@@ -183,17 +183,9 @@ export const essays: Essay[] = [
       { t: 'p', text: 'And that is a fact. We as a society have to change, and to begin precisely from the axiom: the right of different people to exist and to dignity is beyond question. And only then move on to the harder philosophical questions.' },
     ],
   },
-  {
-    slug: 'sofiyka-and-the-waltz',
-    title: 'On Sofiyka and the waltz',
-    originalTitle: 'Про Софійку та вальс',
-    date: '3 June 2026',
-    source: 'https://pavlyshyn.leaflet.pub/3mneqny3cgk25',
-    note: 'TRANSLATION PENDING — the full Ukrainian text could not be retrieved automatically. What follows is a summary of the argument, not Volodymyr’s words. Do not publish until replaced with a real translation.',
-    blocks: [
-      { t: 'p', text: 'Ukrainian media covered the story of a girl with particular needs who wanted to dance the waltz at her school leaving ball, and of the boy who danced it with her. The story was told as a happy one.' },
-      { t: 'p', text: 'The author — himself a person with cerebral palsy — observes that in twenty-five years and more, sadly, not much has changed. What troubles him is not the disagreement with the parents but the comments about the boy who danced.' },
-      { t: 'p', text: 'The problem lies in his act being received as heroism. What he wants is a society in which such an interaction is ordinary: we should not turn interacting with people who have particular needs into some special act of heroism.' },
-    ],
-  },
+  // REMOVED: 'On Sofiyka and the waltz' (Про Софійку та вальс, 3 June 2026,
+  // https://pavlyshyn.leaflet.pub/3mneqny3cgk25). The full Ukrainian text could not be
+  // retrieved, so the only version available was a machine summary — not Volodymyr's
+  // words. It is not published rather than published in paraphrase. To restore it, add
+  // an Essay entry here with a real translation of the original.
 ];

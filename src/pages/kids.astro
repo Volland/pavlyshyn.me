@@ -6,7 +6,6 @@ import { intro, strands, cast, essays } from '../data/kids';
 const [maxCycle, chess] = strands;
 const origin = essays[0];
 const further = essays.slice(1);
-const leanpub = 'https://leanpub.com/max-tsugi-and-radio';
 ---
 
 <Base
@@ -112,8 +111,8 @@ const leanpub = 'https://leanpub.com/max-tsugi-and-radio';
     <section>
       <h2 class="section-title">Further reading</h2>
       <p class="standfirst">
-        Three more essays, translated from the Ukrainian, on what the series is
-        ultimately about.
+        {further.length} more {further.length === 1 ? 'essay' : 'essays'}, translated
+        from the Ukrainian, on what the series is ultimately about.
       </p>
 
       {further.map((e) => (
@@ -140,11 +139,9 @@ const leanpub = 'https://leanpub.com/max-tsugi-and-radio';
     <Ornament />
 
     <section class="quiet-cta">
-      <p>
-        Both strands are still in manuscript. If you would like to know when the first
-        book is out, it has a page on Leanpub already —
-        <a href={leanpub} lang="uk">Макс, Цугі і світло, яке чутно</a> — and Leanpub will
-        tell you when it publishes.
+      <p class="soon">
+        <span lang="uk">Макс, Цугі і світло, яке чутно</span><br />
+        <span class="soon-note">Max, Tsugi and the Light You Can Hear — to be published soon.</span>
       </p>
       <p class="footnote">
         Written in Ukrainian, for Ukrainian children. This page is in English because the
@@ -276,6 +273,22 @@ const leanpub = 'https://leanpub.com/max-tsugi-and-radio';
   .member p { font-size: 0.92rem; color: var(--ink-faded); margin: 0; }
 
   .quiet-cta { max-width: 38rem; margin: 0 auto; text-align: center; }
+  .soon {
+    font-size: 1.3rem;
+    line-height: 1.4;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 1.6rem 0;
+  }
+  .soon-note {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.88rem;
+    font-variant: small-caps;
+    letter-spacing: 0.11em;
+    text-transform: lowercase;
+    color: var(--orange);
+  }
   .quiet-cta p { max-width: none; }
   .footnote { font-size: 0.85rem; color: var(--ink-faded); margin-top: 1.2rem; }
 </style>
