@@ -1,0 +1,110 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { channels } from '../data/site';
+import { feed } from '../lib/feeds';
+
+// Fetched at build time; the weekly Action keeps it current.
+const streams = await Promise.all(
+  channels.map(async (c) => ({ ...c, items: await feed(c.feed, 6) }))
+);
+const built = new Date().toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+---
+
+<Base
+  title="Writing — Volodymyr Pavlyshyn"
+  description="Substack, YouTube, Leaflet and Medium: the latest essays, talks and notes on agentic memory, sovereign identity, and everything else.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">Writing</h1>
+      <p class="standfirst">
+        Four places, four registers: deep technical essays on Substack, talks on
+        YouTube, and on Leaflet the Ukrainian notes — disability, inclusion,
+        philosophy, and the occasional techno-horror.
+      </p>
+    </header>
+
+    <Ornament />
+
+    {streams.map((s) => (
+      <section class="stream">
+        <div class="stream-head">
+          <h2 class="stream-name">{s.label}</h2>
+          <p class="stream-title"><a href={s.href}>{s.name}</a></p>
+          <p class="stream-note">{s.note}</p>
+        </div>
+
+        <div class="stream-items">
+          {s.items.length > 0 ? (
+            <ul class="posts">
+              {s.items.map((it) => (
+                <li>
+                  <a href={it.href}>{it.title}</a>
+                  {it.date && <span class="when meta">{it.date}</span>}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p class="empty">
+              Nothing pulled here — <a href={s.href}>read it at the source</a>.
+            </p>
+          )}
+        </div>
+      </section>
+    ))}
+
+    <p class="footnote">
+      Post lists are fetched when the site is built and refreshed weekly. Last built
+      {' '}{built}. Nothing here tracks you: no embeds, no cookies, no analytics.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+
+  .stream {
+    display: grid;
+    grid-template-columns: 15rem minmax(0, 1fr);
+    gap: 2.4rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+  @media (max-width: 46rem) { .stream { grid-template-columns: 1fr; gap: 1rem; } }
+
+  .stream-name {
+    font-size: 0.85rem;
+    font-variant: small-caps;
+    letter-spacing: 0.2em;
+    text-transform: lowercase;
+    color: var(--ink-faded);
+    margin-bottom: 0.4rem;
+  }
+  .stream-title { margin: 0; font-size: 1.2rem; }
+  .stream-title a { text-decoration: none; }
+  .stream-note { margin: 0.3rem 0 0; font-size: 0.88rem; color: var(--ink-faded); }
+
+  .posts { list-style: none; margin: 0; padding: 0; }
+  .posts li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.4rem 1.2rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px dotted var(--rule);
+  }
+  .posts a { text-decoration: none; color: var(--ink); flex: 1 1 20rem; }
+  .posts a:hover { color: var(--orange); }
+  .when { white-space: nowrap; }
+  .empty { color: var(--ink-faded); font-style: italic; }
+
+  .footnote {
+    margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+    font-size: 0.85rem; color: var(--ink-faded); max-width: 40rem;
+  }
+</style>

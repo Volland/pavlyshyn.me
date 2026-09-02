@@ -1,0 +1,92 @@
+---
+import '../styles/global.css';
+import { nav, channels, elsewhere, site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  lang?: string;
+}
+
+const { title, description, lang = 'en' } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="theme-color" content="#faf6ef" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <!-- Duotone: maps luminance onto the paper/ink axis so every scanned plate,
+         cover and photograph reads in the same two inks. -->
+    <svg class="filters" aria-hidden="true" focusable="false">
+      <filter id="duotone" color-interpolation-filters="sRGB">
+        <feColorMatrix
+          type="matrix"
+          values="0.2126 0.7152 0.0722 0 0
+                  0.2126 0.7152 0.0722 0 0
+                  0.2126 0.7152 0.0722 0 0
+                  0 0 0 1 0" />
+        <feComponentTransfer>
+          <feFuncR type="table" tableValues="0.13 0.76 0.98" />
+          <feFuncG type="table" tableValues="0.10 0.30 0.96" />
+          <feFuncB type="table" tableValues="0.08 0.09 0.93" />
+        </feComponentTransfer>
+      </filter>
+    </svg>
+
+    <a href="#main" class="sr-only">Skip to content</a>
+
+    <header class="masthead">
+      <div class="masthead-inner">
+        <a class="wordmark" href="/">Volodymyr Pavlyshyn</a>
+        <nav aria-label="Primary">
+          {nav.map((item) => (
+            <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="colophon">
+      <div class="page">
+        <h2 class="section-title">Follow the work</h2>
+        <div class="colophon-grid">
+          {channels.map((c) => (
+            <div>
+              <div class="channel-name">{c.label}</div>
+              <a class="channel-link" href={c.href} rel="me">{c.name}</a>
+              <p class="channel-note">{c.note}</p>
+            </div>
+          ))}
+        </div>
+        <div class="colophon-foot">
+          <span>© {year} Volodymyr Pavlyshyn · {site.location}</span>
+          <a href="/impressum">Impressum</a>
+          <a href="/privacy">Privacy</a>
+          {elsewhere.map((e) => <a href={e.href}>{e.label}</a>)}
+          <span>Set in EB Garamond. No cookies, no analytics.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

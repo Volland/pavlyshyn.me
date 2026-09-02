@@ -1,0 +1,115 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import DiagramPlate from '../components/DiagramPlate.astro';
+import { tools, research, thesis } from '../data/projects';
+---
+
+<Base
+  title="Projects — Volodymyr Pavlyshyn"
+  description="Factum ORM, LPG Modeler and Causal Canvas: three VS Code tools where you draw the model and ship the text.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">{thesis.headline}</h1>
+      <p class="standfirst">{thesis.body}</p>
+    </header>
+
+    <Ornament />
+
+    {tools.map((tool, i) => (
+      <section class="tool" id={tool.slug}>
+        <div class="tool-plate">
+          <DiagramPlate kind={tool.plate} />
+        </div>
+        <div class="tool-body">
+          <h2 class="tool-name">{tool.name}</h2>
+          <p class="tool-tagline">{tool.tagline}</p>
+          <p class="tool-text" set:html={tool.body
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>')} />
+          <p class="tool-links">
+            <a class="btn" href={tool.marketplace}>Install</a>
+            <a href={tool.docs}>Documentation</a>
+            <a href={tool.repo}>Source</a>
+          </p>
+        </div>
+      </section>
+    ))}
+
+    <Ornament />
+
+    <section>
+      <h2 class="section-title">Research &amp; reference</h2>
+      <p class="standfirst">
+        Not products — reference implementations and research, kept public because the
+        results are more useful in the open.
+      </p>
+      <ul class="repos">
+        {research.map((r) => (
+          <li>
+            <a class="repo-name" href={r.href}>{r.name}</a>
+            <span class="stars">{r.stars}★</span>
+            <p>{r.body}</p>
+          </li>
+        ))}
+      </ul>
+      <p class="more-repos">
+        There is a good deal more at <a href="https://github.com/Volland">github.com/Volland</a>
+        — ontology editors, graph engines, and a quantity of half-finished ideas.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+  .head .display { max-width: 14ch; }
+
+  .tool {
+    display: grid;
+    grid-template-columns: 20rem minmax(0, 1fr);
+    gap: 2.6rem;
+    align-items: start;
+    padding: 2.6rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .tool:first-of-type { border-top: 0; }
+  @media (max-width: 50rem) { .tool { grid-template-columns: 1fr; gap: 1.4rem; } }
+
+  .tool-name {
+    font-size: 1.7rem;
+    font-variant: small-caps;
+    letter-spacing: 0.07em;
+    text-transform: lowercase;
+    margin-bottom: 0.1em;
+  }
+  .tool-tagline { font-size: 1.1rem; color: var(--orange); margin-bottom: 0.8em; }
+  .tool-text { max-width: 38rem; }
+  .tool-links {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    margin-top: 1.4rem;
+    font-size: 0.85rem;
+  }
+  .tool-links a:not(.btn) {
+    font-variant: small-caps;
+    letter-spacing: 0.11em;
+    text-transform: lowercase;
+    text-decoration: none;
+  }
+
+  .repos { list-style: none; padding: 0; margin: 1.6rem 0 0; }
+  .repos li { padding: 0.9rem 0; border-top: 1px solid var(--rule); }
+  .repo-name {
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    text-decoration: none;
+    font-size: 1.05rem;
+  }
+  .stars { color: var(--ink-faded); font-size: 0.8rem; margin-left: 0.6rem; }
+  .repos p { margin: 0.2rem 0 0; color: var(--ink-faded); font-size: 0.92rem; max-width: 42rem; }
+  .more-repos { margin-top: 1.6rem; font-size: 0.9rem; color: var(--ink-faded); }
+</style>

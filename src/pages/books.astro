@@ -1,0 +1,358 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { books, shelves, themes, leanpubUrl, coverUrl } from '../data/books';
+// Real cover dimensions, measured from the files (scripts/measure-covers.py).
+// Leanpub covers are not a uniform ratio, so these must not be guessed.
+import coverDims from '../data/cover-dims.json';
+
+const dim = (slug: string) =>
+  (coverDims as Record<string, { w: number; h: number }>)[slug] ?? { w: 347, h: 520 };
+
+// ── Concept Graph geometry, computed at build time ────────────────────
+// Themes sit on the outer ring; books on two inner rings, ordered by the
+// circular mean of the themes they carry, so neighbours share subjects.
+const CX = 200, CY = 200, R_THEME = 158;
+
+const graphBooks = books.filter((b) => b.shelf === 'agents-graphs');
+
+const themeAngle = new Map(
+  themes.map((t, i) => [t.id, (i / themes.length) * Math.PI * 2 - Math.PI / 2])
+);
+
+const meanAngle = (ids: string[]) => {
+  if (!ids.length) return 0;
+  let x = 0, y = 0;
+  for (const id of ids) {
+    const a = themeAngle.get(id as any) ?? 0;
+    x += Math.cos(a); y += Math.sin(a);
+  }
+  return Math.atan2(y, x);
+};
+
+const ordered = [...graphBooks].sort((a, b) => meanAngle(a.themes) - meanAngle(b.themes));
+
+const nodes = ordered.map((b, i) => {
+  const a = (i / ordered.length) * Math.PI * 2 - Math.PI / 2;
+  const r = i % 2 === 0 ? 68 : 104;
+  return { book: b, x: CX + Math.cos(a) * r, y: CY + Math.sin(a) * r };
+});
+
+const themeNodes = themes.map((t) => {
+  const a = themeAngle.get(t.id)!;
+  return {
+    ...t,
+    x: CX + Math.cos(a) * R_THEME,
+    y: CY + Math.sin(a) * R_THEME,
+    anchor: Math.cos(a) > 0.25 ? 'start' : Math.cos(a) < -0.25 ? 'end' : 'middle',
+    dy: Math.sin(a) > 0.5 ? 16 : Math.sin(a) < -0.5 ? -10 : 4,
+  };
+});
+
+const edges = nodes.flatMap((n) =>
+  n.book.themes.map((t) => {
+    const tn = themeNodes.find((x) => x.id === t)!;
+    return { x1: n.x, y1: n.y, x2: tn.x, y2: tn.y, theme: t, slug: n.book.slug };
+  })
+);
+
+const published = books.filter((b) => !b.inProgress).length;
+---
+
+<Base
+  title="Books — Volodymyr Pavlyshyn"
+  description="Twenty-five books on agentic memory, knowledge graphs, engineering craft — and tea. Browse the catalogue as a concept graph.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">The catalogue</h1>
+      <p class="standfirst">
+        {published} published, {books.length - published} in progress. Mostly about how an
+        agent remembers and what it remembers on — and then, at the far end of the shelf,
+        tea, yerba mate and a techno-horror novella. Everything is on Leanpub, where the
+        pricing is yours to set.
+      </p>
+    </header>
+
+    <Ornament />
+
+    <!-- ── Concept Graph ─────────────────────────────────────────── -->
+    <section class="graph-section" id="graph">
+      <h2 class="section-title">The Agents &amp; Graphs shelf, as a graph</h2>
+      <p class="graph-help">
+        Every book is a node; every subject is a hub. Choose a subject to keep only the
+        books that carry it — or choose a book to read what it is about.
+      </p>
+
+      <div class="graph-wrap" data-graph>
+        <svg viewBox="0 0 400 400" role="img"
+             aria-label="A wheel diagram in the manner of Llull: sixteen books arranged on two inner rings, joined by lines to seven subject hubs on the outer ring.">
+          <circle class="ring" cx={CX} cy={CY} r={R_THEME} />
+          <circle class="ring faint" cx={CX} cy={CY} r="104" />
+          <circle class="ring faint" cx={CX} cy={CY} r="68" />
+
+          {edges.map((e) => (
+            <line class="gedge" x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2}
+                  data-theme={e.theme} data-slug={e.slug} />
+          ))}
+
+          {themeNodes.map((t) => (
+            <g class="ghub" data-theme={t.id} tabindex="0" role="button"
+               aria-label={`Filter by ${t.label}`}>
+              <circle cx={t.x} cy={t.y} r="6.5" />
+              <text x={t.x} y={t.y + t.dy} text-anchor={t.anchor}>{t.label}</text>
+            </g>
+          ))}
+
+          {nodes.map((n) => (
+            <g class="gnode" data-slug={n.book.slug}
+               data-themes={n.book.themes.join(' ')} tabindex="0" role="button"
+               aria-label={n.book.title}>
+              <circle cx={n.x} cy={n.y} r="4.4" />
+              <title>{n.book.title}</title>
+            </g>
+          ))}
+        </svg>
+
+        <aside class="graph-read" data-readout aria-live="polite">
+          <p class="graph-idle">
+            Seven subjects, sixteen books. The wheel is Llull's; the argument is that a
+            catalogue about knowledge graphs ought to be one.
+          </p>
+        </aside>
+      </div>
+
+      <div class="chips">
+        <button class="chip is-on" data-chip="all">All subjects</button>
+        {themes.map((t) => <button class="chip" data-chip={t.id}>{t.label}</button>)}
+      </div>
+    </section>
+
+    <Ornament />
+
+    <!-- ── The shelves ───────────────────────────────────────────── -->
+    {shelves.map((shelf) => (
+      <section class="shelf" data-shelf={shelf.id}>
+        <h2 class="section-title">{shelf.label}</h2>
+        <p class="shelf-note">{shelf.note}</p>
+
+        <ul class="grid">
+          {books.filter((b) => b.shelf === shelf.id).map((b) => (
+            <li class="card" id={`book-${b.slug}`} data-themes={b.themes.join(' ')}>
+              <a class="cover" href={leanpubUrl(b.slug)}>
+                <img src={coverUrl(b.slug)} loading="lazy"
+                     width={dim(b.slug).w} height={dim(b.slug).h}
+                     alt={`Cover of ${b.title}`} />
+              </a>
+              <div class="card-body">
+                <h3 class="card-title">
+                  <a href={leanpubUrl(b.slug)}>{b.title}</a>
+                </h3>
+                {b.inProgress && <span class="tag">in progress</span>}
+                {b.lang === 'uk' && <span class="tag">українською</span>}
+                <p class="card-blurb">{b.blurb}</p>
+                {b.edition && (
+                  <p class="edition">
+                    Also in Ukrainian:
+                    <a href={leanpubUrl(b.edition.slug)}>{b.edition.title}</a>
+                  </p>
+                )}
+                <a class="read" href={leanpubUrl(b.slug)}>Read on Leanpub →</a>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+
+    <p class="footnote">
+      Prices on Leanpub are variable — you choose what to pay above the minimum, and the
+      book keeps updating after you buy it.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+  .head .display { max-width: 12ch; }
+
+  .graph-help { color: var(--ink-faded); font-size: 0.95rem; }
+
+  .graph-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+    gap: 2rem;
+    align-items: center;
+  }
+  @media (max-width: 48rem) { .graph-wrap { grid-template-columns: 1fr; } }
+  .graph-wrap svg { width: 100%; height: auto; max-width: 30rem; margin: 0 auto; }
+
+  .ring { fill: none; stroke: var(--rule); stroke-width: 1; }
+  .ring.faint { stroke-dasharray: 2 4; opacity: 0.65; }
+
+  .gedge { stroke: var(--rule); stroke-width: 0.8; transition: stroke 0.15s, stroke-width 0.15s; }
+  .gedge.lit { stroke: var(--orange); stroke-width: 1.3; }
+
+  .ghub circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
+  .ghub text {
+    font-family: var(--serif);
+    font-size: 11px;
+    fill: var(--ink-faded);
+    font-variant: small-caps;
+    letter-spacing: 0.09em;
+  }
+  .ghub { cursor: pointer; }
+  .ghub:hover circle, .ghub.on circle { fill: var(--orange); stroke: var(--orange); }
+  .ghub:hover text, .ghub.on text { fill: var(--orange); }
+
+  .gnode circle { fill: var(--ink); transition: fill 0.15s, r 0.15s; }
+  .gnode { cursor: pointer; }
+  .gnode:hover circle, .gnode.on circle { fill: var(--orange); r: 6; }
+  .gnode.dim circle { fill: var(--rule); }
+
+  .graph-read { border-left: 1px solid var(--rule); padding-left: 1.4rem; min-height: 8rem; }
+  .graph-read p { font-size: 0.92rem; margin: 0 0 0.5rem; }
+  .graph-idle { color: var(--ink-faded); font-style: italic; }
+  .graph-read .rtitle { font-size: 1.05rem; font-style: normal; }
+  @media (max-width: 48rem) {
+    .graph-read { border-left: 0; border-top: 1px solid var(--rule); padding: 1rem 0 0; }
+  }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.6rem; }
+  .chip {
+    font-family: var(--serif);
+    font-size: 0.82rem;
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-faded);
+    padding: 0.2rem 0.7rem;
+    cursor: pointer;
+  }
+  .chip:hover { border-color: var(--orange); color: var(--orange); }
+  .chip.is-on { background: var(--orange); border-color: var(--orange); color: var(--paper); }
+
+  .shelf-note { color: var(--ink-faded); margin-top: -0.8rem; }
+
+  .grid {
+    list-style: none;
+    padding: 0;
+    margin: 1.6rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 2.4rem 2rem;
+  }
+  .card { display: flex; flex-direction: column; gap: 0.8rem; }
+  .card.hidden { display: none; }
+
+  .cover {
+    display: block;
+    border: 1px solid var(--rule);
+    padding: 0.45rem;
+    background: var(--paper);
+    align-self: start;
+  }
+  .cover img { filter: url(#duotone) contrast(1.02); }
+  .cover:hover { border-color: var(--orange); }
+
+  .card-title { font-size: 1.08rem; margin: 0; line-height: 1.25; }
+  .card-title a { text-decoration: none; color: var(--ink); }
+  .card-title a:hover { color: var(--orange); }
+  .card-blurb { font-size: 0.9rem; color: var(--ink-faded); margin: 0.4rem 0 0.6rem; }
+  .edition { font-size: 0.83rem; margin: 0 0 0.6rem; }
+  .edition a { margin-left: 0.35rem; }
+  .read {
+    font-size: 0.8rem;
+    font-variant: small-caps;
+    letter-spacing: 0.11em;
+    text-transform: lowercase;
+    text-decoration: none;
+    margin-top: auto;
+  }
+  .footnote {
+    margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+    font-size: 0.85rem; color: var(--ink-faded); max-width: 36rem;
+  }
+</style>
+
+<script>
+  const wrap = document.querySelector('[data-graph]');
+  if (wrap) {
+    const readout = wrap.querySelector('[data-readout]');
+    const idle = readout?.innerHTML ?? '';
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.card'));
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.chip'));
+    const hubs = Array.from(wrap.querySelectorAll<SVGGElement>('.ghub'));
+    const nodes = Array.from(wrap.querySelectorAll<SVGGElement>('.gnode'));
+    const edges = Array.from(wrap.querySelectorAll<SVGLineElement>('.gedge'));
+
+    const blurbs = new Map<string, { title: string; blurb: string; href: string }>();
+    for (const card of cards) {
+      const slug = card.id.replace(/^book-/, '');
+      blurbs.set(slug, {
+        title: card.querySelector('.card-title')?.textContent?.trim() ?? '',
+        blurb: card.querySelector('.card-blurb')?.textContent?.trim() ?? '',
+        href: card.querySelector<HTMLAnchorElement>('.card-title a')?.href ?? '#',
+      });
+    }
+
+    let theme = 'all';
+
+    function apply() {
+      for (const c of chips) c.classList.toggle('is-on', c.dataset.chip === theme);
+      for (const h of hubs) h.classList.toggle('on', h.dataset.theme === theme);
+      for (const e of edges) e.classList.toggle('lit', theme !== 'all' && e.dataset.theme === theme);
+      for (const n of nodes) {
+        const has = theme === 'all' || (n.dataset.themes ?? '').split(' ').includes(theme);
+        n.classList.toggle('dim', !has);
+      }
+      for (const card of cards) {
+        const has = theme === 'all' || (card.dataset.themes ?? '').split(' ').includes(theme);
+        // Books with no themes (The Craft, Other Worlds) are only shown under "all".
+        card.classList.toggle('hidden', !has);
+      }
+    }
+
+    function setTheme(next: string) {
+      theme = theme === next ? 'all' : next;
+      apply();
+    }
+
+    for (const chip of chips) {
+      chip.addEventListener('click', () => setTheme(chip.dataset.chip!));
+    }
+    for (const hub of hubs) {
+      const go = () => setTheme(hub.dataset.theme!);
+      hub.addEventListener('click', go);
+      hub.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+      });
+    }
+
+    function show(slug: string) {
+      const b = blurbs.get(slug);
+      if (!b || !readout) return;
+      readout.innerHTML = `<p class="rtitle"><a href="${b.href}">${b.title}</a></p><p>${b.blurb}</p>`;
+    }
+
+    for (const node of nodes) {
+      const slug = node.dataset.slug!;
+      node.addEventListener('mouseenter', () => show(slug));
+      node.addEventListener('focus', () => show(slug));
+      node.addEventListener('click', () => {
+        document.getElementById(`book-${slug}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      node.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          document.getElementById(`book-${slug}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    }
+
+    wrap.addEventListener('mouseleave', () => { if (readout) readout.innerHTML = idle; });
+    apply();
+  }
+</script>

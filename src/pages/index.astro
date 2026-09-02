@@ -1,0 +1,192 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { books } from '../data/books';
+import { tools } from '../data/projects';
+import { offers } from '../data/services';
+import { site } from '../data/site';
+
+const published = books.filter((b) => !b.inProgress).length;
+const contact = site.booking || `mailto:${site.email}`;
+---
+
+<Base
+  title="Volodymyr Pavlyshyn — memory and identity for AI agents"
+  description="Principal engineer, twice a founding engineer. I build memory for AI agents, and identity for the agents that carry it. Books, tools, and advisory work from Berlin.">
+
+  <div class="page">
+    <section class="hero">
+      <div class="hero-text">
+        <h1 class="display">I build memory for AI&nbsp;agents, and identity for the agents that carry it.</h1>
+        <p class="standfirst">
+          Twenty-three years an engineer. Founding engineer twice over — at Affinidi,
+          on self-sovereign identity, and at Mykin, on a privacy-first personal AI that
+          runs on your device.
+        </p>
+        <p class="standfirst">
+          I think agents should own their memory, run locally, and never ask a cloud
+          for permission to think.
+        </p>
+      </div>
+
+      <figure class="frontispiece">
+        <div class="oval">
+          <img src="/portrait.jpg" width="640" height="640" alt="Volodymyr Pavlyshyn" />
+        </div>
+        <figcaption>Volodymyr Pavlyshyn<br />Berlin · anno mmxxvi</figcaption>
+      </figure>
+    </section>
+
+    <Ornament />
+
+    <!-- The Two Doors: a reader path and a hire path, as peers. -->
+    <section class="doors" aria-label="Where to go next">
+      <div class="door">
+        <h2 class="door-title">Read the work</h2>
+        <p>
+          {published} published books on agentic memory, graph substrates, and what an
+          agent needs in order to remember — plus tea, yerba mate, and one techno-horror
+          novella.
+        </p>
+        <p class="door-list">
+          {books.filter((b) => b.shelf === 'agents-graphs' && !b.inProgress).slice(0, 4).map((b) => (
+            <span>{b.title}</span>
+          ))}
+          <span class="more">…and {published - 4} more</span>
+        </p>
+        <a class="btn" href="/books">Browse the catalogue</a>
+      </div>
+
+      <div class="door">
+        <h2 class="door-title">Work with me</h2>
+        <p>
+          Advisory and architecture work on agent memory, agent identity and trust —
+          the same problems the books are about, on your system.
+        </p>
+        <p class="door-list">
+          {offers.map((o) => <span>{o.name}</span>)}
+        </p>
+        <a class="btn btn-solid" href="/services">See how that works</a>
+
+        <div class="evidence">
+          <span class="meta">Tools I have shipped</span>
+          <p>
+            {tools.map((t, i) => (
+              <>
+                <a href="/projects">{t.name}</a>{i < tools.length - 1 ? ' · ' : ''}
+              </>
+            ))}
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <Ornament />
+
+    <section class="plate-band">
+      <figure class="plate">
+        <img
+          src="/engravings/llull-ars-magna-wheel.jpg"
+          width="1000" height="1000" loading="lazy"
+          alt="Figura A from Ramon Llull's Ars Magna, 1305: nine concepts arranged on a wheel, every one joined to every other." />
+        <figcaption>
+          Ramon Llull, <em>Ars Magna</em>, 1305. Nine concepts on a wheel, every one
+          joined to every other — a complete graph, drawn seven centuries before anyone
+          needed the word.
+        </figcaption>
+      </figure>
+      <div>
+        <h2 class="section-title">Also here</h2>
+        <dl class="index">
+          <dt><a href="/projects">Projects</a></dt>
+          <dd>Three VS Code tools for modelling: Factum ORM, LPG Modeler, Causal Canvas.</dd>
+          <dt><a href="/kids">Children's books</a></dt>
+          <dd>Max and Tsugi — a cycle for Ukrainian children about living with cerebral palsy.</dd>
+          <dt><a href="/cv">CV</a></dt>
+          <dd>2002 to now, filterable, with the PDF.</dd>
+          <dt><a href="/writing">Writing</a></dt>
+          <dd>Substack, YouTube, Leaflet, Medium — the latest of each.</dd>
+        </dl>
+        <p class="contact-line">
+          Or write to me: <a href={contact}>{site.email}</a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2.5rem 3.5rem;
+    align-items: start;
+    margin: 3.6rem 0 0;
+  }
+  @media (max-width: 52rem) {
+    .hero { grid-template-columns: 1fr; }
+    .frontispiece { order: -1; width: 11rem; }
+  }
+  .hero-text .display { max-width: 15ch; }
+
+  .doors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  .door { padding: 0.4rem 2.4rem 0.6rem 0; }
+  .door + .door {
+    padding: 0.4rem 0 0.6rem 2.4rem;
+    border-left: 1px solid var(--rule);
+  }
+  @media (max-width: 46rem) {
+    .doors { grid-template-columns: 1fr; }
+    .door { padding: 0 0 1.8rem; }
+    .door + .door { padding: 1.8rem 0 0; border-left: 0; border-top: 1px solid var(--rule); }
+  }
+  .door-title {
+    font-size: 1.5rem;
+    font-variant: small-caps;
+    letter-spacing: 0.09em;
+    text-transform: lowercase;
+  }
+  .door p { max-width: 30rem; }
+  .door-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.9rem;
+    color: var(--ink-faded);
+    margin-bottom: 1.3rem;
+  }
+  .door-list .more { font-style: italic; }
+
+  .evidence { margin-top: 1.8rem; padding-top: 1rem; border-top: 1px solid var(--rule); }
+  .evidence p { margin: 0.25rem 0 0; font-size: 0.95rem; }
+
+  .plate-band {
+    display: grid;
+    grid-template-columns: 17rem minmax(0, 1fr);
+    gap: 2.6rem;
+    align-items: start;
+  }
+  @media (max-width: 46rem) { .plate-band { grid-template-columns: 1fr; } }
+  .plate-band figure { margin: 0; }
+  .plate-band figcaption {
+    font-size: 0.82rem;
+    color: var(--ink-faded);
+    margin-top: 0.8rem;
+    line-height: 1.5;
+  }
+
+  .index { margin: 0; }
+  .index dt { margin-top: 0.9rem; }
+  .index dt a {
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    text-decoration: none;
+  }
+  .index dd { margin: 0.05rem 0 0; color: var(--ink-faded); font-size: 0.95rem; }
+  .contact-line { margin-top: 2rem; font-size: 0.95rem; }
+</style>

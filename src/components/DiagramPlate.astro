@@ -1,0 +1,133 @@
+---
+// Diagram Plates — original engraving-idiom SVG showing what each tool produces.
+// These stand in place of product screenshots (see docs/adr/0006).
+interface Props { kind: 'factum' | 'lpg' | 'causal'; }
+const { kind } = Astro.props;
+---
+
+<figure class="diagram">
+  {kind === 'factum' && (
+    <svg viewBox="0 0 400 190" role="img" aria-label="An ORM fact diagram: Person plays the role 'works for' with Company, verbalized as a sentence.">
+      <g class="hatch">
+        <ellipse cx="66" cy="62" rx="52" ry="26" />
+        <ellipse cx="334" cy="62" rx="52" ry="26" />
+      </g>
+      <text class="lbl" x="66" y="66" text-anchor="middle">Person</text>
+      <text class="lbl" x="334" y="66" text-anchor="middle">Company</text>
+
+      <rect class="role" x="163" y="47" width="37" height="30" />
+      <rect class="role" x="200" y="47" width="37" height="30" />
+      <line class="edge" x1="118" y1="62" x2="163" y2="62" />
+      <line class="edge" x1="237" y1="62" x2="282" y2="62" />
+
+      <path class="mand" d="M155 62h-30" />
+      <circle class="dot" cx="152" cy="62" r="3.4" />
+
+      <text class="cap" x="200" y="102" text-anchor="middle">works for</text>
+      <line class="rule" x1="40" y1="134" x2="360" y2="134" />
+      <text class="verb" x="200" y="158" text-anchor="middle">“Each Person works for at most one Company.”</text>
+      <text class="tiny" x="200" y="176" text-anchor="middle">FORML verbalization · read back to a domain expert</text>
+    </svg>
+  )}
+
+  {kind === 'lpg' && (
+    <svg viewBox="0 0 400 200" role="img" aria-label="One property-graph model fanning out into four generated artifacts: LadybugDB DDL, Neo4j constraints, SHACL shapes and an OWL ontology.">
+      <rect class="model" x="150" y="16" width="100" height="40" />
+      <text class="lbl" x="200" y="41" text-anchor="middle">one model</text>
+
+      <g class="edge">
+        <path d="M200 56v22M200 78H58v26M200 78h47v26M200 78h-47v26M200 78h142v26" />
+      </g>
+
+      <g class="artifact">
+        <rect x="16" y="104" width="84" height="40" />
+        <rect x="110" y="104" width="84" height="40" />
+        <rect x="206" y="104" width="84" height="40" />
+        <rect x="300" y="104" width="84" height="40" />
+      </g>
+      <text class="sm" x="58" y="122" text-anchor="middle">LadybugDB</text>
+      <text class="sm" x="58" y="136" text-anchor="middle">DDL</text>
+      <text class="sm" x="152" y="122" text-anchor="middle">Neo4j</text>
+      <text class="sm" x="152" y="136" text-anchor="middle">constraints</text>
+      <text class="sm" x="248" y="122" text-anchor="middle">SHACL</text>
+      <text class="sm" x="248" y="136" text-anchor="middle">shapes</text>
+      <text class="sm" x="342" y="122" text-anchor="middle">OWL</text>
+      <text class="sm" x="342" y="136" text-anchor="middle">ontology</text>
+
+      <text class="tiny" x="200" y="176" text-anchor="middle">four artifacts, one source of truth</text>
+      <text class="tiny" x="200" y="190" text-anchor="middle">— not four that drift apart —</text>
+    </svg>
+  )}
+
+  {kind === 'causal' && (
+    <svg viewBox="0 0 400 200" role="img" aria-label="A causal diagram in which birth weight is a collider on the path between maternal smoking and mortality, marked as something not to adjust for.">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="currentColor" />
+        </marker>
+      </defs>
+
+      <circle class="node" cx="62" cy="44" r="7" />
+      <circle class="node" cx="338" cy="44" r="7" />
+      <circle class="collider" cx="200" cy="126" r="9" />
+
+      <g class="arrow">
+        <path d="M74 42h250" marker-end="url(#arrow)" />
+        <path d="M70 55l118 62" marker-end="url(#arrow)" />
+        <path d="M330 55l-118 62" marker-end="url(#arrow)" />
+      </g>
+
+      <text class="sm" x="62" y="28" text-anchor="middle">maternal smoking</text>
+      <text class="sm" x="338" y="28" text-anchor="middle">mortality</text>
+      <text class="sm warn" x="200" y="153" text-anchor="middle">birth weight</text>
+      <text class="tiny warn" x="200" y="169" text-anchor="middle">collider — do not adjust</text>
+      <text class="tiny" x="200" y="190" text-anchor="middle">the birth weight paradox, caught before it is published</text>
+    </svg>
+  )}
+</figure>
+
+<style>
+  .diagram { margin: 0 0 1.4rem; }
+  .diagram svg { width: 100%; height: auto; overflow: visible; }
+
+  .hatch ellipse,
+  .role,
+  .model,
+  .artifact rect {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1;
+  }
+  .model { stroke: var(--orange); stroke-width: 1.4; }
+  .artifact rect { stroke: var(--rule); }
+
+  .edge, .mand { stroke: var(--ink); stroke-width: 1; fill: none; }
+  .rule { stroke: var(--rule); stroke-width: 1; }
+  .dot { fill: var(--orange); }
+
+  .arrow path { stroke: var(--ink); stroke-width: 1.2; fill: none; color: var(--ink); }
+
+  .node { fill: none; stroke: var(--ink); stroke-width: 1.2; }
+  .collider { fill: none; stroke: var(--orange); stroke-width: 2; }
+
+  text {
+    font-family: var(--serif);
+    fill: var(--ink);
+  }
+  .lbl { font-size: 15px; }
+  .cap {
+    font-size: 12px;
+    fill: var(--ink-faded);
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+  }
+  .sm { font-size: 11.5px; fill: var(--ink-faded); }
+  .verb { font-size: 13.5px; font-style: italic; }
+  .tiny {
+    font-size: 10px;
+    fill: var(--ink-faded);
+    font-variant: small-caps;
+    letter-spacing: 0.11em;
+  }
+  .warn { fill: var(--orange); }
+</style>

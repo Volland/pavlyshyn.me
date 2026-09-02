@@ -1,0 +1,236 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { roles, domains, education, expertise } from '../data/cv';
+---
+
+<Base
+  title="CV — Volodymyr Pavlyshyn"
+  description="Twenty-three years, 2002 to now: principal engineer, twice a founding engineer. Filterable timeline, with the PDF.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">Twenty-three years</h1>
+      <p class="standfirst">
+        From COBOL and Smalltalk to Rust, agentic memory and sovereign AI. It is a long
+        list, and you probably want a slice of it — so filter it down to the part you
+        came for.
+      </p>
+    </header>
+
+    <div class="controls no-print" data-cv>
+      <div class="chips">
+        <button class="chip is-on" data-chip="all">Everything</button>
+        {domains.map((d) => <button class="chip" data-chip={d.id}>{d.label}</button>)}
+      </div>
+      <a class="btn btn-solid dl" href="/cv/volodymyr-pavlyshyn-cv.pdf" download>
+        Download CV · PDF
+      </a>
+    </div>
+
+    <section class="timeline" data-timeline>
+      {roles.map((r) => (
+        <article class="role" data-domains={r.domains.join(' ')}>
+          <div class="years">
+            <span class="to">{r.to}</span>
+            <span class="dash" aria-hidden="true">↑</span>
+            <span class="from">{r.from}</span>
+          </div>
+          <div class="marker" aria-hidden="true"><span></span></div>
+          <details class="role-body">
+            <summary>
+              <h2 class="role-org">{r.org}</h2>
+              <p class="role-title">{r.title}</p>
+              <p class="role-strap">{r.strap}</p>
+              <span class="expand meta">details</span>
+            </summary>
+            <ul>
+              {r.bullets.map((b) => <li>{b}</li>)}
+            </ul>
+          </details>
+        </article>
+      ))}
+    </section>
+
+    <Ornament />
+
+    <section class="cols">
+      <div>
+        <h2 class="section-title">Core expertise</h2>
+        <dl class="expertise">
+          {expertise.map((e) => (
+            <>
+              <dt>{e.label}</dt>
+              <dd>{e.body}</dd>
+            </>
+          ))}
+        </dl>
+      </div>
+      <div>
+        <h2 class="section-title">Education</h2>
+        {education.map((e) => (
+          <p class="edu">
+            <strong>{e.degree}</strong><br />
+            {e.school}<br />
+            <span class="meta">{e.years}</span>
+          </p>
+        ))}
+        <h2 class="section-title" style="margin-top:2.4rem">Elsewhere</h2>
+        <p class="edu">
+          <a href="/projects">Open-source tools</a><br />
+          <a href="/books">Twenty-two books</a><br />
+          <a href="https://www.linkedin.com/in/pavlyshyn/">LinkedIn</a>
+        </p>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    background: var(--paper);
+    z-index: 5;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.45rem; }
+  .chip {
+    font-family: var(--serif);
+    font-size: 0.8rem;
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    background: transparent;
+    border: 1px solid var(--rule);
+    color: var(--ink-faded);
+    padding: 0.18rem 0.65rem;
+    cursor: pointer;
+  }
+  .chip:hover { border-color: var(--orange); color: var(--orange); }
+  .chip.is-on { background: var(--orange); border-color: var(--orange); color: var(--paper); }
+  .dl { white-space: nowrap; }
+
+  .timeline { margin: 2.4rem 0; }
+
+  .role {
+    display: grid;
+    grid-template-columns: 4.6rem 1.4rem minmax(0, 1fr);
+    gap: 0 0.9rem;
+    transition: opacity 0.15s;
+  }
+  .role.dim { opacity: 0.26; }
+
+  .years {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 0.15rem;
+    font-size: 0.82rem;
+    color: var(--ink-faded);
+    line-height: 1.3;
+  }
+  .years .dash { opacity: 0.4; font-size: 0.7rem; }
+
+  .marker { position: relative; }
+  .marker::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: -0.2rem;
+    width: 1px;
+    background: var(--rule);
+    transform: translateX(-50%);
+  }
+  .marker span {
+    position: absolute;
+    left: 50%;
+    top: 0.5rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1.4px solid var(--ink);
+    transform: translateX(-50%);
+  }
+  .role:first-child .marker span { background: var(--orange); border-color: var(--orange); }
+
+  .role-body { padding: 0 0 2rem; }
+  .role-body summary {
+    cursor: pointer;
+    list-style: none;
+    display: block;
+  }
+  .role-body summary::-webkit-details-marker { display: none; }
+
+  .role-org {
+    font-size: 1.28rem;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    margin: 0;
+  }
+  .role-title { margin: 0; font-size: 0.98rem; }
+  .role-strap { margin: 0.15rem 0 0; color: var(--ink-faded); font-size: 0.9rem; max-width: 42rem; }
+  .expand { display: inline-block; margin-top: 0.5rem; color: var(--orange); }
+  details[open] .expand { display: none; }
+  .role-body ul { margin: 0.9rem 0 0; padding-left: 1.1rem; max-width: 42rem; }
+  .role-body li { margin-bottom: 0.4rem; font-size: 0.93rem; }
+
+  .cols {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (max-width: 46rem) { .cols { grid-template-columns: 1fr; gap: 2rem; } }
+  .expertise dt {
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    color: var(--orange);
+    margin-top: 1rem;
+  }
+  .expertise dd { margin: 0.1rem 0 0; font-size: 0.93rem; color: var(--ink-faded); }
+  .edu { font-size: 0.95rem; }
+
+  @media print {
+    .role-body ul { display: block !important; }
+    .role.dim { opacity: 1; }
+  }
+</style>
+
+<script>
+  const panel = document.querySelector('[data-cv]');
+  if (panel) {
+    const chips = Array.from(panel.querySelectorAll<HTMLButtonElement>('.chip'));
+    const roles = Array.from(document.querySelectorAll<HTMLElement>('.role'));
+    let active = 'all';
+
+    function apply() {
+      for (const c of chips) c.classList.toggle('is-on', c.dataset.chip === active);
+      for (const r of roles) {
+        const has = active === 'all' || (r.dataset.domains ?? '').split(' ').includes(active);
+        r.classList.toggle('dim', !has);
+      }
+    }
+
+    for (const chip of chips) {
+      chip.addEventListener('click', () => {
+        const next = chip.dataset.chip!;
+        active = active === next ? 'all' : next;
+        apply();
+      });
+    }
+  }
+</script>

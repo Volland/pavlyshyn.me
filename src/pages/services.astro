@@ -1,0 +1,170 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { offers, howItWorks } from '../data/services';
+import { site } from '../data/site';
+
+const hasBooking = Boolean(site.booking);
+---
+
+<Base
+  title="Services — Volodymyr Pavlyshyn"
+  description="Advisory and architecture work on agentic memory, agent identity and trust, architecture review, and team workshops.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">Work with me</h1>
+      <p class="standfirst">
+        Four ways in. All of them are the same problems the books are about, applied to
+        your system instead of a page.
+      </p>
+      <p class="cta-row">
+        {hasBooking && <a class="btn btn-solid" href={site.booking}>Book a 30-minute call</a>}
+        <a class={hasBooking ? 'btn' : 'btn btn-solid'} href={`mailto:${site.email}`}>
+          {site.email}
+        </a>
+      </p>
+    </header>
+
+    <Ornament />
+
+    <section class="offers">
+      {offers.map((o, i) => (
+        <article class="offer">
+          <div class="offer-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</div>
+          <div>
+            <h2 class="offer-name">{o.name}</h2>
+            <p class="offer-shape">{o.shape}</p>
+            <p class="offer-body">{o.body}</p>
+            <p class="fit-label meta">You might want this if</p>
+            <ul class="fit">
+              {o.fit.map((f) => <li>{f}</li>)}
+            </ul>
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <Ornament />
+
+    <section class="how">
+      <div>
+        <h2 class="section-title">How it works</h2>
+        <ol class="steps">
+          {howItWorks.map((s) => <li>{s}</li>)}
+        </ol>
+        <p class="price-note">
+          No price list. The right number depends on scope, duration and what the work is
+          worth to you, and I would rather find that out on a call than guess in public.
+        </p>
+      </div>
+      <div class="evidence-box">
+        <h2 class="section-title">Where this comes from</h2>
+        <p>
+          Founding engineer at <strong>Affinidi</strong> — self-sovereign identity, DID
+          and Sidetree protocol work, and a COVID verifiable-credentials platform taken
+          from zero to a live airport integration in four weeks.
+        </p>
+        <p>
+          Founding engineer at <strong>Mykin.ai</strong> — a privacy-first personal AI,
+          with on-device semantic memory: a personal knowledge graph with vector search
+          and clustering, running on a phone.
+        </p>
+        <p>
+          Before that: Zalando, TomTom, LiveIntent. Teams of five to fifteen, systems
+          serving forty million customers, and three million events a minute.
+        </p>
+        <p class="evidence-links">
+          <a href="/cv">The full CV →</a>
+          <a href="/projects">Tools I have shipped →</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="closing">
+      <h2 class="closing-title">Start with a conversation</h2>
+      <p>
+        Tell me what you are building and what is going wrong. If I am not the right
+        person, I will say so and try to point you at who is.
+      </p>
+      <p class="cta-row">
+        {hasBooking && <a class="btn btn-solid" href={site.booking}>Book a 30-minute call</a>}
+        <a class={hasBooking ? 'btn' : 'btn btn-solid'} href={`mailto:${site.email}`}>
+          {site.email}
+        </a>
+        <a class="btn btn-quiet" href="https://www.linkedin.com/in/pavlyshyn/">LinkedIn</a>
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.8rem; }
+
+  .offers { display: grid; gap: 0; }
+  .offer {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 2.2rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .offer:first-child { border-top: 0; }
+  @media (max-width: 40rem) { .offer { grid-template-columns: 1fr; gap: 0.3rem; } }
+
+  .offer-num {
+    font-size: 1.1rem;
+    color: var(--orange);
+    letter-spacing: 0.1em;
+    padding-top: 0.35rem;
+  }
+  .offer-name {
+    font-size: 1.5rem;
+    font-variant: small-caps;
+    letter-spacing: 0.07em;
+    text-transform: lowercase;
+    margin-bottom: 0.05em;
+  }
+  .offer-shape {
+    color: var(--ink-faded);
+    font-style: italic;
+    margin-bottom: 0.9em;
+    font-size: 0.95rem;
+  }
+  .offer-body { max-width: 38rem; }
+  .fit-label { display: block; margin: 1.1rem 0 0.35rem; }
+  .fit { margin: 0; padding-left: 1.1rem; max-width: 38rem; }
+  .fit li { color: var(--ink-faded); font-size: 0.93rem; margin-bottom: 0.25rem; }
+
+  .how {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (max-width: 46rem) { .how { grid-template-columns: 1fr; gap: 2rem; } }
+  .steps { margin: 0; padding-left: 1.2rem; }
+  .steps li { margin-bottom: 0.5rem; }
+  .price-note {
+    margin-top: 1.4rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+    font-size: 0.9rem; color: var(--ink-faded);
+  }
+  .evidence-box p { font-size: 0.95rem; }
+  .evidence-links { display: flex; flex-wrap: wrap; gap: 1.4rem; font-size: 0.85rem; }
+  .evidence-links a {
+    font-variant: small-caps; letter-spacing: 0.1em;
+    text-transform: lowercase; text-decoration: none;
+  }
+
+  .closing {
+    border-top: 1px solid var(--rule);
+    padding-top: 2.4rem;
+  }
+  .closing-title {
+    font-size: 1.6rem;
+    font-variant: small-caps;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+  }
+</style>

@@ -1,0 +1,281 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { intro, strands, cast, essays } from '../data/kids';
+
+const [maxCycle, chess] = strands;
+const origin = essays[0];
+const further = essays.slice(1);
+const leanpub = 'https://leanpub.com/max-tsugi-and-radio';
+---
+
+<Base
+  title="Children's books — Max and Tsugi"
+  description="A cycle of children's stories for the Ukrainian market about a boy with cerebral palsy and a cat who has been through something of his own, plus Chess Without Hurry.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">{intro.headline}</h1>
+      <p class="standfirst">{intro.standfirst}</p>
+    </header>
+
+    <Ornament />
+
+    <!-- ── The origin essay carries the page ─────────────────────── -->
+    <article class="essay">
+      <h2 class="essay-title">{origin.title}</h2>
+      <p class="essay-meta meta">
+        {origin.date} · originally
+        <a href={origin.source} lang="uk">{origin.originalTitle}</a>
+      </p>
+      <div class="essay-body">
+        {origin.blocks.map((b) => b.t === 'p' && <p>{b.text}</p>)}
+      </div>
+      <p class="signed">— Volodymyr</p>
+    </article>
+
+    <Ornament />
+
+    <!-- ── Strand one ────────────────────────────────────────────── -->
+    <section class="strand">
+      <div class="strand-head">
+        <h2 class="strand-name">{maxCycle.name}</h2>
+        <p class="strand-meta meta">{maxCycle.status} · {maxCycle.age}</p>
+        <p>{maxCycle.body}</p>
+      </div>
+      <ol class="stories">
+        {maxCycle.stories.map((s, i) => (
+          <li>
+            <span class="story-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="story-title">{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+    <Ornament />
+
+    <!-- ── Strand two ────────────────────────────────────────────── -->
+    <section class="strand">
+      <div class="strand-head">
+        <h2 class="strand-name">
+          {chess.name}
+          <span class="original" lang="uk">{chess.original}</span>
+        </h2>
+        <p class="strand-meta meta">{chess.status} · {chess.age}</p>
+        <p>{chess.body}</p>
+        <blockquote>
+          For the first time in my life somebody told me: think as long as you need. It
+          turned out that chess is not a game for people who think fast — quite the
+          opposite. Nobody here counts to three.
+        </blockquote>
+      </div>
+
+      <div class="lessons">
+        {chess.lessons.map((l) => (
+          <div class="lesson">
+            <h3 class="lesson-title" set:html={l.title.replace(/“(.+?)”/g, '<em>“$1”</em>')} />
+            <p>{l.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <aside class="parents">
+        <h3 class="parents-title">{chess.parents.title}</h3>
+        <p>{chess.parents.body}</p>
+      </aside>
+    </section>
+
+    <Ornament />
+
+    <!-- ── Cast ──────────────────────────────────────────────────── -->
+    <section>
+      <h2 class="section-title">The cast</h2>
+      <div class="cast">
+        {cast.map((c) => (
+          <div class="member">
+            <h3 class="member-name">
+              {c.name} <span class="original" lang="uk">{c.original}</span>
+            </h3>
+            <p>{c.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <Ornament />
+
+    <!-- ── Further reading: the other essays ─────────────────────── -->
+    <section>
+      <h2 class="section-title">Further reading</h2>
+      <p class="standfirst">
+        Three more essays, translated from the Ukrainian, on what the series is
+        ultimately about.
+      </p>
+
+      {further.map((e) => (
+        <article class="essay secondary" id={e.slug}>
+          <h3 class="essay-title small">{e.title}</h3>
+          <p class="essay-meta meta">
+            {e.date} · originally <a href={e.source} lang="uk">{e.originalTitle}</a>
+          </p>
+          {e.note && <p class="translator-note">{e.note}</p>}
+          <div class="essay-body">
+            {e.blocks.map((b) => (
+              <>
+                {b.t === 'p' && <p>{b.text}</p>}
+                {b.t === 'h' && <h4 class="essay-h">{b.text}</h4>}
+                {b.t === 'q' && <blockquote>{b.text}</blockquote>}
+                {b.t === 'ul' && <ul>{b.items.map((i) => <li>{i}</li>)}</ul>}
+              </>
+            ))}
+          </div>
+        </article>
+      ))}
+    </section>
+
+    <Ornament />
+
+    <section class="quiet-cta">
+      <p>
+        Both strands are still in manuscript. If you would like to know when the first
+        book is out, it has a page on Leanpub already —
+        <a href={leanpub} lang="uk">Макс, Цугі і світло, яке чутно</a> — and Leanpub will
+        tell you when it publishes.
+      </p>
+      <p class="footnote">
+        Written in Ukrainian, for Ukrainian children. This page is in English because the
+        rest of the site is.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+  .head .display { max-width: 13ch; }
+
+  .essay { max-width: 38rem; margin: 0 auto; }
+  .essay-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.1rem);
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    margin-bottom: 0.15em;
+  }
+  .essay-title.small { font-size: 1.4rem; }
+  .essay-meta { display: block; margin-bottom: 1.6rem; }
+  .essay-meta a { text-decoration: none; }
+  .essay-body p { max-width: none; }
+  .essay-body > p:first-child::first-letter {
+    float: left;
+    font-size: 3.4em;
+    line-height: 0.82;
+    padding: 0.06em 0.1em 0 0;
+    color: var(--orange);
+  }
+  .essay.secondary { margin: 2.6rem auto 0; padding-top: 2rem; border-top: 1px solid var(--rule); }
+  .essay.secondary .essay-body > p:first-child::first-letter { float: none; font-size: 1em; color: inherit; padding: 0; }
+  .essay-h {
+    font-size: 1.05rem;
+    font-variant: small-caps;
+    letter-spacing: 0.11em;
+    text-transform: lowercase;
+    margin-top: 1.8rem;
+  }
+  .signed { margin-top: 1.6rem; font-style: italic; color: var(--ink-faded); }
+
+  .translator-note {
+    border-left: 2px solid var(--orange);
+    padding: 0.4rem 0 0.4rem 0.9rem;
+    font-size: 0.85rem;
+    color: var(--ink-faded);
+    background: var(--paper-deep);
+  }
+
+  .strand-head { max-width: 40rem; }
+  .strand-name {
+    font-size: 1.8rem;
+    font-variant: small-caps;
+    letter-spacing: 0.06em;
+    text-transform: lowercase;
+    margin-bottom: 0.1em;
+  }
+  .original {
+    font-variant: normal;
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 0.62em;
+    color: var(--ink-faded);
+    margin-left: 0.5rem;
+  }
+  .strand-meta { display: block; margin-bottom: 1rem; }
+
+  .stories { list-style: none; padding: 0; margin: 2rem 0 0; }
+  .stories li {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .story-num { color: var(--orange); font-size: 0.9rem; padding-top: 0.2rem; }
+  .story-title {
+    font-size: 1.1rem;
+    font-variant: small-caps;
+    letter-spacing: 0.07em;
+    text-transform: lowercase;
+    margin-bottom: 0.1em;
+  }
+  .stories p { margin: 0; color: var(--ink-faded); font-size: 0.94rem; max-width: 40rem; }
+
+  .lessons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.6rem 2rem;
+    margin: 2.2rem 0;
+  }
+  .lesson { border-top: 1px solid var(--rule); padding-top: 0.9rem; }
+  .lesson-title {
+    font-size: 1.02rem;
+    margin-bottom: 0.25em;
+  }
+  .lesson p { font-size: 0.92rem; color: var(--ink-faded); margin: 0; }
+
+  .parents {
+    border: 1px solid var(--rule);
+    background: var(--paper-deep);
+    padding: 1.5rem 1.7rem;
+    max-width: 42rem;
+  }
+  .parents-title {
+    font-size: 1.05rem;
+    font-variant: small-caps;
+    letter-spacing: 0.1em;
+    text-transform: lowercase;
+    color: var(--orange);
+  }
+  .parents p { margin: 0; font-size: 0.95rem; max-width: none; }
+
+  .cast {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1.6rem 2rem;
+  }
+  .member { border-top: 1px solid var(--rule); padding-top: 0.9rem; }
+  .member-name {
+    font-size: 1.1rem;
+    font-variant: small-caps;
+    letter-spacing: 0.07em;
+    text-transform: lowercase;
+    margin-bottom: 0.15em;
+  }
+  .member p { font-size: 0.92rem; color: var(--ink-faded); margin: 0; }
+
+  .quiet-cta { max-width: 38rem; margin: 0 auto; text-align: center; }
+  .quiet-cta p { max-width: none; }
+  .footnote { font-size: 0.85rem; color: var(--ink-faded); margin-top: 1.2rem; }
+</style>
