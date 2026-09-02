@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
+import { legal } from '../data/legal';
 ---
 
 <Base
@@ -78,8 +79,13 @@ import { site } from '../data/site';
 
       <h2 class="section-title">Controller</h2>
       <p>
-        Volodymyr Pavlyshyn, Berlin, Germany. Full details in the
-        {' '}<a href="/impressum">Impressum</a>.
+        {legal.legalName}<br />
+        {legal.street}, {legal.postcode} {legal.city}, {legal.country}<br />
+        <a href={`mailto:${legal.email}`}>{legal.email}</a>
+      </p>
+      <p>
+        Full details in the <a href="/impressum">Impressum</a>; terms of business in the
+        {' '}<a href="/agb">AGB</a>.
       </p>
     </section>
 

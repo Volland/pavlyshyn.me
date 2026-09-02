@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { site } from '../data/site';
+import { legal } from '../data/legal';
 ---
 
 <Base
@@ -13,39 +13,33 @@ import { site } from '../data/site';
       <p class="standfirst">Angaben gemäß § 5 DDG</p>
     </header>
 
-    <div class="todo">
-      <strong>Not ready to publish.</strong> The postal address below is a placeholder.
-      German law requires an address at which post can actually be received. Fill this in
-      before the site goes live — an incomplete Impressum on a site advertising paid
-      services is the specific thing that attracts Abmahnung letters.
-    </div>
-
     <section>
       <h2 class="section-title">Diensteanbieter</h2>
       <p>
-        Volodymyr Pavlyshyn<br />
-        <span class="placeholder">[Straße und Hausnummer]</span><br />
-        <span class="placeholder">[PLZ] Berlin</span><br />
-        Deutschland
+        {legal.legalName}<br />
+        {legal.street}<br />
+        {legal.postcode} {legal.city}<br />
+        {legal.country}
       </p>
 
       <h2 class="section-title">Kontakt</h2>
       <p>
-        E-Mail: <a href={`mailto:${site.email}`}>{site.email}</a><br />
-        <span class="placeholder">[Telefonnummer — optional, aber empfohlen]</span>
+        E-Mail: <a href={`mailto:${legal.email}`}>{legal.email}</a>
+        {legal.phone && <><br />Telefon: {legal.phone}</>}
       </p>
 
-      <h2 class="section-title">Umsatzsteuer-Identifikationsnummer</h2>
-      <p>
-        <span class="placeholder">
-          [USt-IdNr. gemäß § 27 a UStG, falls vorhanden — sonst diesen Abschnitt löschen]
-        </span>
-      </p>
+      {legal.vatId && (
+        <>
+          <h2 class="section-title">Umsatzsteuer-Identifikationsnummer</h2>
+          <p>
+            Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz:<br />
+            {legal.vatId}
+          </p>
+        </>
+      )}
 
       <h2 class="section-title">Verantwortlich für den Inhalt</h2>
-      <p>
-        Volodymyr Pavlyshyn, Anschrift wie oben.
-      </p>
+      <p>{legal.legalName}, Anschrift wie oben.</p>
 
       <h2 class="section-title">EU-Streitschlichtung</h2>
       <p>
@@ -55,36 +49,41 @@ import { site } from '../data/site';
         einer Verbraucherschlichtungsstelle teilzunehmen.
       </p>
 
+      <h2 class="section-title">Haftung für Inhalte</h2>
+      <p>
+        Als Diensteanbieter bin ich gemäß § 7 Abs. 1 DDG für eigene Inhalte auf diesen
+        Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich
+        als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte
+        fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine
+        rechtswidrige Tätigkeit hinweisen.
+      </p>
+
       <h2 class="section-title">Haftung für Links</h2>
       <p>
         Diese Website verweist auf externe Websites Dritter — unter anderem Leanpub,
-        GitHub, Substack, YouTube, Medium und Leaflet. Auf deren Inhalte habe ich keinen
-        Einfluss und übernehme dafür keine Gewähr. Für die Inhalte der verlinkten Seiten
-        ist stets der jeweilige Anbieter verantwortlich.
+        GitHub, den Visual Studio Marketplace, Substack, YouTube, Medium und Leaflet. Auf
+        deren Inhalte habe ich keinen Einfluss und übernehme dafür keine Gewähr. Für die
+        Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter verantwortlich.
+        Bei Bekanntwerden von Rechtsverletzungen werden derartige Links umgehend entfernt.
       </p>
 
       <h2 class="section-title">Urheberrecht</h2>
       <p>
-        Die auf dieser Website erstellten Inhalte unterliegen dem deutschen Urheberrecht.
-        Die historischen Abbildungen sind gemeinfrei; Buchcover sind Eigentum des jeweiligen
-        Rechteinhabers.
+        Die von mir erstellten Inhalte und Werke auf dieser Website unterliegen dem
+        deutschen Urheberrecht. Die abgebildeten historischen Tafeln sind gemeinfrei;
+        Buchcover liegen beim jeweiligen Rechteinhaber.
       </p>
     </section>
 
-    <p class="back"><a href="/">← Zurück zur Startseite</a></p>
+    <p class="back">
+      <a href="/agb">AGB</a> · <a href="/privacy">Datenschutz</a> ·
+      <a href="/">Zurück zur Startseite</a>
+    </p>
   </div>
 </Base>
 
 <style>
   .head { margin: 3.4rem 0 2rem; }
-  .todo {
-    border: 1px solid var(--orange);
-    background: var(--paper-deep);
-    padding: 1rem 1.2rem;
-    font-size: 0.9rem;
-    margin-bottom: 2.4rem;
-  }
-  .placeholder { color: var(--orange); }
   .section-title { margin-top: 2rem; }
   .back { margin-top: 3rem; font-size: 0.9rem; }
 </style>
