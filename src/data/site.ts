@@ -26,13 +26,6 @@ export const channels = [
     feed: '',
   },
   {
-    label: 'Leaflet',
-    name: 'Hominem verum quaero',
-    href: 'https://pavlyshyn.leaflet.pub/',
-    note: 'Notes by flashlight — essays, mostly in Ukrainian.',
-    feed: '',
-  },
-  {
     label: 'Medium',
     name: '@volodymyrpavlyshyn',
     href: 'https://medium.com/@volodymyrpavlyshyn',

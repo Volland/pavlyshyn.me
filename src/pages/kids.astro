@@ -24,8 +24,7 @@ const further = essays.slice(1);
     <article class="essay">
       <h2 class="essay-title">{origin.title}</h2>
       <p class="essay-meta meta">
-        {origin.date} · originally
-        <a href={origin.source} lang="uk">{origin.originalTitle}</a>
+        {origin.date} · originally <span lang="uk">{origin.originalTitle}</span>
       </p>
       <div class="essay-body">
         {origin.blocks.map((b) => b.t === 'p' && <p>{b.text}</p>)}
@@ -119,7 +118,7 @@ const further = essays.slice(1);
         <article class="essay secondary" id={e.slug}>
           <h3 class="essay-title small">{e.title}</h3>
           <p class="essay-meta meta">
-            {e.date} · originally <a href={e.source} lang="uk">{e.originalTitle}</a>
+            {e.date} · originally <span lang="uk">{e.originalTitle}</span>
           </p>
           {e.note && <p class="translator-note">{e.note}</p>}
           <div class="essay-body">

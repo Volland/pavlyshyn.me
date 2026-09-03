@@ -243,7 +243,7 @@ export const books: Book[] = [
     slug: '97-',
     title: '97%',
     blurb:
-      'A techno-horror novella. Two prequels — 87% and 37% — are published on Leaflet.',
+      'A techno-horror novella.',
     shelf: 'other-worlds',
     themes: [],
   },

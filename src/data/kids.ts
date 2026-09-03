@@ -1,5 +1,6 @@
 // The World of Max and Tsugi.
-// Essays translated from the Ukrainian originals on pavlyshyn.leaflet.pub.
+// Essays translated from Volodymyr's Ukrainian originals. The originals live on a
+// private blog and are deliberately not linked.
 // TRANSLATION DRAFTS — every line needs Volodymyr's review before launch.
 
 export type Block =
@@ -13,7 +14,7 @@ export interface Essay {
   title: string;
   originalTitle: string;
   date: string;
-  source: string;
+  source?: string;
   note?: string;
   blocks: Block[];
 }
@@ -121,7 +122,6 @@ export const essays: Essay[] = [
     title: 'Why I began writing about Max and Tsugi',
     originalTitle: 'Чому я почав писати про Макса і Цугі',
     date: '17 August 2026',
-    source: 'https://pavlyshyn.leaflet.pub/3mtc6jaubpk2w',
     blocks: [
       { t: 'p', text: 'I have always liked to write, though with my coordination it is hard work, and it tires me. My writing career began with a shortage of books. I took books from the library, they had to be given back, and I wanted to keep something for myself — so I needed some way of fixing what I had read. Fairly quickly, still a child, I understood: the only way was not to copy books out, but to write a story about books. I had a large Soviet calendar, three hundred and something pages, a page for every day — and in it I made my extracts and wrote that book of mine. Much later I learned that in the Renaissance this was called a commonplace book. That, I suppose, was my creative debut.' },
       { t: 'p', text: 'I always liked telling things. For my nephew I invented completely made-up fairy tales about whatever it was I wanted to get across to him. And out in the yard among the other children I was popular because I was forever inventing some game or telling some story.' },
@@ -146,7 +146,6 @@ export const essays: Essay[] = [
     title: 'Disability as internal emigration',
     originalTitle: 'Інвалідність як внутрішня еміграція',
     date: '5 June 2026',
-    source: 'https://pavlyshyn.leaflet.pub/3mnjx5homos2v',
     note: 'The original is spoken rather than written — recorded and transcribed. The English keeps that register.',
     blocks: [
       { t: 'p', text: 'On the state of internal emigration, and people with particular needs. Internal emigration is an interesting thing. To make it clear — I am from western Ukraine. I was that kind of banderivets, spoke Ukrainian all the way through. And I remember, when I was a teenager, I came to Kyiv, and it was explained to me that I was a bumpkin, and that I ought to explain properly to people what I wanted from them, in a language they could understand. And then you realise that your world ends at the Zbruch, and you are an immigrant in your own country. Because the society around you, for some reason, does not understand you. Then, thirty years later, those same people tell you that in city X everyone spoke Russian, so it is awkward for them, and really they are the victims, and we all have to sympathise, because that is how life turned out for them, so we should all rise to meet them. Well — that is a story a lot of people from western Ukraine will recognise. I am very glad that it is changing now.' },
@@ -163,7 +162,6 @@ export const essays: Essay[] = [
     title: 'On the nature of inclusion and our moral compass',
     originalTitle: 'Про природу інклюзії та наш моральний компас',
     date: '3 June 2026',
-    source: 'https://pavlyshyn.leaflet.pub/3mnf726xcqk2g',
     blocks: [
       { t: 'p', text: 'We have had a long discussion about inclusion: what it ought to look like and what it even is. But let us be candid and admit one fact — the need for inclusion arose through the entirely opposite process: through our having built a world for neurotypical people who do not have life-challenges. And, in principle, we cannot blame humanity for it, because everyone builds the world with the hands and eyes they have, perceiving everything else through the prism of their own self. Accordingly, it is a convenient world for those in whom everything is typical: neurotypical, physiologically typical. And there is nothing bad in that.' },
       { t: 'p', text: 'The problems and the challenges begin when we actively separate off and push away a part of society because of their particularities, or simply because they are inconvenient to us. Because people with disabilities are inconvenient; people with autism are difficult, unclear, other. Biologically we carry certain prejudices that signal to us that this person is dangerous, or unsuitable as a partner. In the end we have an animal tendency towards separation and division into our own and not our own. It is part of human nature — more precisely, of its biological base, on top of which an extraordinarily complex and ambiguous social mechanism has been built.' },
@@ -184,7 +182,7 @@ export const essays: Essay[] = [
     ],
   },
   // REMOVED: 'On Sofiyka and the waltz' (Про Софійку та вальс, 3 June 2026,
-  // https://pavlyshyn.leaflet.pub/3mneqny3cgk25). The full Ukrainian text could not be
+  // originally published 3 June 2026). The full Ukrainian text could not be
   // retrieved, so the only version available was a machine summary — not Volodymyr's
   // words. It is not published rather than published in paraphrase. To restore it, add
   // an Essay entry here with a real translation of the original.
