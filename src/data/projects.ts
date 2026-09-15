@@ -63,7 +63,24 @@ export const tools: Tool[] = [
   },
 ];
 
-export const research = [
+export interface Research {
+  name: string;
+  stars?: number;
+  href: string;
+  body: string;
+  links?: { label: string; href: string }[];
+}
+
+export const research: Research[] = [
+  {
+    name: 'shacl2cypher',
+    href: 'https://github.com/Volland/shacl2cypher',
+    body: 'Validate a property graph with shapes, not hand-written queries. Compiles W3C SHACL shapes into read-only Cypher for Neo4j and LadybugDB, with FalkorDB on the way. CLI, Python and Node, byte-identical output.',
+    links: [
+      { label: 'Documentation', href: 'https://volland.github.io/shacl2cypher/' },
+      { label: 'SHACL on FalkorDB', href: 'https://volland.github.io/shacl2cypher/articles/falkordb.html' },
+    ],
+  },
   {
     name: 'agentic-memory',
     stars: 11,

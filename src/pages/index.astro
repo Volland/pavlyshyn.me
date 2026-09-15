@@ -73,9 +73,10 @@ const contact = site.booking || `mailto:${site.email}`;
           <p>
             {tools.map((t, i) => (
               <>
-                <a href="/projects">{t.name}</a>{i < tools.length - 1 ? ' · ' : ''}
+                <a href="/projects">{t.name}</a>{' · '}
               </>
             ))}
+            <a href="/projects">shacl2cypher</a>
           </p>
         </div>
       </div>
@@ -99,7 +100,7 @@ const contact = site.booking || `mailto:${site.email}`;
         <h2 class="section-title">Also here</h2>
         <dl class="index">
           <dt><a href="/projects">Projects</a></dt>
-          <dd>Three VS Code tools for modelling: Factum ORM, LPG Modeler, Causal Canvas.</dd>
+          <dd>Three VS Code tools for modelling — Factum ORM, LPG Modeler, Causal Canvas — and shacl2cypher, SHACL validation for Cypher graphs.</dd>
           <dt><a href="/kids">Children's books</a></dt>
           <dd>Max and Tsugi — a cycle for Ukrainian children about living with cerebral palsy.</dd>
           <dt><a href="/cv">CV</a></dt>
