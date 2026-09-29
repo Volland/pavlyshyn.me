@@ -19,9 +19,38 @@ export interface Role {
   strap: string;
   domains: Domain[];
   bullets: string[];
+  link?: { label: string; href: string };
 }
 
 export const roles: Role[] = [
+  {
+    from: '2026',
+    to: 'Present',
+    title: 'Creator · Open-Source Author',
+    org: 'OxigraphDB',
+    strap: 'Open-source graph database for edge agentic AI',
+    domains: ['agentic', 'graph', 'systems'],
+    bullets: [
+      'Building OxigraphDB, an open-source, embeddable RDF / SPARQL graph database designed as the knowledge and memory layer for agentic AI running at the edge.',
+      'Added time-travel queries over versioned graph state, so agents can reason about what was known at any point in time, and a Datalog engine as a recursive reasoning layer for rule-based inference over the knowledge graph.',
+      'Focused on local-first, on-device agent memory: lightweight footprint, standards-based semantics (RDF, SPARQL, SHACL) and no mandatory cloud dependency.',
+    ],
+    link: { label: 'oxigraphdb.com', href: 'https://oxigraphdb.com' },
+  },
+  {
+    from: '2026',
+    to: 'Present',
+    title: 'Creator · Open-Source Author',
+    org: 'shacl2cypher',
+    strap: 'Open-source SHACL → Cypher compiler for validating property graphs',
+    domains: ['graph'],
+    bullets: [
+      'Designed and built a compiler that turns standard W3C SHACL shapes into named, read-only Cypher validation queries for labelled property graphs (Neo4j, LadybugDB).',
+      'Reports every broken rule with the offending node or relationship and the value at fault, with table, JSON, JUnit and SARIF output for CI pipelines.',
+      'Shipped as a CLI and Python package on PyPI (pip install shacl2cypher), with documentation, a SHACL-for-property-graphs guide and LPG Modeler integration.',
+    ],
+    link: { label: 'volland.github.io/shacl2cypher', href: 'https://volland.github.io/shacl2cypher/' },
+  },
   {
     from: '2025',
     to: 'Present',
@@ -47,6 +76,7 @@ export const roles: Role[] = [
       'Designed and delivered core semantic memory for AI agents: a personal knowledge graph with vector search and clustering, on-device.',
       'Established company-wide tech standards, a testing strategy for non-deterministic AI systems, and agentic data pipeline architecture.',
       'Contributed directly to a $2M investment round; represented technical architecture to investors.',
+      'Drove Alpha → Beta → Production release cycles under mobile hardware and storage constraints.',
       'Partnered with Turso to enable vector search on mobile devices — a first for the platform.',
     ],
   },
@@ -58,11 +88,11 @@ export const roles: Role[] = [
     strap: 'Self-sovereign identity platform and verifiable credentials infrastructure',
     domains: ['identity', 'leadership', 'systems'],
     bullets: [
-      'Founding engineer on the SSI platform; member of the architecture group and Office of CTO; led cross-company architectural reviews.',
+      'Founding engineer on the SSI platform; member of the architecture group and Office of CTO; led cross-company architectural reviews and design decisions.',
       'Delivered a working COVID verifiable credentials platform from zero to live airport integration in Singapore in four weeks.',
       'Led L2-level DID/Sidetree protocol support for core identity services.',
       'Introduced an Architecture Decision Log and C4 documentation discipline across engineering.',
-      'Performance-tuned the core SDK for 10k concurrent connections.',
+      'Performance-tuned the core SDK for 10k concurrent connections; drove technical vision for new products with the CTO.',
       'Built the engineering recruitment process and technical interviewing standards.',
     ],
   },
@@ -76,7 +106,7 @@ export const roles: Role[] = [
     bullets: [
       'Designed a full-stack valuation system with a rule-based DSL and an incremental re-computation engine.',
       'Introduced XState/statechart-based modelling for the frontend: ~30% faster feature delivery and significant codebase reduction.',
-      'Built observability infrastructure (AWS OpenDistro / ELK) and owned infrastructure maintenance.',
+      'Built observability infrastructure (AWS OpenDistro / ELK) and owned infrastructure maintenance (Docker Swarm, bare-metal Linux).',
     ],
   },
   {
@@ -89,7 +119,7 @@ export const roles: Role[] = [
     bullets: [
       'Owned high-throughput JS data-feeder services at 3M events/min and drove reliability engineering.',
       'Architected a tag management application of Google Tag Manager class with sub-millisecond execution.',
-      'Full-stack delivery from React frontend to Scala backend.',
+      'Tuned QA and deployment pipelines; full-stack delivery from React frontend to Scala backend.',
     ],
   },
   {
@@ -112,10 +142,10 @@ export const roles: Role[] = [
     to: '2016',
     title: 'Lead Engineer / Big Data R&D',
     org: 'TomTom',
-    strap: 'Geospatial and traffic analytics — large-scale graph data at scale',
+    strap: 'Geospatial and traffic analytics — large-scale graph data visualisation and processing',
     domains: ['graph', 'systems', 'frontend'],
     bullets: [
-      'Designed a frontend visualisation platform for geospatial and traffic big data (React, TopoJSON/GeoJSON).',
+      'Designed a frontend visualisation platform for geospatial and traffic big data (React + Reflux, TopoJSON/GeoJSON).',
       'Implemented memory-efficient GPS probe path-reconstruction algorithms in Java — graph traversal at scale.',
       'Prototyped traffic analytics across Python, C++, NodeJS and QGIS; owned binary big-data provider design.',
     ],
@@ -128,8 +158,9 @@ export const roles: Role[] = [
     strap: 'Consumer fintech — credit comparison and origination',
     domains: ['frontend'],
     bullets: [
-      'Owned a large-scale UX surface on Backbone and vanilla JS with measurable client-side performance gains.',
+      'Owned a large-scale UX surface on Backbone and vanilla JS; delivered desktop and mobile pages with measurable client-side performance gains.',
       'Integrated and tuned an in-house Java CMS (JSP / Spring MVC) while shipping new features on a legacy stack.',
+      'Partnered with marketing to integrate analytics and tracking infrastructure across the site.',
     ],
   },
   {
@@ -140,9 +171,10 @@ export const roles: Role[] = [
     strap: 'Food-delivery marketplace — force.com and high-traffic web frontend',
     domains: ['frontend', 'systems'],
     bullets: [
-      'Tuned initial-page performance by 60% on the discount/stamp-card feature.',
-      'Built a company-wide customer feedback and survey system on force.com.',
-      'Set up CI/CD delivery tooling for force.com.',
+      'Tuned initial-page performance by 60% on the discount/stamp-card feature; improved client-side and integration response times across the site.',
+      'Built a company-wide customer feedback and survey system on force.com; delivered service-console customisation for country streams.',
+      'Set up CI/CD delivery tooling for force.com; prototyped a gamification and award system for support agents.',
+      'Implemented mass-fax and mass-mail functionality on top of force.com.',
     ],
   },
   {
@@ -155,7 +187,8 @@ export const roles: Role[] = [
     bullets: [
       'Delivered GIPSY, a single-page deal-flow and cross-border scheduling planner extending Salesforce.',
       'Architected Lab Forum, a Heroku-based reusable digital-forum framework for enterprise customers.',
-      'Built STORM, a force.com recruitment platform covering the full HR workflow.',
+      'Built STORM, a force.com recruitment platform covering the full HR workflow with a cloud-side candidate experience.',
+      'Force.com Certified Developer; hands-on Visualforce, Apex, Heroku (Rails / NodeJS / Java Spring) and JS UX work.',
     ],
   },
   {
@@ -168,6 +201,7 @@ export const roles: Role[] = [
     bullets: [
       'Performance-tuned WCF services on a large distributed SOA risk-management platform.',
       'Second-line 24/7 production support for a live trading system.',
+      "Maintained the Apex/Oracle Database application layer and the platform's security sub-system.",
     ],
   },
   {
@@ -180,6 +214,7 @@ export const roles: Role[] = [
     bullets: [
       'Led a security sub-system redesign for healthcare and public-sector platforms; migration to Windows Identity Foundation and ADFS 2.0.',
       'Architected a personal-information management cloud product with rich object semantics across mixed media.',
+      'Delivered the laboratory-process management portal end to end.',
       'Owned team management, technical interviewing, competence audit and estimation across multiple streams.',
     ],
   },
@@ -188,12 +223,14 @@ export const roles: Role[] = [
     to: '2010',
     title: 'System / Cloud Solutions Architect',
     org: 'Eleks Software',
-    strap: 'Scalable architecture and cloud migration across .NET / Azure',
+    strap: 'Scalable architecture, cloud migration and large-system estimation across .NET / Azure',
     domains: ['systems', 'leadership'],
     bullets: [
-      'Designed architecture for an MMOG platform serving 80,000+ concurrent users across 46 countries.',
-      'Architected an iris-recognition cloud service: 10× fewer maintenance pitstops, 4× better recognition latency.',
-      'Department-wide architecture auditor; led legacy cloud migration strategy and estimations of 10,000+ hours.',
+      'Designed architecture for an MMOG platform serving 80,000+ concurrent users across 46 countries on four continents.',
+      'Architected an iris-recognition cloud service: lower hardware support cost, 10× fewer maintenance pitstops, 4× better recognition latency.',
+      'Delivered a TV-box software platform unifying digital television, personal media and internet services on the living-room TV.',
+      'Department-wide architecture auditor; led legacy cloud migration strategy (C++ DCOM → cloud) and estimations of 10,000+ hours.',
+      'Concurrently held a project manager role: team co-ordination, requirements and risk management for distributed teams.',
     ],
   },
   {
@@ -204,9 +241,11 @@ export const roles: Role[] = [
     strap: 'Shared web platform and component libraries for e-government delivery',
     domains: ['systems', 'frontend'],
     bullets: [
-      'Designed a shared web core platform powering 15+ e-government projects, used in mission-critical work from 2006 onward.',
+      'Designed a shared web core platform (ASP.NET, MS SQL Server) powering 15+ e-government projects, used in mission-critical work from 2006 onward.',
       'Built a unified testing process that halved development time and cut full-regression cycles to under a day.',
       'Shipped a reusable client-side controls library with a declarative configuration model, in pure JavaScript.',
+      'Owned web automation testing tools for UI and services; mentored JavaScript and UX developers; ran technical interviews.',
+      'Delivered image-processing algorithms with scanner and video-camera integration.',
     ],
   },
   {
@@ -218,7 +257,7 @@ export const roles: Role[] = [
     domains: ['systems'],
     bullets: [
       'Web development, Win32 and Unix desktop development, and systems administration for SMB and education clients.',
-      'Delivered e-learning platforms, e-commerce systems, reputation systems, and small-business CMS/CRM.',
+      'Delivered e-learning platforms (Moodle-based and custom), e-commerce systems, reputation systems, accounting and small-business CMS/CRM.',
     ],
   },
 ];
@@ -236,14 +275,22 @@ export const education = [
   },
 ];
 
+export const languages = [
+  { name: 'Ukrainian', level: 'Native' },
+  { name: 'English', level: 'C1' },
+  { name: 'German', level: 'B1' },
+  { name: 'Polish', level: 'B2+' },
+  { name: 'Russian', level: 'C2' },
+];
+
 export const expertise = [
   {
     label: 'Architecture & systems design',
-    body: 'Distributed graph systems · columnar and embedded databases · Semantic Spacetime ontology · bipartite knowledge graphs · HyperGraphRAG · HNSW vector search · Reciprocal Rank Fusion · local-first architecture',
+    body: 'Distributed graph systems · columnar and embedded databases (Kùzu/LadybugDB) · Semantic Spacetime ontology · bipartite knowledge graphs · HyperGraphRAG · HNSW vector search · Reciprocal Rank Fusion · local-first architecture',
   },
   {
     label: 'Agentic & AI infrastructure',
-    body: 'Agent memory pipelines · semantic extraction-consolidation · promise-graph cooperation · agentic world models · multi-agent trust registries · LLM orchestration',
+    body: 'Agent memory pipelines · semantic extraction-consolidation (FIRE) · promise-graph agent cooperation · agentic world models · multi-agent trust registries · LLM orchestration',
   },
   {
     label: 'Identity & trust protocols',
@@ -252,5 +299,9 @@ export const expertise = [
   {
     label: 'Languages & runtimes',
     body: 'Rust · TypeScript · Python · Go · Kotlin · Scala · C++ · Zig · Clojure — language chosen to fit the problem',
+  },
+  {
+    label: 'Delivery & leadership',
+    body: 'Staff/Principal IC · Office of CTO · architecture review · technical hiring · R&D roadmapping · team coaching · Agile/Scrum',
   },
 ];

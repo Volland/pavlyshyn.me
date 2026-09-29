@@ -2,12 +2,12 @@
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
 import DiagramPlate from '../components/DiagramPlate.astro';
-import { tools, research, thesis } from '../data/projects';
+import { tools, products, research, thesis } from '../data/projects';
 ---
 
 <Base
   title="Projects — Volodymyr Pavlyshyn"
-  description="Factum ORM, LPG Modeler and Causal Canvas: three VS Code tools where you draw the model and ship the text. Plus shacl2cypher, graph RAG and agent memory research.">
+  description="Factum ORM, LPG Modeler and Causal Canvas: three VS Code tools where you draw the model and ship the text. Plus OxigraphDB and shacl2cypher in open source, and graph RAG and agent memory research.">
 
   <div class="page">
     <header class="head">
@@ -36,6 +36,29 @@ import { tools, research, thesis } from '../data/projects';
         </div>
       </section>
     ))}
+
+    <Ornament />
+
+    <section id="open-source">
+      <h2 class="section-title">Open source</h2>
+      <p class="standfirst">
+        Two graph products built in the open: memory an agent can keep on its own
+        device, and a way to prove a property graph still matches its model.
+      </p>
+      <div class="products">
+        {products.map((p) => (
+          <article class="product">
+            <h3 class="tool-name"><a href={`/projects/${p.slug}`}>{p.name}</a></h3>
+            <p class="tool-tagline">{p.tagline}</p>
+            <p class="product-summary">{p.summary}</p>
+            <p class="tool-links">
+              <a class="btn" href={`/projects/${p.slug}`}>About {p.name}</a>
+              <a href={p.home.href}>{p.home.href.replace(/^https:\/\//, '').replace(/\/$/, '')}</a>
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
 
     <Ornament />
 
@@ -104,6 +127,23 @@ import { tools, research, thesis } from '../data/projects';
     text-transform: lowercase;
     text-decoration: none;
   }
+
+  .products {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 1.6rem;
+  }
+  .product { padding: 0.4rem 2.4rem 0.6rem 0; }
+  .product + .product { padding: 0.4rem 0 0.6rem 2.4rem; border-left: 1px solid var(--rule); }
+  @media (max-width: 46rem) {
+    .products { grid-template-columns: 1fr; }
+    .product { padding: 0 0 1.8rem; }
+    .product + .product { padding: 1.8rem 0 0; border-left: 0; border-top: 1px solid var(--rule); }
+  }
+  .product .tool-name a { color: var(--ink); text-decoration: none; }
+  .product .tool-name a:hover { color: var(--orange); }
+  .product-summary { color: var(--ink-faded); font-size: 0.95rem; }
+  .product .tool-links { flex-wrap: wrap; }
 
   .repos { list-style: none; padding: 0; margin: 1.6rem 0 0; }
   .repos li { padding: 0.9rem 0; border-top: 1px solid var(--rule); }

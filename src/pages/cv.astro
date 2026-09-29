@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
-import { roles, domains, education, expertise } from '../data/cv';
+import { roles, domains, education, expertise, languages } from '../data/cv';
 ---
 
 <Base
@@ -23,7 +23,7 @@ import { roles, domains, education, expertise } from '../data/cv';
         <button class="chip is-on" data-chip="all">Everything</button>
         {domains.map((d) => <button class="chip" data-chip={d.id}>{d.label}</button>)}
       </div>
-      <a class="btn btn-solid dl" href="/cv/volodymyr-pavlyshyn-cv.pdf" download>
+      <a class="btn btn-solid dl" href="/cv/pavlyshyn_cv_2026.pdf" download="volodymyr-pavlyshyn-cv-2026.pdf">
         Download CV · PDF
       </a>
     </div>
@@ -47,6 +47,7 @@ import { roles, domains, education, expertise } from '../data/cv';
             <ul>
               {r.bullets.map((b) => <li>{b}</li>)}
             </ul>
+            {r.link && <p class="role-link"><a href={r.link.href}>{r.link.label}</a></p>}
           </details>
         </article>
       ))}
@@ -75,8 +76,17 @@ import { roles, domains, education, expertise } from '../data/cv';
             <span class="meta">{e.years}</span>
           </p>
         ))}
+        <h2 class="section-title" style="margin-top:2.4rem">Languages</h2>
+        <p class="edu">
+          {languages.map((l, i) => (
+            <>
+              {i > 0 && ' · '}{l.name} <span class="meta">{l.level}</span>
+            </>
+          ))}
+        </p>
         <h2 class="section-title" style="margin-top:2.4rem">Elsewhere</h2>
         <p class="edu">
+          <a href="/cv/pavlyshyn_cv_2026.pdf" download="volodymyr-pavlyshyn-cv-2026.pdf">CV as PDF</a><br />
           <a href="/projects">Open-source tools</a><br />
           <a href="/books">Twenty-two books</a><br />
           <a href="https://www.linkedin.com/in/pavlyshyn/">LinkedIn</a>
@@ -186,6 +196,7 @@ import { roles, domains, education, expertise } from '../data/cv';
   details[open] .expand { display: none; }
   .role-body ul { margin: 0.9rem 0 0; padding-left: 1.1rem; max-width: 42rem; }
   .role-body li { margin-bottom: 0.4rem; font-size: 0.93rem; }
+  .role-link { margin: 0.6rem 0 0; font-size: 0.9rem; }
 
   .cols {
     display: grid;

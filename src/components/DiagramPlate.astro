@@ -1,7 +1,7 @@
 ---
 // Diagram Plates — original engraving-idiom SVG showing what each tool produces.
 // These stand in place of product screenshots (see docs/adr/0006).
-interface Props { kind: 'factum' | 'lpg' | 'causal'; }
+interface Props { kind: 'factum' | 'lpg' | 'causal' | 'oxigraph' | 'shacl'; }
 const { kind } = Astro.props;
 ---
 
@@ -84,6 +84,57 @@ const { kind } = Astro.props;
       <text class="tiny" x="200" y="190" text-anchor="middle">the birth weight paradox, caught before it is published</text>
     </svg>
   )}
+
+  {kind === 'oxigraph' && (
+    <svg viewBox="0 0 400 200" role="img" aria-label="An agent and its memory graph drawn inside one device boundary, joined by a SPARQL query, with no line leaving the device.">
+      <rect class="model" x="20" y="14" width="360" height="140" />
+      <text class="tiny" x="32" y="32">the device</text>
+
+      <circle class="node" cx="96" cy="88" r="26" />
+      <text class="lbl" x="96" y="93" text-anchor="middle">agent</text>
+
+      <line class="edge" x1="122" y1="88" x2="210" y2="88" />
+      <text class="cap" x="166" y="80" text-anchor="middle">sparql</text>
+
+      <g class="edge">
+        <path d="M232 88L300 54M232 88L300 122M300 54L352 88" />
+      </g>
+      <circle class="collider" cx="228" cy="88" r="6" />
+      <circle class="node" cx="302" cy="53" r="5" />
+      <circle class="node" cx="302" cy="123" r="5" />
+      <circle class="node" cx="354" cy="89" r="5" />
+      <text class="sm" x="228" y="112" text-anchor="middle">ann</text>
+      <text class="sm" x="302" y="42" text-anchor="middle">bob</text>
+      <text class="sm" x="302" y="142" text-anchor="middle">Berlin</text>
+      <text class="sm" x="262" y="62" text-anchor="middle">knows</text>
+      <text class="sm" x="268" y="116" text-anchor="end">livesIn</text>
+
+      <text class="tiny" x="200" y="176" text-anchor="middle">memory that stays where the agent runs</text>
+      <text class="tiny" x="200" y="190" text-anchor="middle">— no server, no cloud round-trip —</text>
+    </svg>
+  )}
+
+  {kind === 'shacl' && (
+    <svg viewBox="0 0 400 200" role="img" aria-label="A SHACL shape requiring every Person to have a name, compiled into a read-only Cypher query that finds the one Person without one.">
+      <rect class="artifact-box" x="10" y="26" width="160" height="62" />
+      <rect class="model" x="230" y="26" width="160" height="62" />
+      <text class="tiny" x="90" y="18" text-anchor="middle">shacl shape</text>
+      <text class="tiny" x="310" y="18" text-anchor="middle">read-only cypher</text>
+      <text class="sm" x="90" y="52" text-anchor="middle">sh:path ex:name</text>
+      <text class="sm" x="90" y="70" text-anchor="middle">sh:minCount 1</text>
+      <text class="sm" x="310" y="52" text-anchor="middle">MATCH (n:Person)</text>
+      <text class="sm" x="310" y="70" text-anchor="middle">WHERE n.name IS NULL</text>
+
+      <line class="edge" x1="170" y1="57" x2="230" y2="57" />
+      <path class="edge" d="M222 52l8 5l-8 5" />
+      <text class="cap" x="200" y="48" text-anchor="middle">compile</text>
+
+      <line class="rule" x1="40" y1="120" x2="360" y2="120" />
+      <text class="verb warn" x="200" y="146" text-anchor="middle">“Person id=p3: Person needs a name.”</text>
+      <text class="tiny" x="200" y="172" text-anchor="middle">neo4j · ladybugdb · falkordb</text>
+      <text class="tiny" x="200" y="188" text-anchor="middle">the shapes that document the model now test it</text>
+    </svg>
+  )}
 </figure>
 
 <style>
@@ -93,7 +144,8 @@ const { kind } = Astro.props;
   .hatch ellipse,
   .role,
   .model,
-  .artifact rect {
+  .artifact rect,
+  .artifact-box {
     fill: none;
     stroke: var(--ink);
     stroke-width: 1;
