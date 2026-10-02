@@ -6,11 +6,11 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
 
 <Base
   title="CV — Volodymyr Pavlyshyn"
-  description="Twenty-three years, 2002 to now: principal engineer, twice a founding engineer. Filterable timeline, with the PDF.">
+  description="Engineering since 2002: principal engineer, twice a founding engineer. Explore the career timeline by domain, with a downloadable PDF.">
 
   <div class="page">
     <header class="head">
-      <h1 class="display">Twenty-three years</h1>
+      <h1 class="display">Engineering since 2002</h1>
       <p class="standfirst">
         From COBOL and Smalltalk to Rust, agentic memory and sovereign AI. It is a long
         list, and you probably want a slice of it — so filter it down to the part you
@@ -20,13 +20,14 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
 
     <div class="controls no-print" data-cv>
       <div class="chips">
-        <button class="chip is-on" data-chip="all">Everything</button>
-        {domains.map((d) => <button class="chip" data-chip={d.id}>{d.label}</button>)}
+        <button class="chip is-on" data-chip="all" aria-pressed="true">Everything</button>
+        {domains.map((d) => <button class="chip" data-chip={d.id} aria-pressed="false">{d.label}</button>)}
       </div>
       <a class="btn btn-solid dl" href="/cv/pavlyshyn_cv_2026.pdf" download="volodymyr-pavlyshyn-cv-2026.pdf">
         Download CV · PDF
       </a>
     </div>
+    <p class="filter-status meta no-print" data-cv-status role="status"></p>
 
     <section class="timeline" data-timeline>
       {roles.map((r) => (
@@ -88,7 +89,7 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
         <p class="edu">
           <a href="/cv/pavlyshyn_cv_2026.pdf" download="volodymyr-pavlyshyn-cv-2026.pdf">CV as PDF</a><br />
           <a href="/projects">Open-source tools</a><br />
-          <a href="/books">Twenty-two books</a><br />
+          <a href="/books">Browse the catalogue</a><br />
           <a href="https://www.linkedin.com/in/pavlyshyn/">LinkedIn</a>
         </p>
       </div>
@@ -123,12 +124,17 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
     background: transparent;
     border: 1px solid var(--rule);
     color: var(--ink-faded);
-    padding: 0.18rem 0.65rem;
+    padding: 0.35rem 0.65rem;
+    min-height: 44px;
     cursor: pointer;
   }
   .chip:hover { border-color: var(--orange); color: var(--orange); }
   .chip.is-on { background: var(--orange); border-color: var(--orange); color: var(--paper); }
   .dl { white-space: nowrap; }
+  .filter-status { margin-top: 0.8rem; }
+  @media (max-width: 40rem) {
+    .controls { position: static; }
+  }
 
   .timeline { margin: 2.4rem 0; }
 
@@ -138,7 +144,12 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
     gap: 0 0.9rem;
     transition: opacity 0.15s;
   }
-  .role.dim { opacity: 0.26; }
+  @media (max-width: 40rem) {
+    .role { grid-template-columns: 3rem 0.65rem minmax(0, 1fr); gap: 0 0.6rem; }
+  }
+  .role.dim .marker span { border-color: var(--rule); background: var(--paper); }
+  .role.dim .role-org, .role.dim .role-title { color: var(--ink-faded); }
+  .role.match .role-org { color: var(--orange); }
 
   .years {
     display: flex;
@@ -217,7 +228,7 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
 
   @media print {
     .role-body ul { display: block !important; }
-    .role.dim { opacity: 1; }
+    .role.dim .role-org, .role.dim .role-title, .role.match .role-org { color: var(--ink); }
   }
 </style>
 
@@ -226,14 +237,26 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
   if (panel) {
     const chips = Array.from(panel.querySelectorAll<HTMLButtonElement>('.chip'));
     const roles = Array.from(document.querySelectorAll<HTMLElement>('.role'));
+    const status = document.querySelector('[data-cv-status]');
     let active = 'all';
 
     function apply() {
-      for (const c of chips) c.classList.toggle('is-on', c.dataset.chip === active);
+      for (const c of chips) {
+        const selected = c.dataset.chip === active;
+        c.classList.toggle('is-on', selected);
+        c.setAttribute('aria-pressed', String(selected));
+      }
+      let matches = 0;
       for (const r of roles) {
         const has = active === 'all' || (r.dataset.domains ?? '').split(' ').includes(active);
         r.classList.toggle('dim', !has);
+        r.classList.toggle('match', active !== 'all' && has);
+        if (has) matches++;
       }
+      const label = chips.find((chip) => chip.dataset.chip === active)?.textContent?.trim();
+      if (status) status.textContent = active === 'all'
+        ? `Showing all ${roles.length} roles.`
+        : `${label}: ${matches} matching roles highlighted. The full timeline remains available.`;
     }
 
     for (const chip of chips) {
@@ -243,5 +266,16 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
         apply();
       });
     }
+    apply();
   }
+
+  const details = Array.from(document.querySelectorAll<HTMLDetailsElement>('.role-body'));
+  let previouslyOpen: boolean[] = [];
+  window.addEventListener('beforeprint', () => {
+    previouslyOpen = details.map((detail) => detail.open);
+    details.forEach((detail) => { detail.open = true; });
+  });
+  window.addEventListener('afterprint', () => {
+    details.forEach((detail, i) => { detail.open = previouslyOpen[i] ?? false; });
+  });
 </script>

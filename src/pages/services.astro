@@ -21,7 +21,7 @@ const hasBooking = Boolean(site.booking);
       <p class="cta-row">
         {hasBooking && <a class="btn btn-solid" href={site.booking}>Book a 30-minute call</a>}
         <a class={hasBooking ? 'btn' : 'btn btn-solid'} href={`mailto:${site.email}`}>
-          {site.email}
+          Start a conversation by email
         </a>
       </p>
     </header>
@@ -36,6 +36,10 @@ const hasBooking = Boolean(site.booking);
             <h2 class="offer-name">{o.name}</h2>
             <p class="offer-shape">{o.shape}</p>
             <p class="offer-body">{o.body}</p>
+            <h3 class="fit-label meta">What you take away</h3>
+            <ul class="fit">
+              {o.deliverables.map((d) => <li>{d}</li>)}
+            </ul>
             <p class="fit-label meta">You might want this if</p>
             <ul class="fit">
               {o.fit.map((f) => <li>{f}</li>)}
@@ -50,6 +54,9 @@ const hasBooking = Boolean(site.booking);
     <section class="how">
       <div>
         <h2 class="section-title">How it works</h2>
+        <p>Include a short description of your system, the decision you face, and your
+          timeline in your email. We agree the deliverables, duration and cadence in
+          the written proposal before the work starts.</p>
         <ol class="steps">
           {howItWorks.map((s) => <li>{s}</li>)}
         </ol>
@@ -90,10 +97,11 @@ const hasBooking = Boolean(site.booking);
       <p class="cta-row">
         {hasBooking && <a class="btn btn-solid" href={site.booking}>Book a 30-minute call</a>}
         <a class={hasBooking ? 'btn' : 'btn btn-solid'} href={`mailto:${site.email}`}>
-          {site.email}
+          Start a conversation by email
         </a>
         <a class="btn btn-quiet" href="https://www.linkedin.com/in/pavlyshyn/">LinkedIn</a>
       </p>
+      <p class="meta">Prefer a direct address? <a href={`mailto:${site.email}`}>{site.email}</a></p>
     </section>
   </div>
 </Base>

@@ -93,7 +93,7 @@ const { product } = Astro.props as { product: Product };
 
   .points {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
     gap: 1.6rem 2.4rem;
     margin: 0;
   }

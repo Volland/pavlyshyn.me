@@ -3,11 +3,16 @@ export interface Offer {
   shape: string;
   body: string;
   fit: string[];
+  deliverables: string[];
 }
 
 export const offers: Offer[] = [
   {
     name: 'Agentic memory architecture',
+    deliverables: [
+      'A memory architecture covering storage, retrieval and consolidation.',
+      'A prioritised implementation plan with trade-offs and evaluation criteria.',
+    ],
     shape: 'Design partner, ongoing',
     body: `Designing the memory an agent actually needs: episodic, semantic and
     procedural layers, the knowledge-graph substrate underneath them, and the
@@ -22,6 +27,10 @@ export const offers: Offer[] = [
   },
   {
     name: 'Agent identity & trust',
+    deliverables: [
+      'An identity and trust model for your agents and their integrations.',
+      'Protocol recommendations, trust boundaries and an implementation plan.',
+    ],
     shape: 'Project or advisory',
     body: `Identity for agents, and trust between them. DID methods — did:web,
     did:webvh, did:webs — KERI, verifiable credentials, GLEIF vLEI, agent reputation
@@ -36,6 +45,10 @@ export const offers: Offer[] = [
   },
   {
     name: 'Architecture review',
+    deliverables: [
+      'A written assessment of strengths, risks and architectural trade-offs.',
+      'Prioritised recommendations and a walkthrough with your team.',
+    ],
     shape: 'Time-boxed, written findings',
     body: `A senior read of an existing system, ending in a written document you can
     hand to your board or your team — what is sound, what will hurt, what to do
@@ -49,6 +62,10 @@ export const offers: Offer[] = [
   },
   {
     name: 'Workshops & training',
+    deliverables: [
+      'Team sessions on agent architecture, knowledge graphs and local-first AI.',
+      'Exercises and reference material tied to your team’s engineering questions.',
+    ],
     shape: 'Multi-day, on-site or remote',
     body: `Teaching engineering teams the material behind the books: agent
     architecture, knowledge graphs as agent memory, and local-first and edge AI. The

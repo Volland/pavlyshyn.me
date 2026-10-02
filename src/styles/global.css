@@ -167,6 +167,9 @@ section { margin: 4rem 0; }
   font-size: 0.83rem;
 }
 .masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--ink-faded);
   text-decoration: none;
   font-variant: small-caps;
@@ -183,7 +186,7 @@ section { margin: 4rem 0; }
 }
 .colophon-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr));
   gap: 1.6rem 2rem;
   margin-bottom: 2.2rem;
 }
@@ -253,6 +256,7 @@ section { margin: 4rem 0; }
 
 /* ── Buttons ─────────────────────────────────────────────────────────── */
 .btn {
+  min-height: 44px;
   display: inline-block;
   font-variant: small-caps;
   letter-spacing: 0.13em;
@@ -277,6 +281,19 @@ section { margin: 4rem 0; }
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 .filters { position: absolute; width: 0; height: 0; overflow: hidden; }
+.skip-link:focus {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.6rem 1rem;
+  overflow: visible;
+  clip: auto;
+  background: var(--paper);
+  z-index: 10;
+}
 .meta {
   font-variant: small-caps;
   letter-spacing: 0.12em;
@@ -296,6 +313,14 @@ section { margin: 4rem 0; }
 }
 
 :focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
 
 @media print {
   .masthead, .colophon, .no-print { display: none !important; }

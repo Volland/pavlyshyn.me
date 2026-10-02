@@ -12,6 +12,24 @@ const { title, description, lang = 'en' } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 const year = new Date().getFullYear();
+const socialImage = new URL('/portrait.jpg', Astro.site).toString();
+const personId = new URL('/#person', Astro.site).toString();
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Person', '@id': personId,
+      name: site.name, url: Astro.site?.toString(),
+      image: socialImage, jobTitle: site.role,
+      sameAs: elsewhere.map((entry) => entry.href),
+    },
+    {
+      '@type': 'WebPage', '@id': canonical,
+      url: canonical, name: title, description, inLanguage: lang,
+      author: { '@id': personId },
+    },
+  ],
+};
 ---
 
 <!doctype html>
@@ -26,6 +44,16 @@ const year = new Date().getFullYear();
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="640" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="Volodymyr Pavlyshyn" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
+    <meta name="twitter:image:alt" content="Volodymyr Pavlyshyn" />
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
     <meta name="theme-color" content="#faf6ef" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   </head>
@@ -48,14 +76,14 @@ const year = new Date().getFullYear();
       </filter>
     </svg>
 
-    <a href="#main" class="sr-only">Skip to content</a>
+    <a href="#main" class="sr-only skip-link">Skip to content</a>
 
     <header class="masthead">
       <div class="masthead-inner">
         <a class="wordmark" href="/">Volodymyr Pavlyshyn</a>
         <nav aria-label="Primary">
           {nav.map((item) => (
-            <a href={item.href} aria-current={path === item.href ? 'page' : undefined}>
+            <a href={item.href} aria-current={path === item.href || path.startsWith(`${item.href}/`) ? 'page' : undefined}>
               {item.label}
             </a>
           ))}

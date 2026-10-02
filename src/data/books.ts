@@ -251,3 +251,24 @@ export const books: Book[] = [
 
 export const leanpubUrl = (slug: string) => `https://leanpub.com/${slug}`;
 export const coverUrl = (slug: string) => `/covers/${slug}.jpg`;
+
+export const readingPaths = [
+  {
+    label: 'Start here',
+    slug: 'ai-agents-memory',
+    reader: 'For anyone designing their first agent memory system.',
+    outcome: 'Understand where retrieval ends and memory begins, and how a knowledge graph helps an agent reason.',
+  },
+  {
+    label: 'For working engineers',
+    slug: 'graphengineering',
+    reader: 'For engineers maintaining a graph that changes over time.',
+    outcome: 'Explore the loop of extraction, consolidation and forgetting that keeps agent memory useful.',
+  },
+  {
+    label: 'For deeper research',
+    slug: 'dependenttypesdttlogicholforaiagentreadyknowledgegraphs',
+    reader: 'For readers exploring the formal foundations of graph models.',
+    outcome: 'Examine how dependent types and logic can make constraints part of the model itself.',
+  },
+].map((path) => ({ ...path, book: books.find((book) => book.slug === path.slug)! }));

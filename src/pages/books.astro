@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
-import { books, shelves, themes, leanpubUrl, coverUrl } from '../data/books';
+import { books, shelves, themes, readingPaths, leanpubUrl, coverUrl } from '../data/books';
 // Real cover dimensions, measured from the files (scripts/measure-covers.py).
 // Leanpub covers are not a uniform ratio, so these must not be guessed.
 import coverDims from '../data/cover-dims.json';
@@ -44,8 +44,8 @@ const themeNodes = themes.map((t) => {
     ...t,
     x: CX + Math.cos(a) * R_THEME,
     y: CY + Math.sin(a) * R_THEME,
-    anchor: Math.cos(a) > 0.25 ? 'start' : Math.cos(a) < -0.25 ? 'end' : 'middle',
-    dy: Math.sin(a) > 0.5 ? 16 : Math.sin(a) < -0.5 ? -10 : 4,
+    anchor: Math.cos(a) > 0.25 ? 'end' : Math.cos(a) < -0.25 ? 'start' : 'middle',
+    dy: Math.sin(a) > 0.5 ? 16 : -12,
   };
 });
 
@@ -61,7 +61,7 @@ const published = books.filter((b) => !b.inProgress).length;
 
 <Base
   title="Books — Volodymyr Pavlyshyn"
-  description="Twenty-five books on agentic memory, knowledge graphs, engineering craft — and tea. Browse the catalogue as a concept graph.">
+  description={`${books.length} books on agentic memory, knowledge graphs, engineering craft — and tea. Find a starting point or explore the catalogue as a concept graph.`}>
 
   <div class="page">
     <header class="head">
@@ -72,7 +72,28 @@ const published = books.filter((b) => !b.inProgress).length;
         tea, yerba mate and a techno-horror novella. Everything is on Leanpub, where the
         pricing is yours to set.
       </p>
+      <nav class="shelf-links" aria-label="Catalogue shelves">
+        <a href="#graph">Explore the graph</a>
+        {shelves.map((shelf) => <a href={`#shelf-${shelf.id}`} data-shelf-link>{shelf.label}</a>)}
+      </nav>
     </header>
+
+    <Ornament />
+
+    <section aria-labelledby="reading-title">
+      <h2 class="section-title" id="reading-title">Choose your first book</h2>
+      <div class="reading-paths">
+        {readingPaths.map((path) => (
+          <article class="reading-path">
+            <p class="meta">{path.label}</p>
+            <h3><a href={leanpubUrl(path.slug)}>{path.book.title}</a></h3>
+            <p>{path.reader}</p>
+            <p>{path.outcome}</p>
+            <a href={leanpubUrl(path.slug)}>Read on Leanpub →</a>
+          </article>
+        ))}
+      </div>
+    </section>
 
     <Ornament />
 
@@ -85,8 +106,8 @@ const published = books.filter((b) => !b.inProgress).length;
       </p>
 
       <div class="graph-wrap" data-graph>
-        <svg viewBox="0 0 400 400" role="img"
-             aria-label="A wheel diagram in the manner of Llull: sixteen books arranged on two inner rings, joined by lines to seven subject hubs on the outer ring.">
+        <svg viewBox="0 0 400 400" role="group"
+             aria-label={`Explore ${graphBooks.length} books connected to ${themes.length} subjects. Choose a subject to filter, or a book to find it in the catalogue.`}>
           <circle class="ring" cx={CX} cy={CY} r={R_THEME} />
           <circle class="ring faint" cx={CX} cy={CY} r="104" />
           <circle class="ring faint" cx={CX} cy={CY} r="68" />
@@ -98,7 +119,8 @@ const published = books.filter((b) => !b.inProgress).length;
 
           {themeNodes.map((t) => (
             <g class="ghub" data-theme={t.id} tabindex="0" role="button"
-               aria-label={`Filter by ${t.label}`}>
+               aria-pressed="false" aria-label={`Filter by ${t.label}`}>
+              <circle class="hit-area" cx={t.x} cy={t.y} r="16" />
               <circle cx={t.x} cy={t.y} r="6.5" />
               <text x={t.x} y={t.y + t.dy} text-anchor={t.anchor}>{t.label}</text>
             </g>
@@ -107,7 +129,8 @@ const published = books.filter((b) => !b.inProgress).length;
           {nodes.map((n) => (
             <g class="gnode" data-slug={n.book.slug}
                data-themes={n.book.themes.join(' ')} tabindex="0" role="button"
-               aria-label={n.book.title}>
+               aria-pressed="false" aria-label={n.book.title}>
+              <circle class="hit-area" cx={n.x} cy={n.y} r="14" />
               <circle cx={n.x} cy={n.y} r="4.4" />
               <title>{n.book.title}</title>
             </g>
@@ -116,36 +139,37 @@ const published = books.filter((b) => !b.inProgress).length;
 
         <aside class="graph-read" data-readout aria-live="polite">
           <p class="graph-idle">
-            Seven subjects, sixteen books. The wheel is Llull's; the argument is that a
+            {themes.length} subjects, {graphBooks.length} books. The wheel is Llull's; the argument is that a
             catalogue about knowledge graphs ought to be one.
           </p>
         </aside>
       </div>
 
       <div class="chips">
-        <button class="chip is-on" data-chip="all">All subjects</button>
-        {themes.map((t) => <button class="chip" data-chip={t.id}>{t.label}</button>)}
+        <button class="chip is-on" data-chip="all" aria-pressed="true">All subjects</button>
+        {themes.map((t) => <button class="chip" data-chip={t.id} aria-pressed="false">{t.label}</button>)}
       </div>
+      <p class="filter-status meta" data-filter-status role="status"></p>
     </section>
 
     <Ornament />
 
     <!-- ── The shelves ───────────────────────────────────────────── -->
     {shelves.map((shelf) => (
-      <section class="shelf" data-shelf={shelf.id}>
+      <section class="shelf" id={`shelf-${shelf.id}`} data-shelf={shelf.id}>
         <h2 class="section-title">{shelf.label}</h2>
         <p class="shelf-note">{shelf.note}</p>
 
         <ul class="grid">
           {books.filter((b) => b.shelf === shelf.id).map((b) => (
-            <li class="card" id={`book-${b.slug}`} data-themes={b.themes.join(' ')}>
+            <li class="card" id={`book-${b.slug}`} data-themes={b.themes.join(' ')} tabindex="-1">
               <a class="cover" href={leanpubUrl(b.slug)}>
                 <img src={coverUrl(b.slug)} loading="lazy"
                      width={dim(b.slug).w} height={dim(b.slug).h}
                      alt={`Cover of ${b.title}`} />
               </a>
               <div class="card-body">
-                <h3 class="card-title">
+                <h3 class="card-title" lang={b.lang ?? 'en'}>
                   <a href={leanpubUrl(b.slug)}>{b.title}</a>
                 </h3>
                 {b.inProgress && <span class="tag">in progress</span>}
@@ -154,7 +178,7 @@ const published = books.filter((b) => !b.inProgress).length;
                 {b.edition && (
                   <p class="edition">
                     Also in Ukrainian:
-                    <a href={leanpubUrl(b.edition.slug)}>{b.edition.title}</a>
+                    <a href={leanpubUrl(b.edition.slug)} lang={b.edition.lang}>{b.edition.title}</a>
                   </p>
                 )}
                 <a class="read" href={leanpubUrl(b.slug)}>Read on Leanpub →</a>
@@ -175,6 +199,17 @@ const published = books.filter((b) => !b.inProgress).length;
 <style>
   .head { margin: 3.4rem 0 0; }
   .head .display { max-width: 12ch; }
+  .shelf-links { display: flex; flex-wrap: wrap; gap: 0.3rem 1.4rem; margin-top: 1.2rem; }
+  .shelf-links a { display: inline-flex; align-items: center; min-height: 44px; font-size: 0.9rem; }
+  .shelf[hidden] { display: none; }
+  .shelf, .card { scroll-margin-top: 1.5rem; }
+  .reading-paths { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+  .reading-path { border-top: 1px solid var(--rule); padding-top: 1rem; }
+  .reading-path h3 { font-size: 1.15rem; }
+  .reading-path p:not(.meta) { font-size: 0.9rem; color: var(--ink-faded); }
+  .reading-path > a { font-size: 0.9rem; }
+  @media (max-width: 48rem) { .reading-paths { grid-template-columns: 1fr; gap: 1.4rem; } }
+  .filter-status { margin-top: 0.8rem; }
 
   .graph-help { color: var(--ink-faded); font-size: 0.95rem; }
 
@@ -193,27 +228,32 @@ const published = books.filter((b) => !b.inProgress).length;
   .gedge { stroke: var(--rule); stroke-width: 0.8; transition: stroke 0.15s, stroke-width 0.15s; }
   .gedge.lit { stroke: var(--orange); stroke-width: 1.3; }
 
-  .ghub circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
+  .ghub circle:not(.hit-area) { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
   .ghub text {
     font-family: var(--serif);
     font-size: 11px;
     fill: var(--ink-faded);
+    paint-order: stroke;
+    stroke: var(--paper);
+    stroke-width: 3px;
+    stroke-linejoin: round;
     font-variant: small-caps;
     letter-spacing: 0.09em;
   }
   .ghub { cursor: pointer; }
-  .ghub:hover circle, .ghub.on circle { fill: var(--orange); stroke: var(--orange); }
+  .ghub:hover circle:not(.hit-area), .ghub.on circle:not(.hit-area) { fill: var(--orange); stroke: var(--orange); }
   .ghub:hover text, .ghub.on text { fill: var(--orange); }
 
-  .gnode circle { fill: var(--ink); transition: fill 0.15s, r 0.15s; }
+  .gnode circle:not(.hit-area) { fill: var(--ink); transition: fill 0.15s, r 0.15s; }
   .gnode { cursor: pointer; }
-  .gnode:hover circle, .gnode.on circle { fill: var(--orange); r: 6; }
-  .gnode.dim circle { fill: var(--rule); }
+  .gnode:hover circle:not(.hit-area), .gnode.on circle:not(.hit-area) { fill: var(--orange); r: 6; }
+  .gnode.dim circle:not(.hit-area) { fill: var(--rule); }
+  .graph-wrap .hit-area { fill: transparent; stroke: none; pointer-events: all; }
 
   .graph-read { border-left: 1px solid var(--rule); padding-left: 1.4rem; min-height: 8rem; }
-  .graph-read p { font-size: 0.92rem; margin: 0 0 0.5rem; }
+  .graph-read :global(p) { font-size: 0.92rem; margin: 0 0 0.5rem; }
   .graph-idle { color: var(--ink-faded); font-style: italic; }
-  .graph-read .rtitle { font-size: 1.05rem; font-style: normal; }
+  .graph-read :global(.rtitle) { font-size: 1.05rem; font-style: normal; }
   @media (max-width: 48rem) {
     .graph-read { border-left: 0; border-top: 1px solid var(--rule); padding: 1rem 0 0; }
   }
@@ -228,7 +268,8 @@ const published = books.filter((b) => !b.inProgress).length;
     background: transparent;
     border: 1px solid var(--rule);
     color: var(--ink-faded);
-    padding: 0.2rem 0.7rem;
+    padding: 0.4rem 0.7rem;
+    min-height: 44px;
     cursor: pointer;
   }
   .chip:hover { border-color: var(--orange); color: var(--orange); }
@@ -241,7 +282,7 @@ const published = books.filter((b) => !b.inProgress).length;
     padding: 0;
     margin: 1.6rem 0 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
     gap: 2.4rem 2rem;
   }
   .card { display: flex; flex-direction: column; gap: 0.8rem; }
@@ -256,6 +297,14 @@ const published = books.filter((b) => !b.inProgress).length;
   }
   .cover img { filter: url(#duotone) contrast(1.02); }
   .cover:hover { border-color: var(--orange); }
+  @media (max-width: 40rem) {
+    .grid { gap: 1.5rem; }
+    .card { display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 1rem; align-items: start; }
+    .cover { padding: 0.25rem; }
+    .card-body { min-width: 0; }
+    .card-title { overflow-wrap: anywhere; }
+    .read { display: inline-flex; align-items: center; min-height: 44px; }
+  }
 
   .card-title { font-size: 1.08rem; margin: 0; line-height: 1.25; }
   .card-title a { text-decoration: none; color: var(--ink); }
@@ -281,8 +330,9 @@ const published = books.filter((b) => !b.inProgress).length;
   const wrap = document.querySelector('[data-graph]');
   if (wrap) {
     const readout = wrap.querySelector('[data-readout]');
-    const idle = readout?.innerHTML ?? '';
+    const status = document.querySelector('[data-filter-status]');
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.card'));
+    const shelves = Array.from(document.querySelectorAll<HTMLElement>('[data-shelf]'));
     const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.chip'));
     const hubs = Array.from(wrap.querySelectorAll<SVGGElement>('.ghub'));
     const nodes = Array.from(wrap.querySelectorAll<SVGGElement>('.gnode'));
@@ -299,10 +349,19 @@ const published = books.filter((b) => !b.inProgress).length;
     }
 
     let theme = 'all';
+    let selectedSlug: string | null = null;
 
     function apply() {
-      for (const c of chips) c.classList.toggle('is-on', c.dataset.chip === theme);
-      for (const h of hubs) h.classList.toggle('on', h.dataset.theme === theme);
+      for (const c of chips) {
+        const active = c.dataset.chip === theme;
+        c.classList.toggle('is-on', active);
+        c.setAttribute('aria-pressed', String(active));
+      }
+      for (const h of hubs) {
+        const active = h.dataset.theme === theme;
+        h.classList.toggle('on', active);
+        h.setAttribute('aria-pressed', String(active));
+      }
       for (const e of edges) e.classList.toggle('lit', theme !== 'all' && e.dataset.theme === theme);
       for (const n of nodes) {
         const has = theme === 'all' || (n.dataset.themes ?? '').split(' ').includes(theme);
@@ -313,11 +372,26 @@ const published = books.filter((b) => !b.inProgress).length;
         // Books with no themes (The Craft, Other Worlds) are only shown under "all".
         card.classList.toggle('hidden', !has);
       }
+      for (const shelf of shelves) {
+        shelf.hidden = !shelf.querySelector('.card:not(.hidden)');
+      }
+      const visible = cards.filter((card) => !card.classList.contains('hidden')).length;
+      const label = chips.find((chip) => chip.dataset.chip === theme)?.textContent?.trim();
+      if (status) status.textContent = theme === 'all'
+        ? `Showing all ${visible} books.`
+        : `${label}: ${visible} books. Choose All subjects to return to the full catalogue.`;
     }
 
     function setTheme(next: string) {
       theme = theme === next ? 'all' : next;
       apply();
+    }
+
+    for (const link of document.querySelectorAll('[data-shelf-link]')) {
+      link.addEventListener('click', () => {
+        theme = 'all';
+        apply();
+      });
     }
 
     for (const chip of chips) {
@@ -334,25 +408,51 @@ const published = books.filter((b) => !b.inProgress).length;
     function show(slug: string) {
       const b = blurbs.get(slug);
       if (!b || !readout) return;
-      readout.innerHTML = `<p class="rtitle"><a href="${b.href}">${b.title}</a></p><p>${b.blurb}</p>`;
+      selectedSlug = slug;
+      for (const node of nodes) {
+        const selected = node.dataset.slug === selectedSlug;
+        node.classList.toggle('on', selected);
+        node.setAttribute('aria-pressed', String(selected));
+      }
+      const title = document.createElement('p');
+      title.className = 'rtitle';
+      const link = document.createElement('a');
+      link.href = b.href;
+      link.textContent = b.title;
+      title.append(link);
+      const blurb = document.createElement('p');
+      blurb.textContent = b.blurb;
+      readout.replaceChildren(title, blurb);
+    }
+
+    function reveal(slug: string) {
+      const card = document.getElementById(`book-${slug}`);
+      if (!card) return;
+      if (card.classList.contains('hidden')) {
+        theme = 'all';
+        apply();
+      }
+      show(slug);
+      card.focus({ preventScroll: true });
+      card.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+        block: 'center',
+      });
     }
 
     for (const node of nodes) {
       const slug = node.dataset.slug!;
       node.addEventListener('mouseenter', () => show(slug));
       node.addEventListener('focus', () => show(slug));
-      node.addEventListener('click', () => {
-        document.getElementById(`book-${slug}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      });
+      node.addEventListener('click', () => reveal(slug));
       node.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          document.getElementById(`book-${slug}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          reveal(slug);
         }
       });
     }
 
-    wrap.addEventListener('mouseleave', () => { if (readout) readout.innerHTML = idle; });
     apply();
   }
 </script>

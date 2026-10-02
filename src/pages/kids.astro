@@ -230,7 +230,7 @@ const further = essays.slice(1);
 
   .lessons {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
     gap: 1.6rem 2rem;
     margin: 2.2rem 0;
   }
@@ -258,7 +258,7 @@ const further = essays.slice(1);
 
   .cast {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
     gap: 1.6rem 2rem;
   }
   .member { border-top: 1px solid var(--rule); padding-top: 0.9rem; }

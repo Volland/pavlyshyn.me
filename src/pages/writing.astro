@@ -48,7 +48,9 @@ const built = new Date().toLocaleDateString('en-GB', {
             </ul>
           ) : (
             <p class="empty">
-              Nothing pulled here — <a href={s.href}>read it at the source</a>.
+              <a href={s.href}>{s.label === 'YouTube'
+                ? 'Watch talks and walkthroughs →'
+                : `Read the latest on ${s.label} →`}</a>
             </p>
           )}
         </div>

@@ -7,7 +7,6 @@ import { offers } from '../data/services';
 import { site } from '../data/site';
 
 const published = books.filter((b) => !b.inProgress).length;
-const contact = site.booking || `mailto:${site.email}`;
 ---
 
 <Base
@@ -17,9 +16,13 @@ const contact = site.booking || `mailto:${site.email}`;
   <div class="page">
     <section class="hero">
       <div class="hero-text">
-        <h1 class="display">I build memory for AI&nbsp;agents, and identity for the agents that carry it.</h1>
+        <h1 class="display">Memory and identity for AI&nbsp;agents.</h1>
+        <p class="hero-actions" aria-label="Explore the work">
+          <a class="btn" href="/books">Browse the catalogue</a>
+          <a class="btn" href="/services">Work with me</a>
+        </p>
         <p class="standfirst">
-          Twenty-three years an engineer. Founding engineer twice over — at Affinidi,
+          Engineering since 2002. Founding engineer twice over — at Affinidi,
           on self-sovereign identity, and at Mykin, on a privacy-first personal AI that
           runs on your device.
         </p>
@@ -66,14 +69,14 @@ const contact = site.booking || `mailto:${site.email}`;
         <p class="door-list">
           {offers.map((o) => <span>{o.name}</span>)}
         </p>
-        <a class="btn btn-solid" href="/services">See how that works</a>
+        <a class="btn" href="/services">Explore the services</a>
 
         <div class="evidence">
           <span class="meta">Tools I have shipped</span>
           <p>
             {tools.map((t, i) => (
               <>
-                <a href="/projects">{t.name}</a>{' · '}
+                <a href={`/projects#${t.slug}`}>{t.name}</a>{' · '}
               </>
             ))}
             {products.map((p, i) => (
@@ -84,6 +87,27 @@ const contact = site.booking || `mailto:${site.email}`;
           </p>
         </div>
       </div>
+    </section>
+
+    <Ornament />
+
+    <section class="experience" aria-labelledby="experience-title">
+      <h2 class="section-title" id="experience-title">From architecture to production</h2>
+      <div class="experience-grid">
+        <article>
+          <h3>Affinidi · identity people could use</h3>
+          <p>As a founding engineer, I worked on self-sovereign identity and a COVID
+            verifiable-credentials platform taken from zero to a live airport integration
+            in four weeks.</p>
+        </article>
+        <article>
+          <h3>Mykin · memory on the device</h3>
+          <p>As a founding engineer, I built on-device semantic memory for a privacy-first
+            personal AI: a personal knowledge graph with vector search and clustering,
+            running on a phone.</p>
+        </article>
+      </div>
+      <a href="/cv">Read the full CV →</a>
     </section>
 
     <Ornament />
@@ -113,7 +137,7 @@ const contact = site.booking || `mailto:${site.email}`;
           <dd>Substack, YouTube, Medium — the latest of each.</dd>
         </dl>
         <p class="contact-line">
-          Or write to me: <a href={contact}>{site.email}</a>
+          Or write to me: <a href={`mailto:${site.email}`}>{site.email}</a>
         </p>
       </div>
     </section>
@@ -130,9 +154,14 @@ const contact = site.booking || `mailto:${site.email}`;
   }
   @media (max-width: 52rem) {
     .hero { grid-template-columns: 1fr; }
-    .frontispiece { order: -1; width: 11rem; }
+    .frontispiece { width: 11rem; margin: 0 auto; }
   }
   .hero-text .display { max-width: 15ch; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.4rem 0 1.8rem; max-width: none; }
+  .experience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; }
+  .experience h3 { font-size: 1.2rem; }
+  .experience p { font-size: 0.95rem; color: var(--ink-faded); }
+  @media (max-width: 46rem) { .experience-grid { grid-template-columns: 1fr; gap: 1rem; } }
 
   .doors {
     display: grid;
