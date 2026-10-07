@@ -26,58 +26,18 @@ export const roles: Role[] = [
   {
     from: '2026',
     to: 'Present',
-    title: 'Creator · Open-Source Author',
-    org: 'TypedGraph',
-    strap: 'A shared space for agents and humans — typed knowledge graph over Markdown and code',
-    domains: ['agentic', 'graph', 'leadership'],
-    bullets: [
-      'Building TypedGraph, an open-source tool that turns Markdown notes and code into a typed, validated knowledge graph that people and AI agents read and write together.',
-      'Typed, signed edges with properties in plain Markdown, an openCypher query engine, vector search and GraphRAG, a CLI (tg) and an MCP server for Claude Code and other agents.',
-      'Shipped as an Obsidian plugin and a VS Code extension, with validation against code and documentation drift — shared, institutional memory for teams of people and agents.',
-    ],
-    link: { label: 'typedgraph.org', href: 'https://typedgraph.org' },
-  },
-  {
-    from: '2026',
-    to: 'Present',
     title: 'Creator · Open-Source Author · Independent Researcher',
-    org: 'Tiramemsu',
-    strap: 'Layered, bitemporal, never-forget memory for agents on SQLite',
+    org: 'Open-source memory systems',
+    strap: 'TypedGraph, Tiramemsu, OxigraphDB and shacl2cypher — one programme: agent memory as a typed, temporal, verifiable graph',
     domains: ['agentic', 'graph', 'systems'],
     bullets: [
-      'Designed and built Tiramemsu, an embedded graph database in Rust on SQLite where every fact has an id, so provenance, confidence and beliefs stack as layers on facts.',
-      'Bitemporal by construction — transaction time and valid time — with append-only storage enforced by triggers; SPARQL and openCypher over one store; an MCP server for agents.',
-      'Published the underlying research as independent work on Zenodo: layered bitemporal graphs and metagraph encodings over identified triples.',
+      'TypedGraph — turns Markdown notes and code into a typed, validated knowledge graph that people and AI agents share: openCypher, vector search and GraphRAG, a CLI and an MCP server, shipped as an Obsidian plugin and a VS Code extension.',
+      'Tiramemsu — an embedded graph database in Rust on SQLite where every fact has an id, so provenance and belief stack as layers; bitemporal by construction, append-only, SPARQL and openCypher over one store.',
+      'OxigraphDB — an embeddable RDF / SPARQL database for agents at the edge, with time-travel queries over versioned state and a Datalog reasoning layer.',
+      'shacl2cypher — a compiler from W3C SHACL shapes to Cypher validation queries for property graphs, with JUnit and SARIF output for CI; published on PyPI.',
+      'Published the underlying research independently on Zenodo: layered bitemporal graphs and metagraph encodings over identified triples.',
     ],
-    link: { label: 'tiramemsu.com', href: 'https://www.tiramemsu.com' },
-  },
-  {
-    from: '2026',
-    to: 'Present',
-    title: 'Creator · Open-Source Author',
-    org: 'OxigraphDB',
-    strap: 'Open-source graph database for edge agentic AI',
-    domains: ['agentic', 'graph', 'systems'],
-    bullets: [
-      'Building OxigraphDB, an open-source, embeddable RDF / SPARQL graph database designed as the knowledge and memory layer for agentic AI running at the edge.',
-      'Added time-travel queries over versioned graph state, so agents can reason about what was known at any point in time, and a Datalog engine as a recursive reasoning layer for rule-based inference over the knowledge graph.',
-      'Focused on local-first, on-device agent memory: lightweight footprint, standards-based semantics (RDF, SPARQL, SHACL) and no mandatory cloud dependency.',
-    ],
-    link: { label: 'oxigraphdb.com', href: 'https://oxigraphdb.com' },
-  },
-  {
-    from: '2026',
-    to: 'Present',
-    title: 'Creator · Open-Source Author',
-    org: 'shacl2cypher',
-    strap: 'Open-source SHACL → Cypher compiler for validating property graphs',
-    domains: ['graph'],
-    bullets: [
-      'Designed and built a compiler that turns standard W3C SHACL shapes into named, read-only Cypher validation queries for labelled property graphs (Neo4j, LadybugDB).',
-      'Reports every broken rule with the offending node or relationship and the value at fault, with table, JSON, JUnit and SARIF output for CI pipelines.',
-      'Shipped as a CLI and Python package on PyPI (pip install shacl2cypher), with documentation, a SHACL-for-property-graphs guide and LPG Modeler integration.',
-    ],
-    link: { label: 'volland.github.io/shacl2cypher', href: 'https://volland.github.io/shacl2cypher/' },
+    link: { label: 'All projects', href: '/projects' },
   },
   {
     from: '2025',
@@ -288,6 +248,15 @@ export const roles: Role[] = [
       'Delivered e-learning platforms (Moodle-based and custom), e-commerce systems, reputation systems, accounting and small-business CMS/CRM.',
     ],
   },
+];
+
+// Headline numbers drawn from the roles above — shown on /, /cv and /services.
+export const impact = [
+  { figure: '18 teams', body: 'about 100 engineers co-ordinated for the Zalando loyalty-programme rollout' },
+  { figure: '40M+', body: 'customers served by Transaction Core, the order backend I architected and led' },
+  { figure: '4 weeks', body: 'from zero to a live airport integration for a COVID verifiable-credentials platform' },
+  { figure: '$2M', body: 'investment round I contributed to by representing the architecture to investors' },
+  { figure: '3M/min', body: 'events through the data-feeder services I owned at LiveIntent' },
 ];
 
 export const education = [

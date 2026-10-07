@@ -1,25 +1,27 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
+import ImpactStrip from '../components/ImpactStrip.astro';
 import { roles, domains, education, expertise, languages } from '../data/cv';
 ---
 
 <Base
-  title="CV — Volodymyr Pavlyshyn"
-  description="Engineering since 2002: principal engineer, twice a founding engineer, specialising in memory and institutional memory for agents and humans. Explore the career timeline by domain, with a downloadable PDF.">
+  title="CV — Volodymyr Pavlyshyn, Principal Engineer & Architect"
+  description="Principal engineer and architect, twice a founding engineer, Office of CTO. Agent memory, knowledge graphs, identity and trust, systems at scale — engineering since 2002. Filterable timeline and PDF.">
 
   <div class="page">
     <header class="head">
-      <h1 class="display">Engineering since 2002</h1>
+      <h1 class="display">Principal engineer &amp; architect</h1>
       <p class="standfirst">
-        From COBOL and Smalltalk to Rust, agentic memory and sovereign AI. It is a long
-        list, and you probably want a slice of it — so filter it down to the part you
-        came for.
+        Twice a founding engineer, partnering with CTOs on technical vision; architecture
+        across agent memory, graph systems, identity and trust, and systems serving tens of
+        millions of customers. Engineering since 2002.
       </p>
       <p class="standfirst">
-        I create the spaces and teams where agents and humans can coexist, share context,
-        and exchange knowledge. I specialize in memory and institutional memory.
+        It is a long list, and you probably want a slice of it — so filter it down to the
+        part you came for.
       </p>
+      <ImpactStrip />
     </header>
 
     <div class="controls no-print" data-cv>
@@ -34,7 +36,7 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
     <p class="filter-status meta no-print" data-cv-status role="status"></p>
 
     <section class="timeline" data-timeline>
-      {roles.map((r) => (
+      {roles.map((r, i) => (
         <article class="role" data-domains={r.domains.join(' ')}>
           <div class="years">
             <span class="to">{r.to}</span>
@@ -42,7 +44,7 @@ import { roles, domains, education, expertise, languages } from '../data/cv';
             <span class="from">{r.from}</span>
           </div>
           <div class="marker" aria-hidden="true"><span></span></div>
-          <details class="role-body">
+          <details class="role-body" open={i < 3}>
             <summary>
               <h2 class="role-org">{r.org}</h2>
               <p class="role-title">{r.title}</p>

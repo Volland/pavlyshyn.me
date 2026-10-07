@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
+import ImpactStrip from '../components/ImpactStrip.astro';
 import { books } from '../data/books';
 import { tools, products } from '../data/projects';
 import { papers } from '../data/papers';
@@ -14,29 +15,27 @@ const others = memory.filter((p) => p !== featured);
 ---
 
 <Base
-  title="Volodymyr Pavlyshyn — memory for agents and humans"
-  description="I create the spaces and teams where agents and humans can coexist, share context, and exchange knowledge. I specialize in memory and institutional memory. Open source, papers, books and advisory work from Berlin.">
+  title="Volodymyr Pavlyshyn — Principal Engineer & Architect for agent memory"
+  description="Principal engineer and architect for AI agent memory: knowledge graphs, retrieval, temporal and verifiable data, agent identity and trust. Twice a founding engineer. Architecture consulting, reviews and workshops from Berlin.">
 
   <div class="page">
     <section class="hero">
       <div class="hero-text">
+        <p class="meta hero-role">Principal engineer &amp; architect</p>
         <h1 class="display">Memory for agents and&nbsp;humans.</h1>
-        <p class="hero-actions" aria-label="Explore the work">
-          <a class="btn" href="/books">Browse the catalogue</a>
-          <a class="btn" href="/services">Work with me</a>
-        </p>
         <p class="standfirst">
-          I create the spaces and teams where agents and humans can coexist, share
-          context, and exchange knowledge.
-        </p>
-        <p class="standfirst">
-          I specialize in memory and institutional memory — what an agent, a team or an
-          organisation knows, and how it keeps knowing it.
+          I design how AI agents and the teams around them remember — knowledge graphs,
+          retrieval, temporal and verifiable data, and the identity and trust between
+          agents — and I have shipped it in production, not just on slides.
         </p>
         <p class="standfirst">
           Engineering since 2002. Founding engineer twice over — at Affinidi, on
-          self-sovereign identity, and at Mykin, on a privacy-first personal AI that runs
-          on your device.
+          self-sovereign identity, and at Mykin, on a privacy-first personal AI with its
+          memory on the device. Before that, architecture at Zalando scale.
+        </p>
+        <p class="hero-actions" aria-label="Explore the work">
+          <a class="btn btn-solid" href="/services">Work with me</a>
+          <a class="btn" href="/cv">See the experience</a>
         </p>
       </div>
 
@@ -50,34 +49,19 @@ const others = memory.filter((p) => p !== featured);
 
     <Ornament />
 
-    <!-- The Two Doors: a reader path and a hire path, as peers. -->
+    <!-- The Two Doors: a hire path and a reader path, as peers (see ADR 0004). -->
     <section class="doors" aria-label="Where to go next">
-      <div class="door">
-        <h2 class="door-title">Read the work</h2>
-        <p>
-          {published} published books on agentic memory, graph substrates, and what an
-          agent needs in order to remember — plus tea, yerba mate, and one techno-horror
-          novella.
-        </p>
-        <p class="door-list">
-          {books.filter((b) => b.shelf === 'agents-graphs' && !b.inProgress).slice(0, 4).map((b) => (
-            <span>{b.title}</span>
-          ))}
-          <span class="more">…and {published - 4} more</span>
-        </p>
-        <a class="btn" href="/books">Browse the catalogue</a>
-      </div>
-
       <div class="door">
         <h2 class="door-title">Work with me</h2>
         <p>
-          Advisory and architecture work on agent memory, agent identity and trust —
-          the same problems the books are about, on your system.
+          Architecture consulting on agent memory, knowledge graphs, and agent identity
+          and trust: design partnership, architecture reviews and team workshops — the
+          same problems the books are about, on your system.
         </p>
         <p class="door-list">
           {offers.map((o) => <span>{o.name}</span>)}
         </p>
-        <a class="btn" href="/services">Explore the services</a>
+        <a class="btn btn-solid" href="/services">Explore the services</a>
 
         <div class="evidence">
           <span class="meta">Tools I have shipped</span>
@@ -95,6 +79,22 @@ const others = memory.filter((p) => p !== featured);
           </p>
         </div>
       </div>
+      <div class="door">
+        <h2 class="door-title">Read the work</h2>
+        <p>
+          {published} published books on agentic memory, graph substrates, and what an
+          agent needs in order to remember — plus tea, yerba mate, and one techno-horror
+          novella.
+        </p>
+        <p class="door-list">
+          {books.filter((b) => b.shelf === 'agents-graphs' && !b.inProgress).slice(0, 4).map((b) => (
+            <span>{b.title}</span>
+          ))}
+          <span class="more">…and {published - 4} more</span>
+        </p>
+        <a class="btn" href="/books">Browse the catalogue</a>
+      </div>
+
     </section>
 
     <Ornament />
@@ -133,19 +133,29 @@ const others = memory.filter((p) => p !== featured);
       <h2 class="section-title" id="experience-title">From architecture to production</h2>
       <div class="experience-grid">
         <article>
-          <h3>Affinidi · identity people could use</h3>
-          <p>As a founding engineer, I worked on self-sovereign identity and a COVID
-            verifiable-credentials platform taken from zero to a live airport integration
-            in four weeks.</p>
+          <h3>Mykin · memory on the device</h3>
+          <p>Founding engineer and principal architect. Shaped the technical vision with
+            the CTO and built on-device semantic memory for a privacy-first personal AI —
+            a personal knowledge graph with vector search and clustering, running on a
+            phone. Partnered with Turso to bring vector search to mobile, and represented
+            the architecture in a $2M round.</p>
         </article>
         <article>
-          <h3>Mykin · memory on the device</h3>
-          <p>As a founding engineer, I built on-device semantic memory for a privacy-first
-            personal AI: a personal knowledge graph with vector search and clustering,
-            running on a phone.</p>
+          <h3>Affinidi · identity people could use</h3>
+          <p>Founding engineer, architecture group and Office of CTO. Led cross-company
+            architecture reviews, introduced ADRs and C4 across engineering, and took a
+            COVID verifiable-credentials platform from zero to a live airport
+            integration in four weeks.</p>
+        </article>
+        <article>
+          <h3>Zalando · architecture at scale</h3>
+          <p>Architected and led Transaction Core, the order backend for 40M+ customers;
+            led the checkout monolith's move to microservices and co-ordinated 18 teams,
+            about 100 engineers, for the loyalty-programme rollout.</p>
         </article>
       </div>
-      <a href="/cv">Read the full CV →</a>
+      <ImpactStrip />
+      <p class="experience-foot"><a href="/cv">Read the full CV →</a></p>
     </section>
 
     <Ornament />
@@ -210,7 +220,10 @@ const others = memory.filter((p) => p !== featured);
   .memory-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem; margin-top: 1.2rem; font-size: 0.85rem; }
   .memory-links a:not(.btn) { font-variant: small-caps; letter-spacing: 0.11em; text-transform: lowercase; text-decoration: none; }
   .memory-foot { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; margin-top: 1.8rem; font-size: 0.9rem; color: var(--ink-faded); max-width: none; }
-  .experience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; }
+  .experience-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2.4rem; }
+  @media (max-width: 60rem) { .experience-grid { grid-template-columns: 1fr 1fr; } }
+  .experience-foot { margin-top: 1.4rem; }
+  .hero-role { display: block; margin-bottom: 0.6rem; color: var(--orange); }
   .experience h3 { font-size: 1.2rem; }
   .experience p { font-size: 0.95rem; color: var(--ink-faded); }
   @media (max-width: 46rem) { .experience-grid { grid-template-columns: 1fr; gap: 1rem; } }

@@ -13,3 +13,11 @@ not two variations of the same button — rather than a blended pitch that serve
 `/projects` was added later and is deliberately *not* a third door. It sits in the nav as a peer page,
 but on the homepage it appears as evidence beneath the hire door — shipped tools being a stronger
 credential than any bullet on `/services`. The Two Doors remain two.
+
+## Amendment, October 2026
+
+The doors are still two and still peers, but the hire door now comes first and carries the solid
+button, and the hero's primary action points to `/services`. The site's job has shifted towards
+presenting principal / architect-level work and consulting; the catalogue remains a full door, but
+it reads as evidence of expertise as much as a product. The site deliberately says nothing about
+availability for employment.

@@ -21,7 +21,23 @@ const structuredData = {
       '@type': 'Person', '@id': personId,
       name: site.name, url: Astro.site?.toString(),
       image: socialImage, jobTitle: site.role,
+      description: 'Principal engineer and architect specialising in memory for AI agents and teams: knowledge graphs, retrieval, temporal data, and agent identity and trust.',
+      knowsAbout: [
+        'Software architecture', 'Agentic AI', 'Agent memory', 'Knowledge graphs',
+        'GraphRAG', 'Graph databases', 'RDF and SPARQL', 'openCypher',
+        'Self-sovereign identity', 'Verifiable credentials', 'Local-first software',
+      ],
+      address: { '@type': 'PostalAddress', addressLocality: site.location, addressCountry: 'DE' },
+      alumniOf: { '@type': 'CollegeOrUniversity', name: 'Lviv Polytechnic National University' },
       sameAs: elsewhere.map((entry) => entry.href),
+    },
+    {
+      '@type': 'ProfessionalService',
+      name: `${site.name} — architecture consulting`,
+      url: new URL('/services', Astro.site).toString(),
+      provider: { '@id': personId },
+      areaServed: 'Europe',
+      serviceType: 'Software architecture consulting for agent memory, knowledge graphs, and agent identity and trust',
     },
     {
       '@type': 'WebPage', '@id': canonical,

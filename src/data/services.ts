@@ -26,6 +26,23 @@ export const offers: Offer[] = [
     ],
   },
   {
+    name: 'Fractional architect',
+    deliverables: [
+      'Senior architecture ownership for your agent and data platform, on a regular cadence.',
+      'Decision records, design reviews and mentoring that stay with the team after I leave.',
+    ],
+    shape: 'Ongoing, part-time',
+    body: `Principal-level architecture without a full-time principal hire. A fixed
+    rhythm of design reviews, architecture decisions and pairing with your tech leads,
+    for teams building agents, knowledge graphs or memory-heavy products who need
+    someone who has made these calls before — and written down why.`,
+    fit: [
+      'You are building agents and nobody on the team has designed agent memory before.',
+      'Your tech leads are strong, but architecture decisions keep getting made by default.',
+      'You need principal-level judgement now, ahead of a principal-level hire.',
+    ],
+  },
+  {
     name: 'Agent identity & trust',
     deliverables: [
       'An identity and trust model for your agents and their integrations.',
@@ -68,9 +85,9 @@ export const offers: Offer[] = [
     ],
     shape: 'Multi-day, on-site or remote',
     body: `Teaching engineering teams the material behind the books: agent
-    architecture, knowledge graphs as agent memory, and local-first and edge AI. The
-    same programme shape currently being built inside an engineering organisation
-    rather than assembled for a conference slot.`,
+    architecture, knowledge graphs as agent memory, and local-first and edge AI.
+    Built around your team's real systems and decisions rather than assembled for a
+    conference slot.`,
     fit: [
       'Your team is shipping agents by pattern-matching on blog posts.',
       'You want a shared vocabulary before a big architectural decision, not after.',

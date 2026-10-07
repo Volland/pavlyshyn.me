@@ -1,6 +1,6 @@
 export const site = {
   name: 'Volodymyr Pavlyshyn',
-  role: 'Principal Engineer · Agent Memory & Institutional Memory',
+  role: 'Principal Engineer & Architect · Agent Memory and Knowledge Graphs',
   location: 'Berlin',
   email: 'pavlyshyn@gmail.com',
   // TODO(volodymyr): replace with your real Cal.com / Calendly link before launch.
@@ -42,11 +42,11 @@ export const elsewhere = [
 ];
 
 export const nav = [
-  { href: '/books', label: 'Books' },
+  { href: '/services', label: 'Work with me' },
   { href: '/projects', label: 'Projects' },
-  { href: '/kids', label: "Children's books" },
-  { href: '/services', label: 'Services' },
-  { href: '/papers', label: 'Papers' },
   { href: '/cv', label: 'CV' },
+  { href: '/papers', label: 'Papers' },
+  { href: '/books', label: 'Books' },
   { href: '/writing', label: 'Writing' },
+  { href: '/kids', label: "Children's books" },
 ];

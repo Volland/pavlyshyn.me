@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
+import ImpactStrip from '../components/ImpactStrip.astro';
 import { offers, howItWorks } from '../data/services';
 import { site } from '../data/site';
 
@@ -8,15 +9,17 @@ const hasBooking = Boolean(site.booking);
 ---
 
 <Base
-  title="Services — Volodymyr Pavlyshyn"
-  description="Advisory and architecture work on agentic memory, agent identity and trust, architecture review, and team workshops.">
+  title="Architecture consulting — agent memory & knowledge graphs — Volodymyr Pavlyshyn"
+  description="Architecture consulting from a principal engineer and twice-founding engineer: agentic memory and knowledge-graph design, fractional architect, agent identity and trust, architecture reviews and team workshops. Berlin and remote.">
 
   <div class="page">
     <header class="head">
       <h1 class="display">Work with me</h1>
       <p class="standfirst">
-        Four ways in. All of them are the same problems the books are about, applied to
-        your system instead of a page.
+        Architecture consulting on agent memory, knowledge graphs, and agent identity and
+        trust — from a principal engineer who has shipped them in production. Five ways
+        in, from a time-boxed review to an ongoing design partnership. Berlin, and
+        remote across Europe.
       </p>
       <p class="cta-row">
         {hasBooking && <a class="btn btn-solid" href={site.booking}>Book a 30-minute call</a>}
@@ -78,8 +81,14 @@ const hasBooking = Boolean(site.booking);
           and clustering, running on a phone.
         </p>
         <p>
-          Before that: Zalando, TomTom, LiveIntent. Teams of five to fifteen, systems
-          serving forty million customers, and three million events a minute.
+          Before that: Zalando, TomTom, LiveIntent. Teams of five to fifteen, eighteen
+          teams co-ordinated on one rollout, systems serving forty million customers,
+          and three million events a minute.
+        </p>
+        <p>
+          Today: open-source memory systems — TypedGraph, Tiramemsu, OxigraphDB — and
+          independent research on bitemporal graphs, so the advice comes from code that
+          runs.
         </p>
         <p class="evidence-links">
           <a href="/cv">The full CV →</a>
@@ -87,6 +96,8 @@ const hasBooking = Boolean(site.booking);
         </p>
       </div>
     </section>
+
+    <ImpactStrip title="Track record" />
 
     <section class="closing">
       <h2 class="closing-title">Start with a conversation</h2>
