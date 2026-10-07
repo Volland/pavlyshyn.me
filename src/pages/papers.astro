@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { papers } from '../data/papers';
+
+const fmt = (iso: string) =>
+  new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' });
+---
+
+<Base
+  title="Papers — Volodymyr Pavlyshyn"
+  description="Independent research on memory for AI agents: bitemporal graphs, statement identity and metagraph encodings. Published on Zenodo.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">Papers</h1>
+      <p class="standfirst">
+        Independent research on how agents and institutions remember: what a statement
+        is, when it was true, and when it was learned. Published openly on Zenodo, with
+        the implementations in the open-source projects.
+      </p>
+    </header>
+
+    <Ornament />
+
+    <ol class="papers">
+      {papers.map((p) => (
+        <li>
+          <p class="meta">{p.kind} · {fmt(p.date)} · Independent research work</p>
+          <h2 class="paper-title"><a href={p.href}>{p.title}</a></h2>
+          <p class="abstract">{p.abstract}</p>
+          <p class="paper-links">
+            <a class="btn" href={p.href}>Read on Zenodo</a>
+            <a href={`https://doi.org/${p.doi}`}>doi:{p.doi}</a>
+            {p.related && <a href={p.related.href}>Implementation: {p.related.label}</a>}
+          </p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+  .head .display { max-width: 14ch; }
+  .papers { list-style: none; padding: 0; margin: 0; }
+  .papers li { padding: 1.8rem 0; border-top: 1px solid var(--rule); max-width: 44rem; }
+  .papers li:first-child { border-top: 0; padding-top: 0; }
+  .papers .meta { margin: 0; }
+  .paper-title { font-size: 1.5rem; margin: 0.3rem 0 0.5rem; line-height: 1.25; }
+  .paper-title a { color: var(--ink); text-decoration: none; }
+  .paper-title a:hover { color: var(--orange); }
+  .abstract { color: var(--ink-faded); font-size: 0.95rem; }
+  .paper-links {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem;
+    margin-top: 1.2rem; font-size: 0.85rem;
+  }
+  .paper-links a:not(.btn) {
+    font-variant: small-caps; letter-spacing: 0.11em; text-transform: lowercase; text-decoration: none;
+  }
+</style>

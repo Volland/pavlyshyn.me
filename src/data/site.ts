@@ -1,6 +1,6 @@
 export const site = {
   name: 'Volodymyr Pavlyshyn',
-  role: 'Principal Engineer · Graph Systems & Agent Infrastructure',
+  role: 'Principal Engineer · Agent Memory & Institutional Memory',
   location: 'Berlin',
   email: 'pavlyshyn@gmail.com',
   // TODO(volodymyr): replace with your real Cal.com / Calendly link before launch.
@@ -46,6 +46,7 @@ export const nav = [
   { href: '/projects', label: 'Projects' },
   { href: '/kids', label: "Children's books" },
   { href: '/services', label: 'Services' },
+  { href: '/papers', label: 'Papers' },
   { href: '/cv', label: 'CV' },
   { href: '/writing', label: 'Writing' },
 ];

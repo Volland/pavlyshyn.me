@@ -3,32 +3,40 @@ import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
 import { books } from '../data/books';
 import { tools, products } from '../data/projects';
+import { papers } from '../data/papers';
 import { offers } from '../data/services';
 import { site } from '../data/site';
 
 const published = books.filter((b) => !b.inProgress).length;
+const memory = products.filter((p) => p.group === 'memory');
+const featured = memory.find((p) => p.slug === 'typedgraph')!;
+const others = memory.filter((p) => p !== featured);
 ---
 
 <Base
-  title="Volodymyr Pavlyshyn — memory and identity for AI agents"
-  description="Principal engineer, twice a founding engineer. I build memory for AI agents, and identity for the agents that carry it. Books, tools, and advisory work from Berlin.">
+  title="Volodymyr Pavlyshyn — memory for agents and humans"
+  description="I create the spaces and teams where agents and humans can coexist, share context, and exchange knowledge. I specialize in memory and institutional memory. Open source, papers, books and advisory work from Berlin.">
 
   <div class="page">
     <section class="hero">
       <div class="hero-text">
-        <h1 class="display">Memory and identity for AI&nbsp;agents.</h1>
+        <h1 class="display">Memory for agents and&nbsp;humans.</h1>
         <p class="hero-actions" aria-label="Explore the work">
           <a class="btn" href="/books">Browse the catalogue</a>
           <a class="btn" href="/services">Work with me</a>
         </p>
         <p class="standfirst">
-          Engineering since 2002. Founding engineer twice over — at Affinidi,
-          on self-sovereign identity, and at Mykin, on a privacy-first personal AI that
-          runs on your device.
+          I create the spaces and teams where agents and humans can coexist, share
+          context, and exchange knowledge.
         </p>
         <p class="standfirst">
-          I think agents should own their memory, run locally, and never ask a cloud
-          for permission to think.
+          I specialize in memory and institutional memory — what an agent, a team or an
+          organisation knows, and how it keeps knowing it.
+        </p>
+        <p class="standfirst">
+          Engineering since 2002. Founding engineer twice over — at Affinidi, on
+          self-sovereign identity, and at Mykin, on a privacy-first personal AI that runs
+          on your device.
         </p>
       </div>
 
@@ -91,6 +99,36 @@ const published = books.filter((b) => !b.inProgress).length;
 
     <Ornament />
 
+    <section class="memory" aria-labelledby="memory-title">
+      <h2 class="section-title" id="memory-title">Open-source memory for agents and humans</h2>
+      <div class="memory-grid">
+        <article class="memory-lead">
+          <h3 class="memory-name"><a href={`/projects/${featured.slug}`}>{featured.name}</a></h3>
+          <p class="memory-tag">{featured.tagline}</p>
+          <p>{featured.summary} A shared space where people and their agents work from the same graph.</p>
+          <p class="memory-links">
+            <a class="btn btn-solid" href={featured.home.href}>Visit typedgraph.org</a>
+            <a href={`/projects/${featured.slug}`}>About {featured.name}</a>
+          </p>
+        </article>
+        <div class="memory-rest">
+          {others.map((p) => (
+            <article>
+              <h3 class="memory-name small"><a href={`/projects/${p.slug}`}>{p.name}</a></h3>
+              <p class="memory-tag">{p.tagline}</p>
+              <p>{p.summary}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+      <p class="memory-foot">
+        <a href="/projects#memory">All memory projects →</a>
+        <span>Independent research behind them: {papers.map((p, i) => (<>{i > 0 && ' · '}<a href="/papers">{p.title.split(':')[0]}</a></>))}</span>
+      </p>
+    </section>
+
+    <Ornament />
+
     <section class="experience" aria-labelledby="experience-title">
       <h2 class="section-title" id="experience-title">From architecture to production</h2>
       <div class="experience-grid">
@@ -128,7 +166,9 @@ const published = books.filter((b) => !b.inProgress).length;
         <h2 class="section-title">Also here</h2>
         <dl class="index">
           <dt><a href="/projects">Projects</a></dt>
-          <dd>Three VS Code tools for modelling — Factum ORM, LPG Modeler, Causal Canvas. In open source: OxigraphDB, graph memory for edge agentic AI, and shacl2cypher, SHACL validation for Cypher graphs.</dd>
+          <dd>Open-source memory for agents and humans — TypedGraph, Tiramemsu, OxigraphDB — plus shacl2cypher and three VS Code modelling tools: Factum ORM, LPG Modeler, Causal Canvas.</dd>
+          <dt><a href="/papers">Papers</a></dt>
+          <dd>Independent research on bitemporal graphs, statement identity and metagraph encodings, on Zenodo.</dd>
           <dt><a href="/kids">Children's books</a></dt>
           <dd>Max and Tsugi — a cycle for Ukrainian children about living with cerebral palsy.</dd>
           <dt><a href="/cv">CV</a></dt>
@@ -158,6 +198,18 @@ const published = books.filter((b) => !b.inProgress).length;
   }
   .hero-text .display { max-width: 15ch; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.4rem 0 1.8rem; max-width: none; }
+  .memory-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 2.6rem; margin-top: 1.2rem; }
+  @media (max-width: 46rem) { .memory-grid { grid-template-columns: 1fr; gap: 1.6rem; } }
+  .memory-name { font-size: 1.9rem; font-variant: small-caps; letter-spacing: 0.07em; text-transform: lowercase; margin-bottom: 0.1em; }
+  .memory-name.small { font-size: 1.3rem; }
+  .memory-name a { color: var(--ink); text-decoration: none; }
+  .memory-name a:hover { color: var(--orange); }
+  .memory-tag { color: var(--orange); margin-bottom: 0.5em; }
+  .memory-rest article + article { margin-top: 1.4rem; padding-top: 1.2rem; border-top: 1px solid var(--rule); }
+  .memory-rest p:not(.memory-tag) { font-size: 0.93rem; color: var(--ink-faded); }
+  .memory-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem; margin-top: 1.2rem; font-size: 0.85rem; }
+  .memory-links a:not(.btn) { font-variant: small-caps; letter-spacing: 0.11em; text-transform: lowercase; text-decoration: none; }
+  .memory-foot { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; margin-top: 1.8rem; font-size: 0.9rem; color: var(--ink-faded); max-width: none; }
   .experience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.4rem; }
   .experience h3 { font-size: 1.2rem; }
   .experience p { font-size: 0.95rem; color: var(--ink-faded); }

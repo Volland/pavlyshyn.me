@@ -1,7 +1,7 @@
 ---
 // Diagram Plates — original engraving-idiom SVG showing what each tool produces.
 // These stand in place of product screenshots (see docs/adr/0006).
-interface Props { kind: 'factum' | 'lpg' | 'causal' | 'oxigraph' | 'shacl'; }
+interface Props { kind: 'factum' | 'lpg' | 'causal' | 'oxigraph' | 'shacl' | 'typedgraph' | 'tiramemsu'; }
 const { kind } = Astro.props;
 ---
 
@@ -133,6 +133,54 @@ const { kind } = Astro.props;
       <text class="verb warn" x="200" y="146" text-anchor="middle">“Person id=p3: Person needs a name.”</text>
       <text class="tiny" x="200" y="172" text-anchor="middle">neo4j · ladybugdb · falkordb</text>
       <text class="tiny" x="200" y="188" text-anchor="middle">the shapes that document the model now test it</text>
+    </svg>
+  )}
+
+  {kind === 'typedgraph' && (
+    <svg viewBox="0 0 400 200" role="img" aria-label="A person and an agent both reading and writing one shared graph of typed edges: a note, a service and a decision.">
+      <circle class="node" cx="52" cy="62" r="22" />
+      <text class="lbl" x="52" y="67" text-anchor="middle">human</text>
+      <circle class="node" cx="52" cy="132" r="22" />
+      <text class="lbl" x="52" y="137" text-anchor="middle">agent</text>
+
+      <rect class="model" x="130" y="14" width="250" height="140" />
+      <text class="tiny" x="142" y="32">one shared graph</text>
+
+      <g class="edge">
+        <path d="M74 62L176 84M74 132L176 112M176 98L262 62M176 98L262 134M262 62L340 98M262 134L340 98" />
+      </g>
+      <circle class="node" cx="176" cy="98" r="6" />
+      <circle class="node" cx="262" cy="62" r="6" />
+      <circle class="node" cx="262" cy="134" r="6" />
+      <circle class="collider" cx="340" cy="98" r="7" />
+      <text class="sm" x="176" y="120" text-anchor="middle">note</text>
+      <text class="sm" x="262" y="48" text-anchor="middle">service</text>
+      <text class="sm" x="262" y="154" text-anchor="middle">decision</text>
+      <text class="sm" x="340" y="122" text-anchor="middle">owner</text>
+      <text class="cap" x="222" y="80" text-anchor="middle">depends_on</text>
+
+      <text class="tiny" x="200" y="176" text-anchor="middle">plain Markdown · typed, signed edges</text>
+      <text class="tiny" x="200" y="190" text-anchor="middle">— the same page for people and for agents —</text>
+    </svg>
+  )}
+
+  {kind === 'tiramemsu' && (
+    <svg viewBox="0 0 400 200" role="img" aria-label="Three layers of memory: the fact Alice works at Acme, a confidence and source layer about that fact, and a belief resting on it.">
+      <rect class="model" x="20" y="118" width="360" height="36" />
+      <rect class="artifact-box" x="20" y="68" width="360" height="36" />
+      <rect class="artifact-box" x="20" y="18" width="360" height="36" />
+
+      <text class="tiny" x="30" y="30">layer 3 · belief</text>
+      <text class="sm" x="200" y="46" text-anchor="middle">“Alice is an Acme employee” — rests on e1</text>
+      <text class="tiny" x="30" y="80">layer 2 · about e1</text>
+      <text class="sm" x="200" y="96" text-anchor="middle">confidence 0.8 · source chat-2026-09-29</text>
+      <text class="tiny" x="30" y="130">layer 1 · fact</text>
+      <text class="lbl" x="200" y="146" text-anchor="middle">e1 · alice worksAt acme</text>
+
+      <path class="edge" d="M200 118V104M200 68V54" />
+
+      <text class="tiny" x="200" y="176" text-anchor="middle">when it was recorded · when it was true</text>
+      <text class="tiny" x="200" y="190" text-anchor="middle">— never deleted, only retracted —</text>
     </svg>
   )}
 </figure>

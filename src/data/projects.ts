@@ -74,7 +74,9 @@ export interface Product {
   sample?: { caption: string; code: string };
   home: { label: string; href: string };
   links: { label: string; href: string }[];
-  plate: 'oxigraph' | 'shacl';
+  plate: 'oxigraph' | 'shacl' | 'typedgraph' | 'tiramemsu';
+  // 'memory' products form the Memory & agents line; the rest are graph tooling.
+  group: 'memory' | 'tooling';
 }
 
 export const products: Product[] = [
@@ -102,6 +104,72 @@ export const products: Product[] = [
     home: { label: 'Visit oxigraphdb.com', href: 'https://oxigraphdb.com' },
     links: [],
     plate: 'oxigraph',
+    group: 'memory',
+  },
+  {
+    name: 'TypedGraph',
+    slug: 'typedgraph',
+    tagline: 'A shared space for agents and humans.',
+    summary:
+      'Turns Markdown notes and code into a typed, validated knowledge graph that people and AI agents read and write together.',
+    body: [
+      `People keep what they know in notes and code. Agents keep it in a context
+      window that is gone tomorrow. TypedGraph puts both in the same place: plain
+      Markdown files in which every link is a typed, signed edge with properties — so
+      a human reads a page and an agent queries a graph, and they are looking at the
+      same thing.`,
+      `The files stay the single source of truth. On top of them sit an openCypher
+      query engine, vector search and GraphRAG, a CLI (tg) that validates the graph
+      and flags drift between documentation and code, and an MCP server so Claude
+      Code and other agents can use it as shared, institutional memory for a team.`,
+    ],
+    points: [
+      { label: 'Typed, signed edges', body: 'Relationships carry a type, properties and a signature, written in plain Markdown syntax — validated against a schema.' },
+      { label: 'Humans and agents, one graph', body: 'Works in Obsidian, VS Code and Cursor for people, and through an MCP server and the tg CLI for agents.' },
+      { label: 'Query it', body: 'openCypher traversal, vector search and GraphRAG over the same files, with graph visualisation and query blocks inside notes.' },
+      { label: 'Catches drift', body: 'Validation checks the graph against code and documentation, so shared context does not quietly go stale.' },
+    ],
+    home: { label: 'Visit typedgraph.org', href: 'https://typedgraph.org' },
+    links: [
+      { label: 'Source', href: 'https://github.com/Volland/obsigraph' },
+      { label: 'VS Code extension', href: 'https://marketplace.visualstudio.com/items?itemName=pavlyshyn.typegraph-vscode' },
+      { label: 'Obsidian plugin', href: 'https://community.obsidian.md/plugins/typed-graph' },
+    ],
+    plate: 'typedgraph',
+    group: 'memory',
+  },
+  {
+    name: 'Tiramemsu',
+    slug: 'tiramemsu',
+    tagline: 'Layered, never-forget memory for agents.',
+    summary:
+      'An embedded graph database on SQLite in which every fact has an id, so facts carry provenance and belief — and every change is kept with when it was made and when it was true.',
+    body: [
+      `A knowledge graph stores facts. An agent also has to say how sure it is, where it
+      read something, what it concludes from it — and later, that it was wrong. Those
+      are statements about statements. In Tiramemsu a fact is a row with its own id,
+      and that id can be the subject of another statement: layers of provenance and
+      belief, with no second data structure.`,
+      `It is bitemporal — when the database believed something, and when it was true —
+      and it never forgets: triggers inside the file reject deletes, so forgetting
+      means retracting. SPARQL and openCypher share one store, and an MCP server
+      hands the memory to Claude Code or any other client. One Rust library, one SQLite
+      file, also running in the browser on WebAssembly.`,
+    ],
+    points: [
+      { label: 'Layers', body: 'Provenance, confidence and beliefs stack to any depth. Retracting a fact retracts its layers; correcting it replays them.' },
+      { label: 'Two clocks', body: 'Transaction time and valid time, with now, as_of, history and valid_at views — ask what the agent believed last Tuesday.' },
+      { label: 'Never forgets', body: 'SQLite triggers reject DELETE and any second change to a row. Memory is corrected by superseding, never overwritten.' },
+      { label: 'SPARQL and Cypher', body: 'One store, two query languages, one semantics. Metagraphs and named graphs are ordinary statements.' },
+    ],
+    home: { label: 'Visit tiramemsu.com', href: 'https://www.tiramemsu.com' },
+    links: [
+      { label: 'Source', href: 'https://github.com/Volland/tiramemsu' },
+      { label: 'crates.io', href: 'https://crates.io/crates/tiramemsu' },
+      { label: 'PyPI', href: 'https://pypi.org/project/tiramemsu/' },
+    ],
+    plate: 'tiramemsu',
+    group: 'memory',
   },
   {
     name: 'shacl2cypher',
@@ -144,6 +212,7 @@ failed   Violation           1  PersonShape.worksFor.maxCount
       { label: 'npm', href: 'https://www.npmjs.com/package/shacl2cypher' },
     ],
     plate: 'shacl',
+    group: 'tooling',
   },
 ];
 

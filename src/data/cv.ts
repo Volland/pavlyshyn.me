@@ -27,6 +27,34 @@ export const roles: Role[] = [
     from: '2026',
     to: 'Present',
     title: 'Creator · Open-Source Author',
+    org: 'TypedGraph',
+    strap: 'A shared space for agents and humans — typed knowledge graph over Markdown and code',
+    domains: ['agentic', 'graph', 'leadership'],
+    bullets: [
+      'Building TypedGraph, an open-source tool that turns Markdown notes and code into a typed, validated knowledge graph that people and AI agents read and write together.',
+      'Typed, signed edges with properties in plain Markdown, an openCypher query engine, vector search and GraphRAG, a CLI (tg) and an MCP server for Claude Code and other agents.',
+      'Shipped as an Obsidian plugin and a VS Code extension, with validation against code and documentation drift — shared, institutional memory for teams of people and agents.',
+    ],
+    link: { label: 'typedgraph.org', href: 'https://typedgraph.org' },
+  },
+  {
+    from: '2026',
+    to: 'Present',
+    title: 'Creator · Open-Source Author · Independent Researcher',
+    org: 'Tiramemsu',
+    strap: 'Layered, bitemporal, never-forget memory for agents on SQLite',
+    domains: ['agentic', 'graph', 'systems'],
+    bullets: [
+      'Designed and built Tiramemsu, an embedded graph database in Rust on SQLite where every fact has an id, so provenance, confidence and beliefs stack as layers on facts.',
+      'Bitemporal by construction — transaction time and valid time — with append-only storage enforced by triggers; SPARQL and openCypher over one store; an MCP server for agents.',
+      'Published the underlying research as independent work on Zenodo: layered bitemporal graphs and metagraph encodings over identified triples.',
+    ],
+    link: { label: 'tiramemsu.com', href: 'https://www.tiramemsu.com' },
+  },
+  {
+    from: '2026',
+    to: 'Present',
+    title: 'Creator · Open-Source Author',
     org: 'OxigraphDB',
     strap: 'Open-source graph database for edge agentic AI',
     domains: ['agentic', 'graph', 'systems'],
@@ -290,7 +318,7 @@ export const expertise = [
   },
   {
     label: 'Agentic & AI infrastructure',
-    body: 'Agent memory pipelines · semantic extraction-consolidation (FIRE) · promise-graph agent cooperation · agentic world models · multi-agent trust registries · LLM orchestration',
+    body: 'Memory and institutional memory for agents and teams · bitemporal and layered graphs · Agent memory pipelines · semantic extraction-consolidation (FIRE) · promise-graph agent cooperation · agentic world models · multi-agent trust registries · LLM orchestration',
   },
   {
     label: 'Identity & trust protocols',
