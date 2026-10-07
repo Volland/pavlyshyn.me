@@ -42,11 +42,11 @@ export const elsewhere = [
 ];
 
 export const nav = [
+  { href: '/about', label: 'About' },
   { href: '/services', label: 'Work with me' },
   { href: '/projects', label: 'Projects' },
   { href: '/cv', label: 'CV' },
   { href: '/papers', label: 'Papers' },
   { href: '/books', label: 'Books' },
   { href: '/writing', label: 'Writing' },
-  { href: '/kids', label: "Children's books" },
 ];

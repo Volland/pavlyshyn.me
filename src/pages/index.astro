@@ -49,6 +49,55 @@ const others = memory.filter((p) => p !== featured);
 
     <Ornament />
 
+    <section class="experience" aria-labelledby="experience-title">
+      <h2 class="section-title" id="experience-title">From architecture to production</h2>
+      <div class="experience-grid">
+        <article>
+          <h3>Mykin · memory on the device</h3>
+          <p>Founding engineer and principal architect. Shaped the technical vision with
+            the CTO and built on-device semantic memory for a privacy-first personal AI —
+            a personal knowledge graph with vector search and clustering, running on a
+            phone. Partnered with Turso to bring vector search to mobile, and represented
+            the architecture in a $2M round.</p>
+        </article>
+        <article>
+          <h3>Affinidi · identity people could use</h3>
+          <p>Founding engineer, architecture group and Office of CTO. Led cross-company
+            architecture reviews, introduced ADRs and C4 across engineering, and took a
+            COVID verifiable-credentials platform from zero to a live airport
+            integration in four weeks.</p>
+        </article>
+        <article>
+          <h3>Zalando · architecture at scale</h3>
+          <p>Architected and led Transaction Core, the order backend for 40M+ customers;
+            led the checkout monolith's move to microservices and co-ordinated 18 teams,
+            about 100 engineers, for the loyalty-programme rollout.</p>
+        </article>
+      </div>
+      <ImpactStrip />
+      <p class="experience-foot"><a href="/cv">Read the full CV →</a></p>
+    </section>
+
+    <Ornament />
+
+    <!-- First-person "how I work" teaser; the full text lives on /about. -->
+    <section class="credo" aria-labelledby="credo-title">
+      <h2 class="section-title" id="credo-title">How I work</h2>
+      <p>
+        I believe true leaders build teams, not software — the teams build the software.
+        Today those are hybrid teams of people and agents that shape each other, and a
+        team is only as good as what it can remember, share and trust. That is why I work
+        on memory.
+      </p>
+      <p class="aside">
+        Off the clock: a tea-drinking architect who writes children's books.
+      </p>
+      <p class="motto">Do, validate, iterate, learn, teach. Extend yourself with people and tools.</p>
+      <p><a href="/about">More about how I work →</a></p>
+    </section>
+
+    <Ornament />
+
     <!-- The Two Doors: a hire path and a reader path, as peers (see ADR 0004). -->
     <section class="doors" aria-label="Where to go next">
       <div class="door">
@@ -82,12 +131,12 @@ const others = memory.filter((p) => p !== featured);
       <div class="door">
         <h2 class="door-title">Read the work</h2>
         <p>
-          {published} published books on agentic memory, graph substrates, and what an
-          agent needs in order to remember — plus tea, yerba mate, and one techno-horror
-          novella.
+          {published} published books on agent memory, knowledge modelling, the graph
+          databases memory runs on, and how architecture turns into business impact —
+          with a guide to which to read in depth and which to skim.
         </p>
         <p class="door-list">
-          {books.filter((b) => b.shelf === 'agents-graphs' && !b.inProgress).slice(0, 4).map((b) => (
+          {books.filter((b) => b.depth === 'deep' && !b.inProgress).slice(0, 4).map((b) => (
             <span>{b.title}</span>
           ))}
           <span class="more">…and {published - 4} more</span>
@@ -125,37 +174,6 @@ const others = memory.filter((p) => p !== featured);
         <a href="/projects#memory">All memory projects →</a>
         <span>Independent research behind them: {papers.map((p, i) => (<>{i > 0 && ' · '}<a href="/papers">{p.title.split(':')[0]}</a></>))}</span>
       </p>
-    </section>
-
-    <Ornament />
-
-    <section class="experience" aria-labelledby="experience-title">
-      <h2 class="section-title" id="experience-title">From architecture to production</h2>
-      <div class="experience-grid">
-        <article>
-          <h3>Mykin · memory on the device</h3>
-          <p>Founding engineer and principal architect. Shaped the technical vision with
-            the CTO and built on-device semantic memory for a privacy-first personal AI —
-            a personal knowledge graph with vector search and clustering, running on a
-            phone. Partnered with Turso to bring vector search to mobile, and represented
-            the architecture in a $2M round.</p>
-        </article>
-        <article>
-          <h3>Affinidi · identity people could use</h3>
-          <p>Founding engineer, architecture group and Office of CTO. Led cross-company
-            architecture reviews, introduced ADRs and C4 across engineering, and took a
-            COVID verifiable-credentials platform from zero to a live airport
-            integration in four weeks.</p>
-        </article>
-        <article>
-          <h3>Zalando · architecture at scale</h3>
-          <p>Architected and led Transaction Core, the order backend for 40M+ customers;
-            led the checkout monolith's move to microservices and co-ordinated 18 teams,
-            about 100 engineers, for the loyalty-programme rollout.</p>
-        </article>
-      </div>
-      <ImpactStrip />
-      <p class="experience-foot"><a href="/cv">Read the full CV →</a></p>
     </section>
 
     <Ornament />
@@ -227,6 +245,10 @@ const others = memory.filter((p) => p !== featured);
   .experience h3 { font-size: 1.2rem; }
   .experience p { font-size: 0.95rem; color: var(--ink-faded); }
   @media (max-width: 46rem) { .experience-grid { grid-template-columns: 1fr; gap: 1rem; } }
+
+  .credo { max-width: 42rem; }
+  .credo .motto { font-style: italic; color: var(--orange); }
+  .credo .aside { font-size: 0.9rem; font-style: italic; color: var(--ink-faded); }
 
   .doors {
     display: grid;

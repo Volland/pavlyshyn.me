@@ -1,0 +1,157 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+
+const principles = [
+  {
+    verb: 'Do',
+    body: 'I learn by building. A working prototype on real data settles more questions than a month of diagrams, so I get something running early and let it argue back.',
+  },
+  {
+    verb: 'Validate',
+    body: 'Decisions are tested against real results and real data, not hypothetical ones. If we cannot measure whether an idea worked, we have not finished deciding.',
+  },
+  {
+    verb: 'Iterate',
+    body: 'Small, reversible steps, each one informed by the last. Architecture is a sequence of good-enough decisions recorded as ADRs, not a single grand plan.',
+  },
+  {
+    verb: 'Learn',
+    body: 'Every iteration should leave the team knowing something it did not know before — about the domain, the users, or itself.',
+  },
+  {
+    verb: 'Teach',
+    body: 'What I learn I hand on: through reviews, workshops, books and pairing. A decision only one person understands is a liability, not an asset.',
+  },
+];
+---
+
+<Base
+  title="About — Volodymyr Pavlyshyn"
+  description="How I work and why: leaders build teams, teams build software. Hybrid teams of people and agents, pragmatic decisions validated on real data, and the right problem chosen under real constraints.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">How I work, and why</h1>
+      <p class="standfirst">
+        The rest of this site says what I have built. This page says how I work, and why.
+      </p>
+    </header>
+
+    <Ornament />
+
+    <article class="essay" aria-labelledby="about-title">
+      <h2 class="essay-title" id="about-title">Teams build the software</h2>
+      <div class="essay-body">
+        <p>
+          I believe true leaders build teams, not software. The teams build the software.
+          My job as a principal engineer or architect is not to be the smartest person in
+          the room, but to make the room smarter: to set a clear direction, make the
+          trade-offs visible, and leave behind people who can make the next decision
+          without me.
+        </p>
+        <p>
+          Those teams look different now. We build hybrid teams of people and agents that
+          grow together — people shape the agents, and the agents extend
+          what people can do. That is why I care so much about memory. A team, human or
+          machine, is only as good as what it can remember, share and trust. Agents that
+          forget, or that cannot explain where a fact came from, cannot be real
+          teammates.
+        </p>
+        <p>
+          I am also a pragmatist. We always work with a lack of resources, and that is
+          not going to change. So the most important decision is choosing the right
+          challenge to tackle — the one that moves the most with what we actually have
+          — and building a strategy around it, rather than around the plan we would make
+          if we had everything.
+        </p>
+      </div>
+      <p class="signed">— Volodymyr</p>
+    </article>
+
+    <Ornament />
+
+    <section class="how" aria-labelledby="how-title">
+      <h2 class="essay-title" id="how-title">Principles</h2>
+      <p class="motto">Do, validate, iterate, learn, teach.</p>
+      <ol class="principles">
+        {principles.map((p, i) => (
+          <li>
+            <span class="num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3 class="verb">{p.verb}</h3>
+              <p>{p.body}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+      <p class="coda">
+        <strong>Extend yourself with people and tools.</strong> No one scales alone. I
+        multiply my reach through the people I work with and the tools — and now the
+        agents — I build or choose, and I expect the same of the teams I help.
+      </p>
+    </section>
+
+    <Ornament />
+
+    <section class="outside" aria-labelledby="outside-title">
+      <h2 class="essay-title" id="outside-title">Outside work</h2>
+      <p>
+        The same habit — learn something properly by teaching it — runs through what I do
+        off the clock. I write <a href="/kids">children's books</a> in Ukrainian about Max
+        and Tsugi, for kids living with cerebral palsy, because what we teach children is
+        the future we get. And I write about <a href="/personal">tea, yerba mate and one
+        techno-horror novella</a>, mostly to understand things I already love.
+      </p>
+      <p class="actions">
+        <a class="btn btn-solid" href="/services">Work with me</a>
+        <a class="btn" href="/cv">See the experience</a>
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+  .head .display { max-width: 16ch; }
+
+  .essay, .how, .outside { max-width: 38rem; margin: 0 auto; }
+  .essay-title {
+    font-size: clamp(1.6rem, 3.4vw, 2.1rem);
+    font-variant: small-caps;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    margin-bottom: 0.6em;
+  }
+  .essay-body p { max-width: none; }
+  .essay-body > p:first-child::first-letter {
+    float: left;
+    font-size: 3.4em;
+    line-height: 0.82;
+    padding: 0.06em 0.1em 0 0;
+    color: var(--orange);
+  }
+  .signed { margin-top: 1.6rem; font-style: italic; color: var(--ink-faded); }
+
+  .motto { font-style: italic; color: var(--orange); font-size: 1.15rem; }
+  .principles { list-style: none; padding: 0; margin: 1.4rem 0 0; }
+  .principles li {
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr);
+    gap: 0.8rem;
+    padding: 1.1rem 0;
+    border-top: 1px solid var(--rule);
+  }
+  .principles li:first-child { border-top: 0; padding-top: 0; }
+  .num { font-variant-numeric: oldstyle-nums; color: var(--ink-faded); padding-top: 0.15rem; }
+  .verb {
+    font-size: 1.2rem;
+    font-variant: small-caps;
+    letter-spacing: 0.09em;
+    text-transform: lowercase;
+    margin: 0 0 0.2em;
+  }
+  .principles p { margin: 0; max-width: none; color: var(--ink-faded); font-size: 0.97rem; }
+  .coda { margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); max-width: none; }
+  .actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.8rem; }
+</style>

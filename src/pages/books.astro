@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
-import { books, shelves, themes, readingPaths, leanpubUrl, coverUrl } from '../data/books';
+import { books, shelves, themes, depths, readingPaths, leanpubUrl, coverUrl } from '../data/books';
 // Real cover dimensions, measured from the files (scripts/measure-covers.py).
 // Leanpub covers are not a uniform ratio, so these must not be guessed.
 import coverDims from '../data/cover-dims.json';
@@ -14,7 +14,7 @@ const dim = (slug: string) =>
 // circular mean of the themes they carry, so neighbours share subjects.
 const CX = 200, CY = 200, R_THEME = 158;
 
-const graphBooks = books.filter((b) => b.shelf === 'agents-graphs');
+const graphBooks = books;
 
 const themeAngle = new Map(
   themes.map((t, i) => [t.id, (i / themes.length) * Math.PI * 2 - Math.PI / 2])
@@ -57,22 +57,29 @@ const edges = nodes.flatMap((n) =>
 );
 
 const published = books.filter((b) => !b.inProgress).length;
+const byDepth = (['deep', 'quick'] as const).map((d) => ({
+  id: d,
+  ...depths[d],
+  books: shelves.flatMap((shelf) => books.filter((b) => b.shelf === shelf.id && b.depth === d)),
+}));
 ---
 
 <Base
   title="Books — Volodymyr Pavlyshyn"
-  description={`${books.length} books on agentic memory, knowledge graphs, engineering craft — and tea. Find a starting point or explore the catalogue as a concept graph.`}>
+  description={`${books.length} books on agent memory, knowledge modelling, edge graph substrates and architecture practice — with a guide to what to read in depth and what to skim.`}>
 
   <div class="page">
     <header class="head">
       <h1 class="display">The catalogue</h1>
       <p class="standfirst">
-        {published} published, {books.length - published} in progress. Mostly about how an
-        agent remembers and what it remembers on — and then, at the far end of the shelf,
-        tea, yerba mate and a techno-horror novella. Everything is on Leanpub, where the
-        pricing is yours to set.
+        {published} published{books.length > published && `, ${books.length - published} in progress`}.
+        Four shelves: how an agent remembers, how to model what it knows, the databases
+        it remembers on, and how architecture turns into business impact. Not all of it
+        needs a cover-to-cover read — the guide below says which books do. Everything is
+        on Leanpub, where the pricing is yours to set.
       </p>
       <nav class="shelf-links" aria-label="Catalogue shelves">
+        <a href="#guide">What to read in depth</a>
         <a href="#graph">Explore the graph</a>
         {shelves.map((shelf) => <a href={`#shelf-${shelf.id}`} data-shelf-link>{shelf.label}</a>)}
       </nav>
@@ -97,9 +104,32 @@ const published = books.filter((b) => !b.inProgress).length;
 
     <Ornament />
 
+    <!-- ── Reading guide: depth, not just order ─────────────────────── -->
+    <section id="guide" aria-labelledby="guide-title">
+      <h2 class="section-title" id="guide-title">What to read in depth, what to read quickly</h2>
+      <div class="guide">
+        {byDepth.map((d) => (
+          <div class="guide-col">
+            <h3 class="guide-label">{d.label}</h3>
+            <p class="guide-note">{d.note}</p>
+            <ol class="guide-list">
+              {d.books.map((b) => (
+                <li>
+                  <a href={`#book-${b.slug}`}>{b.title}</a>
+                  <span>{b.readNote}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <Ornament />
+
     <!-- ── Concept Graph ─────────────────────────────────────────── -->
     <section class="graph-section" id="graph">
-      <h2 class="section-title">The Agents &amp; Graphs shelf, as a graph</h2>
+      <h2 class="section-title">The catalogue, as a graph</h2>
       <p class="graph-help">
         Every book is a node; every subject is a hub. Choose a subject to keep only the
         books that carry it — or choose a book to read what it is about.
@@ -172,15 +202,9 @@ const published = books.filter((b) => !b.inProgress).length;
                 <h3 class="card-title" lang={b.lang ?? 'en'}>
                   <a href={leanpubUrl(b.slug)}>{b.title}</a>
                 </h3>
+                <span class={`tag depth-${b.depth}`}>{depths[b.depth].label}</span>
                 {b.inProgress && <span class="tag">in progress</span>}
-                {b.lang === 'uk' && <span class="tag">українською</span>}
                 <p class="card-blurb">{b.blurb}</p>
-                {b.edition && (
-                  <p class="edition">
-                    Also in Ukrainian:
-                    <a href={leanpubUrl(b.edition.slug)} lang={b.edition.lang}>{b.edition.title}</a>
-                  </p>
-                )}
                 <a class="read" href={leanpubUrl(b.slug)}>Read on Leanpub →</a>
               </div>
             </li>
@@ -310,8 +334,21 @@ const published = books.filter((b) => !b.inProgress).length;
   .card-title a { text-decoration: none; color: var(--ink); }
   .card-title a:hover { color: var(--orange); }
   .card-blurb { font-size: 0.9rem; color: var(--ink-faded); margin: 0.4rem 0 0.6rem; }
-  .edition { font-size: 0.83rem; margin: 0 0 0.6rem; }
-  .edition a { margin-left: 0.35rem; }
+  .depth-deep { color: var(--orange); border-color: var(--orange); }
+
+  .guide { display: grid; grid-template-columns: 1fr 1fr; gap: 2.6rem; }
+  @media (max-width: 48rem) { .guide { grid-template-columns: 1fr; gap: 1.8rem; } }
+  .guide-label {
+    font-size: 1.3rem; font-variant: small-caps; letter-spacing: 0.08em;
+    text-transform: lowercase; margin-bottom: 0.2em;
+  }
+  .guide-col:first-child .guide-label { color: var(--orange); }
+  .guide-note { font-size: 0.9rem; color: var(--ink-faded); }
+  .guide-list { list-style: none; padding: 0; margin: 1rem 0 0; }
+  .guide-list li { padding: 0.65rem 0; border-top: 1px solid var(--rule); }
+  .guide-list a { display: block; text-decoration: none; color: var(--ink); line-height: 1.3; }
+  .guide-list a:hover { color: var(--orange); }
+  .guide-list span { display: block; font-size: 0.86rem; color: var(--ink-faded); margin-top: 0.15rem; }
   .read {
     font-size: 0.8rem;
     font-variant: small-caps;
@@ -369,7 +406,6 @@ const published = books.filter((b) => !b.inProgress).length;
       }
       for (const card of cards) {
         const has = theme === 'all' || (card.dataset.themes ?? '').split(' ').includes(theme);
-        // Books with no themes (The Craft, Other Worlds) are only shown under "all".
         card.classList.toggle('hidden', !has);
       }
       for (const shelf of shelves) {

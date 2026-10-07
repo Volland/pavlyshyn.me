@@ -3,7 +3,7 @@ import { products } from '../data/projects';
 
 export const GET: APIRoute = ({ site }) => {
   const paths = [
-    '/', '/books', '/services', '/projects', '/kids', '/cv', '/papers', '/writing',
+    '/', '/about', '/books', '/services', '/projects', '/kids', '/personal', '/cv', '/papers', '/writing',
     '/impressum', '/agb', '/datenschutz', '/privacy',
     ...products.map((product) => `/projects/${product.slug}`),
   ];

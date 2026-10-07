@@ -299,6 +299,6 @@ export const expertise = [
   },
   {
     label: 'Delivery & leadership',
-    body: 'Staff/Principal IC · Office of CTO · architecture review · technical hiring · R&D roadmapping · team coaching · Agile/Scrum',
+    body: 'Staff/Principal IC · Office of CTO · architecture review · technical hiring · R&D roadmapping · team coaching',
   },
 ];

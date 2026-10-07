@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import Ornament from '../components/Ornament.astro';
+import { otherBooks, leanpubUrl, coverUrl } from '../data/books';
+// Real cover dimensions, measured from the files (scripts/measure-covers.py).
+import coverDims from '../data/cover-dims.json';
+
+const dim = (slug: string) =>
+  (coverDims as Record<string, { w: number; h: number }>)[slug] ?? { w: 347, h: 520 };
+---
+
+<Base
+  title="Personal projects — Volodymyr Pavlyshyn"
+  description="Books from outside the day job: the neuroscience and chemistry of tea meditation, yerba mate taken seriously, and a techno-horror novella.">
+
+  <div class="page">
+    <header class="head">
+      <h1 class="display">Personal projects</h1>
+      <p class="standfirst">
+        Books from outside the day job. Tea as a way of listening to yourself, yerba mate
+        taken seriously, and one techno-horror novella — written for the same reason as
+        everything else here: to learn something properly, I teach it.
+      </p>
+    </header>
+
+    <Ornament />
+
+    <ul class="grid">
+      {otherBooks.map((b) => (
+        <li class="card">
+          <a class="cover" href={leanpubUrl(b.slug)}>
+            <img src={coverUrl(b.slug)} loading="lazy"
+                 width={dim(b.slug).w} height={dim(b.slug).h}
+                 alt={`Cover of ${b.title}`} />
+          </a>
+          <div>
+            <h2 class="card-title" lang={b.lang ?? 'en'}>
+              <a href={leanpubUrl(b.slug)}>{b.title}</a>
+            </h2>
+            {b.lang === 'uk' && <span class="tag">українською</span>}
+            <p class="card-blurb">{b.blurb}</p>
+            {b.edition && (
+              <p class="edition">
+                Also in Ukrainian:
+                <a href={leanpubUrl(b.edition.slug)} lang={b.edition.lang}>{b.edition.title}</a>
+              </p>
+            )}
+            <a class="read" href={leanpubUrl(b.slug)}>Read on Leanpub →</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <p class="footnote">
+      Looking for the professional catalogue? It is on <a href="/books">Books</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .head { margin: 3.4rem 0 0; }
+  .head .display { max-width: 12ch; }
+  .grid { list-style: none; padding: 0; margin: 0; display: grid; gap: 2.2rem; }
+  .card {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 1.6rem;
+    align-items: start;
+    max-width: 44rem;
+  }
+  @media (max-width: 40rem) { .card { grid-template-columns: 5.5rem minmax(0, 1fr); gap: 1rem; } }
+  .cover { display: block; border: 1px solid var(--rule); padding: 0.35rem; background: var(--paper); }
+  .cover img { filter: url(#duotone) contrast(1.02); }
+  .cover:hover { border-color: var(--orange); }
+  .card-title { font-size: 1.25rem; margin: 0; line-height: 1.25; overflow-wrap: anywhere; }
+  .card-title a { text-decoration: none; color: var(--ink); }
+  .card-title a:hover { color: var(--orange); }
+  .card-blurb { font-size: 0.95rem; color: var(--ink-faded); margin: 0.4rem 0 0.6rem; }
+  .edition { font-size: 0.85rem; margin: 0 0 0.6rem; }
+  .edition a { margin-left: 0.35rem; }
+  .read {
+    font-size: 0.8rem;
+    font-variant: small-caps;
+    letter-spacing: 0.11em;
+    text-transform: lowercase;
+    text-decoration: none;
+  }
+  .footnote {
+    margin-top: 3rem; padding-top: 1.2rem; border-top: 1px solid var(--rule);
+    font-size: 0.85rem; color: var(--ink-faded); max-width: 36rem;
+  }
+</style>
