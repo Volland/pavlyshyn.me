@@ -321,7 +321,7 @@ export const otherBooks: OtherBook[] = [
 ];
 
 // Books from a publisher, sold through a retailer rather than Leanpub. Each gets a page
-// at /books/<slug>; there is no cover file, so the page draws a typographic one.
+// at /books/<slug>. The cover is public/covers/<slug>.jpg, from the retailer listing.
 export interface PrintBook {
   slug: string;
   title: string;

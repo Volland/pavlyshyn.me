@@ -111,11 +111,9 @@ const byDepth = (['deep', 'quick'] as const).map((d) => ({
       <h2 class="section-title" id="print-title">In print</h2>
       {printBooks.map((p) => (
         <article class="print">
-          <a class="print-plate" href={`/books/${p.slug}`} aria-hidden="true" tabindex="-1">
-            <span class="print-pub">{p.publisher}</span>
-            <span class="print-name">{p.title.split(' — ')[0]}</span>
-            <span class="print-sub">{p.title.split(' — ')[1]}</span>
-            <span class="print-author">Volodymyr Pavlyshyn</span>
+          <a class="cover" href={`/books/${p.slug}`} aria-hidden="true" tabindex="-1">
+            <img src={coverUrl(p.slug)} loading="lazy"
+                 width={dim(p.slug).w} height={dim(p.slug).h} alt="" />
           </a>
           <div>
             <p class="meta">{p.publisher} · {new Date(p.published).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })} · {p.pages} pages · {p.formats.join(' and ')}</p>
@@ -271,31 +269,7 @@ const byDepth = (['deep', 'quick'] as const).map((d) => ({
     align-items: start;
   }
   @media (max-width: 40rem) { .print { grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1.2rem; } }
-  .print-plate {
-    display: flex;
-    flex-direction: column;
-    aspect-ratio: 7.5 / 9.25;
-    padding: 0.9rem 0.8rem;
-    border: 1px solid var(--ink);
-    outline: 1px solid var(--rule);
-    outline-offset: 4px;
-    background: var(--paper-deep);
-    color: var(--ink);
-    text-decoration: none;
-    text-align: center;
-  }
-  .print-plate:hover { border-color: var(--orange); color: var(--orange); }
-  .print-pub, .print-author {
-    font-size: 0.62rem; font-variant: small-caps; letter-spacing: 0.18em; text-transform: lowercase;
-    color: var(--ink-faded);
-  }
-  .print-name { margin-top: auto; font-size: 1.15rem; line-height: 1.1; font-variant: small-caps; letter-spacing: 0.06em; }
-  .print-sub { margin: 0.4rem 0 auto; font-size: 0.72rem; font-style: italic; color: var(--orange); }
-  @media (max-width: 40rem) {
-    .print-plate { padding: 0.5rem 0.4rem; }
-    .print-name { font-size: 0.8rem; }
-    .print-sub, .print-pub, .print-author { font-size: 0.5rem; }
-  }
+  .print .cover { align-self: start; }
   .print-title { font-size: 1.3rem; margin: 0.2rem 0 0; }
   .print-title a { color: var(--ink); text-decoration: none; }
   .print-title a:hover { color: var(--orange); }
