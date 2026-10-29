@@ -1,0 +1,162 @@
+---
+import Base from '../../layouts/Base.astro';
+import Ornament from '../../components/Ornament.astro';
+import { printBooks, books, leanpubUrl, type PrintBook } from '../../data/books';
+
+export function getStaticPaths() {
+  return printBooks.map((book) => ({ params: { slug: book.slug }, props: { book } }));
+}
+
+const { book } = Astro.props as { book: PrintBook };
+const [name, edition] = book.title.split(' — ');
+const related = books.find((b) => b.slug === book.related);
+const date = new Date(book.published).toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric',
+});
+---
+
+<Base
+  title={`${book.title} — Volodymyr Pavlyshyn`}
+  description={`${book.title}: ${book.subtitle}. ${book.publisher}, ${book.pages} pages.`}>
+
+  <div class="page">
+    <p class="crumb meta"><a href="/books">Books</a> · in print</p>
+
+    <section class="book">
+      <div class="book-text">
+        <h1 class="display">{name}</h1>
+        <p class="edition">{edition}</p>
+        <p class="standfirst">{book.subtitle}.</p>
+        {book.body.map((para) => <p>{para}</p>)}
+        <p class="book-links">
+          <a class="btn btn-solid" href={book.href}>Buy on Amazon</a>
+          {related && <a href={leanpubUrl(related.slug)}>On Leanpub: {related.title}</a>}
+        </p>
+      </div>
+      <div class="plate" aria-hidden="true">
+        <span class="plate-pub">{book.publisher}</span>
+        <span class="plate-name">{name}</span>
+        <span class="plate-sub">{edition}</span>
+        <span class="plate-author">Volodymyr Pavlyshyn</span>
+      </div>
+    </section>
+
+    <Ornament />
+
+    <section>
+      <h2 class="section-title">What it gives you</h2>
+      <ul class="features">
+        {book.features.map((f) => <li>{f}</li>)}
+      </ul>
+    </section>
+
+    <section class="cols">
+      <div>
+        <h2 class="section-title">What you will learn</h2>
+        <ol class="learn">
+          {book.learn.map((l) => <li>{l}</li>)}
+        </ol>
+      </div>
+      <div>
+        <h2 class="section-title">Who it is for</h2>
+        <p class="aside">{book.audience}</p>
+        <h2 class="section-title" style="margin-top:2.4rem">Details</h2>
+        <dl class="details">
+          <dt>Publisher</dt><dd>{book.publisher}</dd>
+          <dt>Published</dt><dd>{date}</dd>
+          <dt>Length</dt><dd>{book.pages} pages</dd>
+          <dt>Formats</dt><dd>{book.formats.join(', ')}</dd>
+          <dt>ISBN-13</dt><dd>{book.isbn13}</dd>
+          <dt>ISBN-10</dt><dd>{book.isbn10}</dd>
+        </dl>
+      </div>
+    </section>
+
+    <p class="back"><a href="/books">← The whole catalogue</a></p>
+  </div>
+</Base>
+
+<style>
+  .crumb { margin: 2.6rem 0 0; }
+  .crumb a { color: var(--ink-faded); text-decoration: none; }
+  .crumb a:hover { color: var(--orange); }
+
+  .book {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 17rem;
+    gap: 2.6rem 3.5rem;
+    align-items: start;
+    margin-top: 1.2rem;
+  }
+  @media (max-width: 52rem) {
+    .book { grid-template-columns: 1fr; }
+    .plate { order: -1; max-width: 12rem; }
+  }
+  .edition { font-size: 1.3rem; color: var(--orange); font-style: italic; margin: -0.4rem 0 1rem; }
+
+  .plate {
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 7.5 / 9.25;
+    padding: 1.4rem 1.2rem;
+    border: 1px solid var(--ink);
+    outline: 1px solid var(--rule);
+    outline-offset: 6px;
+    background: var(--paper-deep);
+    text-align: center;
+    margin-top: 1.2rem;
+  }
+  .plate-pub, .plate-author {
+    font-size: 0.72rem; font-variant: small-caps; letter-spacing: 0.2em; text-transform: lowercase;
+    color: var(--ink-faded);
+  }
+  .plate-name { margin-top: auto; font-size: 1.7rem; line-height: 1.1; font-variant: small-caps; letter-spacing: 0.06em; }
+  .plate-sub { margin: 0.6rem 0 auto; font-style: italic; color: var(--orange); }
+  @media (max-width: 52rem) {
+    .plate { padding: 0.9rem 0.8rem; }
+    .plate-name { font-size: 1.2rem; }
+    .plate-sub { font-size: 0.85rem; }
+    .plate-pub, .plate-author { font-size: 0.6rem; }
+  }
+
+  .book-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.8rem 1.4rem;
+    margin-top: 1.8rem;
+    font-size: 0.85rem;
+  }
+  .book-links a:not(.btn) {
+    font-variant: small-caps;
+    letter-spacing: 0.11em;
+    text-transform: lowercase;
+    text-decoration: none;
+  }
+
+  .features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+    gap: 1.6rem 2.4rem;
+  }
+  .features li { border-top: 1px solid var(--orange); padding-top: 0.7rem; font-size: 0.95rem; }
+
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 2.6rem;
+    margin-top: 3rem;
+  }
+  @media (max-width: 48rem) { .cols { grid-template-columns: 1fr; } }
+  .learn { padding-left: 1.2rem; margin: 0; }
+  .learn li { padding: 0.35rem 0; }
+  .aside { color: var(--ink-faded); }
+  .details { display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1.2rem; margin: 0; font-size: 0.92rem; }
+  .details dt { font-variant: small-caps; letter-spacing: 0.1em; text-transform: lowercase; color: var(--ink-faded); }
+  .details dd { margin: 0; }
+
+  .back { margin-top: 3rem; font-size: 0.95rem; }
+</style>

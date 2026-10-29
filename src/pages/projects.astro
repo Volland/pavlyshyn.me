@@ -2,7 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
 import DiagramPlate from '../components/DiagramPlate.astro';
-import { tools, products, research, thesis } from '../data/projects';
+import { tools, products, research, lean, thesis } from '../data/projects';
 
 const memory = [...products.filter((p) => p.group === 'memory')].sort(
   (a, b) => (b.slug === 'typedgraph' ? 1 : 0) - (a.slug === 'typedgraph' ? 1 : 0),
@@ -12,14 +12,15 @@ const tooling = products.filter((p) => p.group === 'tooling');
 
 <Base
   title="Projects — Volodymyr Pavlyshyn"
-  description="Open-source memory for agents and humans — TypedGraph, Tiramemsu, OxigraphDB — plus Factum ORM, LPG Modeler and Causal Canvas, three VS Code tools where you draw the model and ship the text.">
+  description="Open-source memory for agents and humans — TypedGraph, Tiramemsu, OxigraphDB — Lean 4 libraries that prove it (lean-elpi, lean-tiramemsu, typedb-lean, ladybug-lean), and three VS Code tools where you draw the model and ship the text.">
 
   <div class="page">
     <header class="head">
       <h1 class="display">Memory for agents and humans.</h1>
       <p class="standfirst">
-        My open-source work, in two lines: <a href="#memory">memory systems</a> — the
-        shared spaces where agents and people keep context and exchange knowledge — and
+        My open-source work, in three lines: <a href="#memory">memory systems</a> — the
+        shared spaces where agents and people keep context and exchange knowledge —
+        <a href="#lean">Lean 4 libraries</a> that prove what that memory promises, and
         <a href="#modeling">modelling tools</a> for drawing a domain and shipping it as text.
       </p>
     </header>
@@ -52,6 +53,33 @@ const tooling = products.filter((p) => p.group === 'tooling');
           </section>
         ))}
       </div>
+    </section>
+
+    <Ornament />
+
+    <section id="lean">
+      <h2 class="section-title">Proved in Lean 4</h2>
+      <p class="standfirst">
+        An agent's memory makes promises — it never forgets, it never holds a
+        contradiction, a query means what it says. In Lean 4 those promises become
+        types and theorems the compiler checks, rather than tests that hope. Logic
+        programming, typed database clients, and a proven port of Tiramemsu. Why it
+        matters for agents: <a href="/writing/lean-verifiable-agents">Lean and verifiable agents</a>.
+      </p>
+      <ul class="lean">
+        {lean.map((l) => (
+          <li>
+            <h3 class="tool-name">{l.home ? <a href={l.home.href}>{l.name}</a> : l.name}</h3>
+            {l.release && <span class="stars">{l.release}</span>}
+            <p class="tool-tagline">{l.tagline}</p>
+            <p class="product-summary">{l.body}</p>
+            <p class="repo-links">
+              {l.home && <a href={l.home.href}>{l.home.label}</a>}
+              {l.links.map((x) => <a href={x.href}>{x.label}</a>)}
+            </p>
+          </li>
+        ))}
+      </ul>
     </section>
 
     <Ornament />
@@ -190,6 +218,21 @@ const tooling = products.filter((p) => p.group === 'tooling');
   .product .tool-name a:hover { color: var(--orange); }
   .product-summary { color: var(--ink-faded); font-size: 0.95rem; }
   .product .tool-links { flex-wrap: wrap; }
+
+  .lean {
+    list-style: none;
+    padding: 0;
+    margin: 1.6rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2.6rem;
+  }
+  @media (max-width: 50rem) { .lean { grid-template-columns: 1fr; } }
+  .lean li { padding: 1.4rem 0 1.2rem; border-top: 1px solid var(--rule); }
+  .lean .tool-name { display: inline; font-size: 1.35rem; }
+  .lean .tool-tagline { font-size: 1rem; margin: 0.3rem 0 0.5rem; }
+  .lean .product-summary { margin: 0; }
+  .lean .repo-links { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; margin: 0.7rem 0 0; font-size: 0.8rem; }
 
   .repos { list-style: none; padding: 0; margin: 1.6rem 0 0; }
   .repos li { padding: 0.9rem 0; border-top: 1px solid var(--rule); }

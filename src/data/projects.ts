@@ -216,6 +216,95 @@ failed   Violation           1  PersonShape.worksFor.maxCount
   },
 ];
 
+// Lean 4 libraries: the same memory work, with the parts that matter proved or
+// checked by the compiler. Each has its own site; there is no page here.
+export interface LeanProject {
+  name: string;
+  tagline: string;
+  body: string;
+  release?: string;
+  home?: { label: string; href: string };
+  links: { label: string; href: string }[];
+}
+
+export const lean: LeanProject[] = [
+  {
+    name: 'lean-elpi',
+    tagline: 'λProlog inside Lean 4, with proofs the kernel checks.',
+    body: `A clean-room Lean 4 implementation of ELPI, the λProlog dialect behind
+    Coq-Elpi. Write tactics, commands and proof search as logic programs, share types
+    and functions with Lean in both directions (deriving Elpi, elpi_extern), and turn
+    what a search finds into a certificate Lean's kernel accepts. Runs all 24 of
+    ELPI's own performance programs; also ships as a standalone binary and as Python,
+    Node.js and Rust packages over one native library.`,
+    release: 'v0.3.3',
+    home: { label: 'volland.github.io/lean-elpi', href: 'https://volland.github.io/lean-elpi/' },
+    links: [
+      { label: 'Source', href: 'https://github.com/Volland/lean-elpi' },
+      { label: 'PyPI', href: 'https://pypi.org/project/leanelpi/' },
+      { label: 'npm', href: 'https://www.npmjs.com/package/@lean-elpi/leanelpi' },
+      { label: 'crates.io', href: 'https://crates.io/crates/leanelpi' },
+    ],
+  },
+  {
+    name: 'lean-tiramemsu',
+    tagline: 'Tiramemsu, ported to Lean 4 with its core semantics proven.',
+    body: `The never-forget memory, with its claims machine-checked. The value codec,
+    the store state machine — never forget, idempotent assert, supersede replay,
+    bitemporal views as log replay — and the query semantics, including joins and
+    paths, are proven; no sorry, no user axioms, no native_decide, enforced by a
+    policy checker in CI. The SPARQL and Cypher front ends are differential-tested
+    against the Rust build, which reads and writes the same files.`,
+    links: [
+      { label: 'Source', href: 'https://github.com/Volland/lean-tiramemsu' },
+      { label: 'Tiramemsu', href: '/projects/tiramemsu' },
+    ],
+  },
+  {
+    name: 'typedb-lean',
+    tagline: 'A TypeDB 3 client where a write in a read transaction does not compile.',
+    body: `Read, write and schema transactions are different types; typeql! escapes
+    every interpolated value, so user data cannot change a query's structure. A
+    lightweight ORM (deriving Entity, deriving Relation), versioned migrations, and
+    async runs through Std.Async — over the official C driver, and as fast as the
+    Rust driver on scans and lookups.`,
+    release: 'v0.1.0',
+    home: { label: 'volland.github.io/typedb-lean', href: 'https://volland.github.io/typedb-lean/' },
+    links: [
+      { label: 'Source', href: 'https://github.com/Volland/typedb-lean' },
+      { label: 'API reference', href: 'https://volland.github.io/typedb-lean/api/TypeDB.html' },
+    ],
+  },
+  {
+    name: 'ladybug-lean',
+    tagline: 'Typed Cypher for LadybugDB, checked against your schema at compile time.',
+    body: `Declare Lean structures as node and relationship tables; queries — written
+    with a builder or as cypher% text — fail to compile on an unknown label, a wrong
+    property type or a relationship whose endpoints do not match. NULL is in the
+    types. The same program runs on the native database or on a pure in-memory graph
+    in #eval, and a differential suite keeps the two in agreement.`,
+    release: 'v0.1.0',
+    home: { label: 'volland.github.io/ladybug-lean', href: 'https://volland.github.io/ladybug-lean/' },
+    links: [
+      { label: 'Source', href: 'https://github.com/Volland/ladybug-lean' },
+      { label: 'Mini book', href: 'https://volland.github.io/ladybug-lean/book.html' },
+    ],
+  },
+  {
+    name: 'bulletproof-knowledge',
+    tagline: 'Companion code for the book: a hallucination-resistant agent in Lean.',
+    body: `Every snippet printed in Bulletproof Knowledge is cut from this repository,
+    and every printed output is checked by #guard_msgs when it builds — if it is in
+    the book, it compiles. A certified store for an agent's memory, rules in λProlog
+    through lean-elpi, and a Chapter 12 agent that catches six kinds of hallucination
+    and says which rule each one broke. No Mathlib; one lake build.`,
+    links: [
+      { label: 'Source', href: 'https://github.com/Volland/bulletproof-knowledge' },
+      { label: 'The book', href: 'https://leanpub.com/bulletproofknowledge' },
+    ],
+  },
+];
+
 export interface Research {
   name: string;
   stars?: number;

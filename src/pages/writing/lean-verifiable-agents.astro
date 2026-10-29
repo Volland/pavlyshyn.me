@@ -1,0 +1,259 @@
+---
+import Base from '../../layouts/Base.astro';
+import Ornament from '../../components/Ornament.astro';
+import { article } from '../../data/articles';
+
+const a = article('lean-verifiable-agents');
+---
+
+<Base title={`${a.title} — Volodymyr Pavlyshyn`} description={a.summary}>
+  <article class="page essay">
+    <p class="crumb meta"><a href="/writing">Writing</a> · essay · {a.date}</p>
+    <h1 class="display">{a.title}</h1>
+    <p class="standfirst">{a.standfirst}</p>
+
+    <Ornament />
+
+    <p>
+      A chatbot that hallucinates says something false once. An agent that
+      hallucinates <em>into its memory</em> says it again tomorrow, and next month,
+      and builds on it. One fluent summary — “Anna and Lena met in Berlin on the
+      morning of day 2000” — becomes a permanent belief, although the memory already
+      places Anna in Lisbon that morning. Every later answer stands on a
+      contradiction that nothing in the pipeline noticed.
+    </p>
+    <p>
+      Memory is what turns a language model into an agent, and it is also what turns
+      a hallucination from an incident into a liability. The usual defences do not
+      reach it. Retrieval cannot tell which of two contradictory notes is right; it
+      returns both, ranked by similarity. Asking a second model “is this
+      consistent?” gets you a plausible verdict, which is a hallucination about a
+      hallucination. Tests sample behaviour; they do not bound it.
+    </p>
+    <p>
+      What is missing is a checker: something small, fixed and independent of the
+      model, that decides what an agent may remember and what it may claim. That is
+      the job Lean 4 does well.
+    </p>
+
+    <h2>A verifier has to be smaller than what it verifies</h2>
+    <p>
+      The test for a checker is old. Proof assistants have used it for decades:
+      the part you must trust should be small enough to read. Lean has a kernel of
+      that kind. Tactics, automation, macros and — now — language models can produce
+      a proof any way they like; the kernel re-checks the finished term, and it does
+      not care how the term was found.
+    </p>
+    <p>
+      That asymmetry is the whole idea. Finding a proof is hard and can be left to
+      something untrustworthy. Checking one is cheap and mechanical. An LLM is a good
+      generator and a poor judge, so put it on the side of the line where being
+      wrong costs nothing: <strong>the LLM proposes, Lean decides.</strong>
+    </p>
+    <p>
+      Lean is also a programming language that compiles to native code, which
+      matters more than it sounds. The specification, the proof and the program that
+      runs are written in one language and checked by one compiler. There is no
+      model in a separate tool that drifts away from the code it was meant to
+      describe.
+    </p>
+
+    <h2>Three places proof belongs in an agent</h2>
+
+    <h3>1 · At the door of memory</h3>
+    <p>
+      Write the agent's ontology as types and its rules about the world as
+      propositions. A person is in one place at a time; an event happens where its
+      participants are; a parent is older than a child. Then make the store itself
+      carry a proof that its contents satisfy the rules. In sketch form:
+    </p>
+    <figure class="code">
+      <pre><code>{`structure Fact where
+  person : Person
+  place  : Place
+  day    : Day
+
+-- Nobody is in two places on the same day.
+def Consistent (facts : List Fact) : Prop :=
+  ∀ a ∈ facts, ∀ b ∈ facts,
+    a.person = b.person → a.day = b.day → a.place = b.place
+
+-- A store cannot be built without the proof.
+structure Memory where
+  facts : List Fact
+  ok    : Consistent facts
+
+-- Either a new store with a new proof, or the rule the fact broke.
+def Memory.insert (m : Memory) (f : Fact) : Except Violation Memory`}</code></pre>
+      <figcaption>A sketch. The full certified store, with its proofs, is in the
+        <a href="https://github.com/Volland/bulletproof-knowledge">bulletproof-knowledge</a> repository.</figcaption>
+    </figure>
+    <p>
+      The type of <code>Memory</code> is the guarantee. There is no code path that
+      produces an inconsistent store, because there is no way to construct one
+      without a proof that it is consistent — and the proof is checked by the kernel,
+      not by the agent. When <code>insert</code> refuses Anna-in-Berlin, it says which
+      rule blocked the fact, and that name goes back to the model as feedback. A
+      rejection is information, not a shrug.
+    </p>
+
+    <h3>2 · In the reasoning</h3>
+    <p>
+      Types are good at shape and invariants. Agents also need rules and search:
+      who could have met whom, what follows if we assume this, which path connects
+      two events. That is logic programming's home ground, and higher-order logic
+      programming — λProlog — handles the parts first-order Prolog cannot: binders,
+      hypothetical questions that leave no trace (<code>pi</code> and
+      <code>=&gt;</code>), relations passed as arguments.
+    </p>
+    <p>
+      <a href="https://volland.github.io/lean-elpi/">lean-elpi</a> runs λProlog
+      inside Lean 4. Lean types derive into ELPI and back; Lean functions are callable
+      as predicates. The point for agents is the last step: when a search finds an
+      answer, it can be turned into a proof term the Lean kernel checks. The search
+      engine is now in the same position as the LLM — useful, fast, and outside the
+      trusted base. Only the certificate is trusted.
+    </p>
+    <figure class="code">
+      <pre><code>{`inductive Tree (α : Type) where
+  | leaf
+  | node (l : Tree α) (a : α) (r : Tree α)
+  deriving Elpi            -- the same type, on both sides
+
+def twice (n : Nat) : Nat := 2 * n
+elpi_extern twice          -- a Lean function as an ELPI predicate
+
+elpi_program demo
+#elpi demo lp%{ twice 21 X }%     -- X = 42`}</code></pre>
+      <figcaption>lean-elpi v0.3.3: one type and one function shared between Lean and λProlog.</figcaption>
+    </figure>
+
+    <h3>3 · In the substrate</h3>
+    <p>
+      An agent's memory lives in a database, and the boundary to the database is
+      where many quiet failures happen: a query with a misspelled label that returns
+      nothing, a write inside what was meant to be a read, a user string spliced into
+      query text. Each of these can be a compile error instead.
+    </p>
+    <figure class="code">
+      <pre><code>{`node_table Person
+node_table Company (key := name)
+rel_table WorksAt (from := Person) (to := Company)
+
+-- Checked against the schema while it compiles:
+-- an unknown label or property, or a string compared
+-- with a number, is an error at the Cypher token.
+def employees := cypher% MATCH (p:Person)-[:WorksAt]->(c:Company)
+                         WHERE p.age > 30 RETURN p.name, c.name`}</code></pre>
+      <figcaption><a href="https://volland.github.io/ladybug-lean/">ladybug-lean</a>: typed Cypher for LadybugDB. In <a href="https://volland.github.io/typedb-lean/">typedb-lean</a>, read and write transactions are different types, so an insert inside a read does not compile.</figcaption>
+    </figure>
+    <p>
+      Further down, the store's own promises can be proved. Tiramemsu, my
+      bitemporal memory on SQLite, claims that it never forgets, that a correction
+      replays the layers that depended on the old fact, and that its time-travel
+      views agree with the log. In
+      <a href="https://github.com/Volland/lean-tiramemsu">lean-tiramemsu</a> those
+      are theorems: the codec, the store state machine and the query semantics,
+      joins and paths included, are proven — with no <code>sorry</code>, no user
+      axioms and no <code>native_decide</code>, enforced in CI by a policy checker
+      that inspects the compiled environment rather than grepping the source.
+    </p>
+
+    <h2>The loop</h2>
+    <p>Put together, the agent runs one loop, and every step of it is explicit:</p>
+    <ol class="loop">
+      <li><strong>Propose.</strong> The LLM reads, summarises and extracts candidate facts and candidate answers.</li>
+      <li><strong>Check.</strong> Lean decides whether each fact keeps memory consistent, and whether each answer follows from what is stored.</li>
+      <li><strong>Commit or reject.</strong> A fact enters only with a proof; an answer leaves only with a certificate. A rejection names the rule it broke.</li>
+      <li><strong>Feed back.</strong> The named rule goes back into the model's context, so the next proposal is better informed than the last.</li>
+    </ol>
+    <p>
+      No proof, no entry. No proof, no answer. The model is free to be creative,
+      because creativity no longer reaches the store unchecked.
+    </p>
+
+    <h2>What it does not give you</h2>
+    <p>
+      The promise is narrow, and it should be said as narrowly as it is. A checker
+      guarantees <em>consistency with your axioms</em>, not truth about the world.
+      If the axioms are wrong, the agent will be consistently wrong, with proofs.
+      A fact that is false but consistent — Anna in Lisbon when she was in Porto —
+      goes straight through.
+    </p>
+    <p>
+      There is also a trusted base, and it is not empty: the Lean compiler and
+      runtime, the C compiler, the database engine underneath, and every part that is
+      tested rather than proven. In lean-tiramemsu, for example, the SPARQL and
+      Cypher front ends are differential-tested against the Rust implementation, not
+      proven. Writing that list down is part of the method. A verifiable system is
+      one where you can say exactly what is verified.
+    </p>
+    <p>
+      And not every agent needs this. A drafting assistant whose output a person
+      reads before it matters can live with plausible. The case for proof grows with
+      how long the agent remembers, how many decisions it builds on what it
+      remembers, and how expensive it is to discover a contradiction late.
+    </p>
+
+    <h2>Where to start</h2>
+    <p>
+      You do not need a mathematics background. Lean is learnable as a typed
+      functional language first and a proof assistant second, and most of what an
+      agent engineer needs is propositions about their own domain, not about real
+      analysis.
+    </p>
+    <ul class="start">
+      <li>
+        <a href={a.book.href}>Bulletproof Knowledge</a> — the book: Lean 4 and λProlog
+        taught from zero, ending with a complete hallucination-resistant agent. Every
+        snippet compiles.
+      </li>
+      <li>
+        <a href="/projects#lean">The Lean 4 libraries</a> — lean-elpi, lean-tiramemsu,
+        typedb-lean and ladybug-lean, all open source.
+      </li>
+      <li>
+        <a href="https://leanpub.com/dependenttypesdttlogicholforaiagentreadyknowledgegraphs">Dependent Types &amp; Logic for AI Agent Ready Knowledge Graphs</a>
+        — the shorter, conceptual companion, if you want the ideas before the code.
+      </li>
+    </ul>
+
+    <p class="sign">— Volodymyr Pavlyshyn, Berlin</p>
+    <p class="back"><a href="/writing">← All writing</a></p>
+  </article>
+</Base>
+
+<style>
+  .essay { max-width: 42rem; }
+  .crumb { margin: 2.6rem 0 0.6rem; }
+  .crumb a { color: var(--ink-faded); text-decoration: none; }
+  .crumb a:hover { color: var(--orange); }
+  .essay h2 { margin-top: 2.6rem; }
+  .essay h3 {
+    margin-top: 2rem;
+    font-variant: small-caps;
+    letter-spacing: 0.07em;
+    text-transform: lowercase;
+    color: var(--orange);
+  }
+  .essay :not(pre) > code { font-size: 0.88em; background: var(--paper-deep); padding: 0.05em 0.3em; }
+
+  .code { margin: 1.6rem 0; }
+  .code pre {
+    margin: 0;
+    padding: 1.1rem 1.3rem;
+    background: var(--paper-deep);
+    border: 1px solid var(--rule);
+    overflow-x: auto;
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+  .code figcaption { margin-top: 0.6rem; font-size: 0.82rem; color: var(--ink-faded); }
+
+  .loop { padding-left: 1.3rem; }
+  .loop li { padding: 0.35rem 0; }
+  .start { padding-left: 1.2rem; }
+  .start li { padding: 0.4rem 0; }
+  .sign { margin-top: 2.6rem; font-style: italic; color: var(--ink-faded); }
+  .back { margin-top: 1.6rem; font-size: 0.95rem; }
+</style>

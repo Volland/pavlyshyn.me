@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
 import { channels } from '../data/site';
 import { feed } from '../lib/feeds';
+import { articles } from '../data/articles';
 
 // Fetched at build time; the weekly Action keeps it current.
 const streams = await Promise.all(
@@ -21,12 +22,31 @@ const built = new Date().toLocaleDateString('en-GB', {
     <header class="head">
       <h1 class="display">Writing</h1>
       <p class="standfirst">
-        Three places, three registers: deep technical essays on Substack, talks on
-        YouTube, and shorter technical writing on Medium.
+        Longer essays here, and three places elsewhere in three registers: deep
+        technical essays on Substack, talks on YouTube, and shorter technical writing
+        on Medium.
       </p>
     </header>
 
     <Ornament />
+
+    <section class="stream">
+      <div class="stream-head">
+        <h2 class="stream-name">On this site</h2>
+        <p class="stream-title">Essays</p>
+        <p class="stream-note">Longer arguments that belong next to the projects they are about.</p>
+      </div>
+      <div class="stream-items">
+        <ul class="posts">
+          {articles.map((a) => (
+            <li>
+              <a href={`/writing/${a.slug}`}>{a.title}</a>
+              <span class="when meta">{a.date}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
 
     {streams.map((s) => (
       <section class="stream">

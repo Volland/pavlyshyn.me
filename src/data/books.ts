@@ -176,6 +176,17 @@ export const books: Book[] = [
     readNote: 'Four relation types worth knowing; the idea lands in a chapter.',
   },
   {
+    slug: 'bulletproofknowledge',
+    title: 'Bulletproof Knowledge',
+    blurb:
+      'Hallucination-resistant neurosymbolic agents in Lean 4 and λProlog. A fact enters memory only with a kernel-checked proof that memory stays consistent, and an answer leaves it only with a proof from what is stored. The LLM proposes; Lean decides.',
+    shelf: 'modelling',
+    themes: ['logic', 'memory', 'graph-substrate'],
+    depth: 'deep',
+    readNote: 'Where the modelling becomes provable — every snippet compiles, and the last chapter is a working agent.',
+    inProgress: true,
+  },
+  {
     slug: 'dependenttypesdttlogicholforaiagentreadyknowledgegraphs',
     title: 'Dependent Types & Logic for AI Agent Ready Knowledge Graphs',
     blurb:
@@ -306,6 +317,79 @@ export const otherBooks: OtherBook[] = [
     title: '97%',
     blurb:
       'A techno-horror novella.',
+  },
+];
+
+// Books from a publisher, sold through a retailer rather than Leanpub. Each gets a page
+// at /books/<slug>; there is no cover file, so the page draws a typographic one.
+export interface PrintBook {
+  slug: string;
+  title: string;
+  subtitle: string;
+  publisher: string;
+  published: string; // ISO
+  pages: number;
+  isbn10: string;
+  isbn13: string;
+  formats: string[];
+  href: string;
+  blurb: string;
+  body: string[];
+  features: string[];
+  learn: string[];
+  audience: string;
+  // The Leanpub title on the same subject, if there is one.
+  related?: string;
+}
+
+export const printBooks: PrintBook[] = [
+  {
+    slug: 'graph-engineering',
+    title: 'Graph Engineering — The Loop Memory Model',
+    subtitle: 'Give agentic workflows durable memory, traceability, and shared knowledge with graphs',
+    publisher: 'Packt',
+    published: '2026-10-19',
+    pages: 138,
+    isbn10: '1808812476',
+    isbn13: '978-1808812477',
+    formats: ['Paperback', 'Kindle'],
+    href: 'https://www.amazon.com/dp/1808812476',
+    blurb:
+      'Agent loops are good at producing work, but the reasoning behind it disappears when the context window closes. This book moves that reasoning into a graph that outlives the run.',
+    body: [
+      `Agent loops are good at producing work, but the reasoning behind that work
+      disappears the moment the context window closes. The next run starts from a
+      transcript, or from nothing, and the decision that mattered last week is
+      rediscovered — or contradicted — this week.`,
+      `The book moves decisions, evidence and execution history out of transcripts and
+      into an explicit graph. Markdown stays the source of truth; the graph is a query
+      index you can rebuild, not a second copy that drifts. From there it walks through
+      parsing a repository into the graph, resolving entities, retrieving small
+      neighbourhoods within a token budget, checking claims against graph paths,
+      coordinating parallel workers, and tracing lineage from an objective to the
+      artifact that met it.`,
+      `It ends on judgement: how to measure whether the graph is any good, how it
+      fails, what it costs — and when an ADR log or a relational table is the better
+      answer.`,
+    ],
+    features: [
+      'Separate work history from durable knowledge with a two-graph architecture and clear bridge rules.',
+      'Retrieve small, provenance-tracked context windows from graph paths, within token budgets.',
+      'Run parallel workers with scoped promises, validated writes, reducer contracts and hard budgets.',
+    ],
+    learn: [
+      'Choose between a loop, chain, swarm, DAG or graph architecture.',
+      'Define schemas for work history and for current knowledge.',
+      'Turn Markdown into a query index without making it a second source of truth.',
+      'Give every assertion provenance, confidence and a validity interval.',
+      'Use NEAR links to surface duplicates before they become contradictions.',
+      'Build a time-aware context assembler.',
+      'Check an evaluation’s claims against paths in the graph.',
+      'Measure graph quality — and know when not to build one.',
+    ],
+    audience:
+      'Senior software engineers, AI and agent engineers, software architects and platform teams already experimenting with agent loops, coding agents or multi-agent workflows.',
+    related: 'graphengineering',
   },
 ];
 

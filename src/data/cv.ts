@@ -28,13 +28,15 @@ export const roles: Role[] = [
     to: 'Present',
     title: 'Creator · Open-Source Author · Independent Researcher',
     org: 'Open-source memory systems',
-    strap: 'TypedGraph, Tiramemsu, OxigraphDB and shacl2cypher — one programme: agent memory as a typed, temporal, verifiable graph',
+    strap: 'TypedGraph, Tiramemsu, OxigraphDB, shacl2cypher and a Lean 4 line — one programme: agent memory as a typed, temporal, verifiable graph',
     domains: ['agentic', 'graph', 'systems'],
     bullets: [
       'TypedGraph — turns Markdown notes and code into a typed, validated knowledge graph that people and AI agents share: openCypher, vector search and GraphRAG, a CLI and an MCP server, shipped as an Obsidian plugin and a VS Code extension.',
       'Tiramemsu — an embedded graph database in Rust on SQLite where every fact has an id, so provenance and belief stack as layers; bitemporal by construction, append-only, SPARQL and openCypher over one store.',
       'OxigraphDB — an embeddable RDF / SPARQL database for agents at the edge, with time-travel queries over versioned state and a Datalog reasoning layer.',
       'shacl2cypher — a compiler from W3C SHACL shapes to Cypher validation queries for property graphs, with JUnit and SARIF output for CI; published on PyPI.',
+      'Lean 4 for verifiable agents — lean-elpi, a clean-room λProlog (ELPI) engine inside Lean 4 with kernel-checked proof certificates and Python, Node.js and Rust bindings; lean-tiramemsu, a port of Tiramemsu whose codec, store state machine and query semantics are machine-checked; typed, compile-time-checked database clients for TypeDB 3 (typedb-lean) and LadybugDB (ladybug-lean).',
+      'Author of Graph Engineering — The Loop Memory Model (Packt, 2026) and of Bulletproof Knowledge, on hallucination-resistant neurosymbolic agents in Lean 4 and λProlog, with fully compiled companion code.',
       'Published the underlying research independently on Zenodo: layered bitemporal graphs and metagraph encodings over identified triples.',
     ],
     link: { label: 'All projects', href: '/projects' },
@@ -290,12 +292,16 @@ export const expertise = [
     body: 'Memory and institutional memory for agents and teams · bitemporal and layered graphs · Agent memory pipelines · semantic extraction-consolidation (FIRE) · promise-graph agent cooperation · agentic world models · multi-agent trust registries · LLM orchestration',
   },
   {
+    label: 'Formal methods & verification',
+    body: 'Lean 4 · dependent types and propositions as types · λProlog / ELPI and higher-order logic programming · kernel-checked certificates · certified ontologies · proof policy in CI · differential testing against a reference oracle',
+  },
+  {
     label: 'Identity & trust protocols',
     body: 'Self-sovereign identity · DID methods (did:web, did:webvh, did:webs) · KERI · verifiable credentials · GLEIF vLEI · agent reputation systems',
   },
   {
     label: 'Languages & runtimes',
-    body: 'Rust · TypeScript · Python · Go · Kotlin · Scala · C++ · Zig · Clojure — language chosen to fit the problem',
+    body: 'Rust · Lean 4 · TypeScript · Python · Go · Kotlin · Scala · C++ · Zig · Clojure — language chosen to fit the problem',
   },
   {
     label: 'Delivery & leadership',

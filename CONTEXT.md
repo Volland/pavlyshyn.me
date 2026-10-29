@@ -32,6 +32,22 @@ The VS Code editor for causal models that validates them — colliders, exclusio
 paths. Always *Causal*. "Casual Canvas" is a different and much sillier product.
 _Avoid_: Casual Canvas
 
+**Lean Libraries**:
+The Lean 4 block on `/projects` (`#lean`) — lean-elpi, lean-tiramemsu, typedb-lean, ladybug-lean and the
+*Bulletproof Knowledge* companion code. One thesis: what agent memory promises is proved or checked by the
+compiler, not hoped for. Each library has its own site; none gets a page here.
+_Avoid_: proof projects, Lean experiments
+
+**Print Edition**:
+A book from a publisher, sold through a retailer instead of Leanpub — *Graph Engineering — The Loop
+Memory Model* (Packt). Shown in the "In print" block on `/books` and on its own page at `/books/<slug>`.
+Not part of the **Catalogue** count or the **Concept Graph**.
+_Avoid_: Packt book, Amazon book
+
+**Essay**:
+Long-form writing published on this site at `/writing/<slug>`, listed first on `/writing` above the feeds.
+_Avoid_: blog post, article (in copy)
+
 **Research Repos**:
 The secondary block on `/projects` — agentic-memory, ladybug-rag, ladybug-rag-rs. Reference
 implementations and research, not products anyone installs. Subordinate to the **Modeling Tools**.

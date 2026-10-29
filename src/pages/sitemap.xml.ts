@@ -1,11 +1,15 @@
 import type { APIRoute } from 'astro';
 import { products } from '../data/projects';
+import { printBooks } from '../data/books';
+import { articles } from '../data/articles';
 
 export const GET: APIRoute = ({ site }) => {
   const paths = [
     '/', '/about', '/books', '/services', '/projects', '/kids', '/personal', '/cv', '/papers', '/writing',
     '/impressum', '/agb', '/datenschutz', '/privacy',
     ...products.map((product) => `/projects/${product.slug}`),
+    ...printBooks.map((book) => `/books/${book.slug}`),
+    ...articles.map((article) => `/writing/${article.slug}`),
   ];
   const urls = paths.map((path) => `<url><loc>${new URL(path, site).href}</loc></url>`).join('');
   return new Response(

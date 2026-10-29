@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Ornament from '../components/Ornament.astro';
-import { books, shelves, themes, depths, readingPaths, leanpubUrl, coverUrl } from '../data/books';
+import { books, printBooks, shelves, themes, depths, readingPaths, leanpubUrl, coverUrl } from '../data/books';
 // Real cover dimensions, measured from the files (scripts/measure-covers.py).
 // Leanpub covers are not a uniform ratio, so these must not be guessed.
 import coverDims from '../data/cover-dims.json';
@@ -76,9 +76,11 @@ const byDepth = (['deep', 'quick'] as const).map((d) => ({
         Four shelves: how an agent remembers, how to model what it knows, the databases
         it remembers on, and how architecture turns into business impact. Not all of it
         needs a cover-to-cover read — the guide below says which books do. Everything is
-        on Leanpub, where the pricing is yours to set.
+        on Leanpub, where the pricing is yours to set — and one is
+        <a href="#print">in print from Packt</a>.
       </p>
       <nav class="shelf-links" aria-label="Catalogue shelves">
+        <a href="#print">In print</a>
         <a href="#guide">What to read in depth</a>
         <a href="#graph">Explore the graph</a>
         {shelves.map((shelf) => <a href={`#shelf-${shelf.id}`} data-shelf-link>{shelf.label}</a>)}
@@ -100,6 +102,33 @@ const byDepth = (['deep', 'quick'] as const).map((d) => ({
           </article>
         ))}
       </div>
+    </section>
+
+    <Ornament />
+
+    <!-- ── In print: publisher editions, sold by a retailer ───────────── -->
+    <section id="print" aria-labelledby="print-title">
+      <h2 class="section-title" id="print-title">In print</h2>
+      {printBooks.map((p) => (
+        <article class="print">
+          <a class="print-plate" href={`/books/${p.slug}`} aria-hidden="true" tabindex="-1">
+            <span class="print-pub">{p.publisher}</span>
+            <span class="print-name">{p.title.split(' — ')[0]}</span>
+            <span class="print-sub">{p.title.split(' — ')[1]}</span>
+            <span class="print-author">Volodymyr Pavlyshyn</span>
+          </a>
+          <div>
+            <p class="meta">{p.publisher} · {new Date(p.published).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })} · {p.pages} pages · {p.formats.join(' and ')}</p>
+            <h3 class="print-title"><a href={`/books/${p.slug}`}>{p.title}</a></h3>
+            <p class="print-subtitle">{p.subtitle}</p>
+            <p class="card-blurb">{p.blurb}</p>
+            <p class="print-links">
+              <a class="btn btn-solid" href={p.href}>Buy on Amazon</a>
+              <a href={`/books/${p.slug}`}>About the book</a>
+            </p>
+          </div>
+        </article>
+      ))}
     </section>
 
     <Ornament />
@@ -234,6 +263,45 @@ const byDepth = (['deep', 'quick'] as const).map((d) => ({
   .reading-path > a { font-size: 0.9rem; }
   @media (max-width: 48rem) { .reading-paths { grid-template-columns: 1fr; gap: 1.4rem; } }
   .filter-status { margin-top: 0.8rem; }
+
+  .print {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: 2rem;
+    align-items: start;
+  }
+  @media (max-width: 40rem) { .print { grid-template-columns: 6.5rem minmax(0, 1fr); gap: 1.2rem; } }
+  .print-plate {
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 7.5 / 9.25;
+    padding: 0.9rem 0.8rem;
+    border: 1px solid var(--ink);
+    outline: 1px solid var(--rule);
+    outline-offset: 4px;
+    background: var(--paper-deep);
+    color: var(--ink);
+    text-decoration: none;
+    text-align: center;
+  }
+  .print-plate:hover { border-color: var(--orange); color: var(--orange); }
+  .print-pub, .print-author {
+    font-size: 0.62rem; font-variant: small-caps; letter-spacing: 0.18em; text-transform: lowercase;
+    color: var(--ink-faded);
+  }
+  .print-name { margin-top: auto; font-size: 1.15rem; line-height: 1.1; font-variant: small-caps; letter-spacing: 0.06em; }
+  .print-sub { margin: 0.4rem 0 auto; font-size: 0.72rem; font-style: italic; color: var(--orange); }
+  @media (max-width: 40rem) {
+    .print-plate { padding: 0.5rem 0.4rem; }
+    .print-name { font-size: 0.8rem; }
+    .print-sub, .print-pub, .print-author { font-size: 0.5rem; }
+  }
+  .print-title { font-size: 1.3rem; margin: 0.2rem 0 0; }
+  .print-title a { color: var(--ink); text-decoration: none; }
+  .print-title a:hover { color: var(--orange); }
+  .print-subtitle { font-style: italic; color: var(--ink-faded); margin: 0.2rem 0 0; }
+  .print-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem; margin-top: 1rem; font-size: 0.85rem; }
+  .print-links a:not(.btn) { font-variant: small-caps; letter-spacing: 0.11em; text-transform: lowercase; text-decoration: none; }
 
   .graph-help { color: var(--ink-faded); font-size: 0.95rem; }
 
